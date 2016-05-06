@@ -33,22 +33,17 @@ layer {
   type: "Convolution"
   bottom: "data"
   top: "conv1"
-  # learning rate and decay multipliers for the filters
-  param { lr_mult: 1 decay_mult: 1 }
-  # learning rate and decay multipliers for the biases
-  param { lr_mult: 2 decay_mult: 0 }
   convolution_param {
     num_output: 12     # learn 96 filters
+    pad: 0
     kernel_h: 8
     kernel_w: 3
+    stride: 1
     weight_filler {
-      type: "gaussian" # initialize the filters from a Gaussian
-      std: 0.01        # distribution with stdev 0.01 (default mean: 0)
+      type: "xavier" # initialize the filters from a Gaussian
     }
-
     bias_filler {
       type: "constant" # initialize the biases to zero (0)
-      value: 0
     }
   }
 }
@@ -79,22 +74,18 @@ layer {
   type: "Convolution"
   bottom: "pool1"
   top: "conv2"
-  # learning rate and decay multipliers for the filters
-  param { lr_mult: 1 decay_mult: 1 }
-  # learning rate and decay multipliers for the biases
-  param { lr_mult: 2 decay_mult: 0 }
   convolution_param {
     num_output: 20     # learn 96 filters
+    pad: 0
     kernel_h: 7
     kernel_w: 3
+    stride: 1
     weight_filler {
-      type: "gaussian" # initialize the filters from a Gaussian
-      std: 0.01        # distribution with stdev 0.01 (default mean: 0)
+      type: "xavier" # initialize the filters from a Gaussian
     }
 
     bias_filler {
       type: "constant" # initialize the biases to zero (0)
-      value: 0
     }
   }
 }
@@ -125,22 +116,18 @@ layer {
   type: "Convolution"
   bottom: "pool2"
   top: "conv3"
-  # learning rate and decay multipliers for the filters
-  param { lr_mult: 1 decay_mult: 1 }
-  # learning rate and decay multipliers for the biases
-  param { lr_mult: 2 decay_mult: 0 }
   convolution_param {
     num_output: 28     # learn 96 filters
+    pad: 0
     kernel_h: 6
     kernel_w: 3
+    stride: 1
     weight_filler {
-      type: "gaussian" # initialize the filters from a Gaussian
-      std: 0.01        # distribution with stdev 0.01 (default mean: 0)
+      type: "xavier" # initialize the filters from a Gaussian
     }
 
     bias_filler {
       type: "constant" # initialize the biases to zero (0)
-      value: 0
     }
   }
 }
@@ -171,22 +158,18 @@ layer {
   type: "Convolution"
   bottom: "pool3"
   top: "conv4"
-  # learning rate and decay multipliers for the filters
-  param { lr_mult: 1 decay_mult: 1 }
-  # learning rate and decay multipliers for the biases
-  param { lr_mult: 2 decay_mult: 0 }
   convolution_param {
     num_output: 36     # learn 96 filters
+    pad: 0
     kernel_h: 6
     kernel_w: 3
+    stride: 1
     weight_filler {
-      type: "gaussian" # initialize the filters from a Gaussian
-      std: 0.01        # distribution with stdev 0.01 (default mean: 0)
+      type: "xavier" # initialize the filters from a Gaussian
     }
 
     bias_filler {
       type: "constant" # initialize the biases to zero (0)
-      value: 0
     }
   }
 }
@@ -217,12 +200,6 @@ layer {
   type: "InnerProduct"
   bottom: "pool4"
   top: "ip1"
-  param {
-    lr_mult: 1
-  }
-  param {
-    lr_mult: 2
-  }
   inner_product_param {
     num_output: 196
     weight_filler {
@@ -256,12 +233,6 @@ layer {
   type: "InnerProduct"
   bottom: "ip1"
   top: "ip2"
-  param {
-    lr_mult: 1
-  }
-  param {
-    lr_mult: 2
-  }
   inner_product_param {
     num_output: 98
     weight_filler {
@@ -295,12 +266,6 @@ layer {
   type: "InnerProduct"
   bottom: "ip2"
   top: "ip3"
-  param {
-    lr_mult: 1
-  }
-  param {
-    lr_mult: 2
-  }
   inner_product_param {
     num_output: 11
     weight_filler {
@@ -309,6 +274,16 @@ layer {
     bias_filler {
       type: "constant"
     }
+  }
+}
+
+layer {
+  name: "drop3"
+  type: "Dropout"
+  bottom: "ip3"
+  top: "ip3"
+  dropout_param {
+    dropout_ratio: 0.5
   }
 }
 
