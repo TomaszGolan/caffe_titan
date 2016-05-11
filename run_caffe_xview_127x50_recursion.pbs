@@ -6,8 +6,6 @@
 #PBS -j oe
 #PBS -V
 
-qsub -W depend=afterok:$PBS_JOBID run_caffe_xview_127x50_recursion.pbs
-
 cd $PROJWORK/hep105/steven_caffe2/caffe
 source $MODULESHOME/init/bash
 source $PROJWORK/hep105/steven_caffe2/bashsetup.execenv.sh
@@ -17,22 +15,28 @@ module load cray-mpich
 
 TOOLS=./build/tools
 
-TOPDIR="/lustre/atlas/proj-shared/hep105/caffe_titan/"
-PREFIX="minosmatch_nukecczdefs_127x50_x_unshifted_me1Bmc"
+TOPDIR=/lustre/atlas/proj-shared/hep105/caffe_titan/
+PREFIX=minosmatch_nukecczdefs_127x50_x_unshifted_me1Bmc
 
-STATUS_FILE="$TOPDIR/$PREFIX.status"
+STATUS_FILE=$TOPDIR/$PREFIX'.status'
 
-STATUS=`cat $STATUS`
+STATUS=`cat $STATUS_FILE`
+
+echo "STATUS = $STATUS"
 
 if [[ -z "$STATUS" ]]
 then
+  echo "First run"
   aprun -n 1 -N 1 $TOOLS/caffe train \
-    --solver=$TOPDIR/$PREFIX_solver.prototxt
+    --solver=$TOPDIR/$PREFIX'_solver.prototxt'
   echo "1" > $STATUS_FILE
 else
-  snapshot="$TOPDIR/$PREFIX_iter_$((STATUS*1000)).solverstate"
+  snapshot=$TOPDIR/$PREFIX'_iter_'$((STATUS*1000))'.solverstate'
+  echo "$((STATUS+1)) run, using: $snapshot"
   aprun -n 1 -N 1 $TOOLS/caffe train \
-    --solver=$TOPDIR/$PREFIX_solver.prototxt \
+    --solver=$TOPDIR'/'$PREFIX'_solver.prototxt' \
     --snapshot=$snapshot
   echo $((STATUS+1)) > $STATUS_FILE
 fi
+
+qsub -W depend=afterok:$PBS_JOBID $TOPDIR/run_caffe_xview_127x50_recursion.pbs
