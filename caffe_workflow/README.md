@@ -1,4 +1,3 @@
----
 # MLMPR Caffe @ Titan
 ---
 
