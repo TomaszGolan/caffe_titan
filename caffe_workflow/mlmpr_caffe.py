@@ -109,8 +109,6 @@ def update_solver(cfg):
 def submit(pbs):
     """qsub the script"""
     cmd = "qsub -q titan " + pbs
-    print cmd
-    # subprocess.Popen(cmd, shell=True, executable="/bin/bash")
     subprocess.call(cmd, shell=True)
 
 
@@ -193,11 +191,7 @@ def advance(status):
 
     pbs = generate_pbs(cfg, last_checkpoint)
 
-    print "przed submit"
-
     submit(pbs)
-
-    print "po submit"
 
 if __name__ == '__main__':
     main()
