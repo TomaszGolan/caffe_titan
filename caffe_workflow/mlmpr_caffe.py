@@ -27,7 +27,9 @@ def generate_pbs(cfg, snapshot=None):
     pbs = cfg.get("path", "logs") + "/" + cfg.get("status", "name") \
                                   + ".pbs"
     out = cfg.get("path", "logs") + "/" + cfg.get("status", "name") \
+                                  + "_" + cfg.get("status", "current_run") \
                                   + ".out"
+    name = cfg.get("status", "name") + "_" + cfg.get("status", "current_run")
 
     pbsf = open(pbs, 'w')
 
@@ -35,7 +37,7 @@ def generate_pbs(cfg, snapshot=None):
     print >> pbsf, "#PBS -A hep105"
     print >> pbsf, "#PBS -l nodes=1"
     print >> pbsf, "#PBS -l walltime=2:00:00"
-    print >> pbsf, "#PBS -N", cfg.get("status", "name")
+    print >> pbsf, "#PBS -N", name
     print >> pbsf, "#PBS -o", out
     print >> pbsf, "#PBS -j oe"
 
@@ -94,8 +96,10 @@ def update_solver(cfg):
     max_iter = \
         cfg.getint("caffe", "max_iter") * cfg.getint("status", "current_run")
 
-    with open(cfg.get("status", "solver"), 'r+') as f:
+    with open(cfg.get("status", "solver"), 'r') as f:
         solver = f.readlines()
+
+    with open(cfg.get("status", "solver"), 'w') as f:
         for line in solver:
             if line.startswith("max_iter"):
                 line = "max_iter: " + str(max_iter) + "\n"
@@ -105,7 +109,9 @@ def update_solver(cfg):
 def submit(pbs):
     """qsub the script"""
     cmd = "qsub -q titan " + pbs
-    subprocess.Popen(cmd, shell=True, executable="/bin/bash")
+    print cmd
+    # subprocess.Popen(cmd, shell=True, executable="/bin/bash")
+    subprocess.call(cmd, shell=True)
 
 
 def save_config(cfg):
@@ -168,22 +174,30 @@ def advance(status):
     cfg = SafeConfigParser()
     cfg.read(status)
 
-    current_run = cfg.getint("status", "current_run") + 1
-    cfg.set("status", "current_run", str(current_run))
-
-    save_config(cfg)
-
-    last_checkpoint, current_iter = get_checkpoint(cfg)
-
     try:
         max_iter = cfg.getint("caffe", "last_iter")
     except:
         max_iter = 0
 
-    if max_iter and current_iter < max_iter:
-        update_solver(cfg)
-        pbs = generate_pbs(cfg, last_checkpoint)
-        submit(pbs)
+    last_checkpoint, current_iter = get_checkpoint(cfg)
+
+    if max_iter and current_iter >= max_iter:
+        return
+
+    current_run = cfg.getint("status", "current_run") + 1
+    cfg.set("status", "current_run", str(current_run))
+
+    save_config(cfg)
+
+    update_solver(cfg)
+
+    pbs = generate_pbs(cfg, last_checkpoint)
+
+    print "przed submit"
+
+    submit(pbs)
+
+    print "po submit"
 
 if __name__ == '__main__':
     main()
