@@ -104,7 +104,6 @@ def update_solver(cfg):
 
 def submit(pbs):
     """qsub the script"""
-    return
     cmd = "qsub -q titan " + pbs
     subprocess.Popen(cmd, shell=True, executable="/bin/bash")
 
