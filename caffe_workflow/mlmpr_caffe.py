@@ -25,10 +25,8 @@ def make_unique(name):
 def generate_pbs(cfg, snapshot=None):
     """Generate PBS script."""
     pbs = cfg.get("path", "logs") + "/" + cfg.get("status", "name") \
-                                  + "_" + cfg.get("status", "current_run") \
                                   + ".pbs"
     out = cfg.get("path", "logs") + "/" + cfg.get("status", "name") \
-                                  + "_" + cfg.get("status", "current_run") \
                                   + ".out"
 
     pbsf = open(pbs, 'w')
@@ -57,7 +55,7 @@ def generate_pbs(cfg, snapshot=None):
                        "--solver=" + cfg.get("status", "solver"), \
                        "--snapshot=" + snapshot
 
-    print >> pbsf, "#python", cfg.get("path", "myself"), "advance --status", \
+    print >> pbsf, "python", cfg.get("path", "myself"), "advance --status", \
         cfg.get("path", "logs") + "/" + cfg.get("status", "name") + ".ini"
 
     pbsf.close()
@@ -68,7 +66,8 @@ def generate_pbs(cfg, snapshot=None):
 def generate_solver(cfg):
     """Make a clone of solver with params defined in config file."""
     solver = cfg.get("path", "logs") + "/" \
-                                     + cfg.get("status", "name") + ".solver"
+                                     + cfg.get("status", "name") \
+                                     + ".solver"
 
     with open(cfg.get("path", "solver")) as f:
         init_solver = f.readlines()
@@ -77,21 +76,35 @@ def generate_solver(cfg):
 
     for line in init_solver:
         if line.startswith('snapshot_prefix'):
-            line = "snapshot_prefix: " + cfg.get("path", "snapshots") + '/' \
-                   + cfg.get("status", "name")
+            line = 'snapshot_prefix: "' + cfg.get("path", "snapshots") + '/' \
+                   + cfg.get("status", "name") + '"\n'
         else:
             for option in cfg.items("caffe"):
                 if line.startswith(option[0]):
                     line = option[0] + ": " + option[1]
-        print >> solverf, line
+        print >> solverf, line,
 
     solverf.close()
 
     return solver
 
 
+def update_solver(cfg):
+    """Update max_iter for next job."""
+    max_iter = \
+        cfg.getint("caffe", "max_iter") * cfg.getint("status", "current_run")
+
+    with open(cfg.get("status", "solver"), 'r+') as f:
+        solver = f.readlines()
+        for line in solver:
+            if line.startswith("max_iter"):
+                line = "max_iter: " + str(max_iter) + "\n"
+            print >> f, line,
+
+
 def submit(pbs):
     """qsub the script"""
+    return
     cmd = "qsub -q titan " + pbs
     subprocess.Popen(cmd, shell=True, executable="/bin/bash")
 
@@ -108,11 +121,13 @@ def get_checkpoint(cfg):
     """Find the last caffe snapshot."""
     path = cfg.get("path", "snapshots")
     prefix = cfg.get("status", "name") + "_iter_"
+    suffix = ".solverstate"
     snapshots = [f for f in os.listdir(path) if isfile(join(path, f))]
     snapshots = [f for f in snapshots if f.startswith(prefix)]
-    snapshots = [f for f in snapshots in f.endswith(".solverstate")]
-    iterations = [i[len(prefix):-len(".solverstate")] for i in snapshots]
-    print iterations
+    snapshots = [f for f in snapshots if f.endswith(suffix)]
+    iterations = [int(i[len(prefix):-len(suffix)]) for i in snapshots]
+    last = max(iterations)
+    return path + "/" + prefix + str(last) + suffix, last
 
 
 @click.group()
@@ -159,11 +174,17 @@ def advance(status):
 
     save_config(cfg)
 
-    last_checkpoint = get_checkpoint(cfg)
+    last_checkpoint, current_iter = get_checkpoint(cfg)
 
-    pbs = generate_pbs(cfg, last_checkpoint)
+    try:
+        max_iter = cfg.getint("caffe", "last_iter")
+    except:
+        max_iter = 0
 
-    submit(pbs)
+    if max_iter and current_iter < max_iter:
+        update_solver(cfg)
+        pbs = generate_pbs(cfg, last_checkpoint)
+        submit(pbs)
 
 if __name__ == '__main__':
     main()
