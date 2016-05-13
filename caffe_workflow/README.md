@@ -1,5 +1,4 @@
 # MLMPR Caffe @ Titan
----
 
 ```
 Usage: mlmpr_caffe.py [OPTIONS] COMMAND [ARGS]...
