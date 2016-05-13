@@ -23,27 +23,27 @@ def make_unique(name):
 
 def generate_pbs(cfg, init=False):
     """Generate PBS script."""
-    pbs = cfg.get("path", "logs") + "/" + cfg.("status", "name") + ".pbs"
-    out = cfg.get("path", "logs") + "/" + cfg.("status", "name") + ".out"
-    err = cfg.get("path", "logs") + "/" + cfg.("status", "name") + ".err"
+    pbs = cfg.get("path", "logs") + "/" + cfg.get("status", "name") + ".pbs"
+    out = cfg.get("path", "logs") + "/" + cfg.get("status", "name") + ".out"
+    err = cfg.get("path", "logs") + "/" + cfg.get("status", "name") + ".err"
 
     pbsf = open(pbs, 'w')
 
-    print pbsf, "#!/bin/bash"
-    print pbsf, "#PBS -A hep105"
-    print pbsf, "#PBS -l nodes=1"
-    print pbsf, "#PBS -l walltime=2:00:00"
-    print pbsf, "#PBS -N", cfg.("status", "name")
-    print pbsf, "#PBS -o", out
-    print pbsf, "#PBS -e", err
+    print >> pbsf, "#!/bin/bash"
+    print >> pbsf, "#PBS -A hep105"
+    print >> pbsf, "#PBS -l nodes=1"
+    print >> pbsf, "#PBS -l walltime=2:00:00"
+    print >> pbsf, "#PBS -N", cfg.get("status", "name")
+    print >> pbsf, "#PBS -o", out
+    print >> pbsf, "#PBS -e", err
 
-    print pbsf, "source $MODULESHOME/init/bash"
-    print pbsf, "source $PROJWORK/hep105/steven_caffe2/bashsetup.execenv.sh"
-    print pbsf, "module load cray-mpich"
+    print >> pbsf, "source $MODULESHOME/init/bash"
+    print >> pbsf, "source $PROJWORK/hep105/steven_caffe2/bashsetup.execenv.sh"
+    print >> pbsf, "module load cray-mpich"
 
-    print pbsf, "aprun -n 1 -N 1", \
-                cfg.get("path", "caffe") + "/build/tools/caffe train", \
-                "--solver=" + cfg.("caffe", "solver")
+    print >> pbsf, "aprun -n 1 -N 1", \
+                   cfg.get("path", "caffe") + "/build/tools/caffe train", \
+                   "--solver=" + cfg.get("caffe", "solver")
 
     pbsf.close()
 
@@ -52,7 +52,7 @@ def generate_pbs(cfg, init=False):
 
 def submit(pbs):
     """qsub the script"""
-    cmd = "qsub -q titan", pbs
+    cmd = "qsub -q titan " + pbs
     subprocess.Popen(cmd, shell=True, executable="/bin/bash")
 
 
