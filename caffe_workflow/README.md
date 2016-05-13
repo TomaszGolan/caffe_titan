@@ -69,6 +69,6 @@ The continuation of already initialized job:
 
 * update `solver`, so max_iter = max_iter * current_run
 
-* look for last snapshot
+* look for last snapshot and update `pbs` script accordingly 
 
 * run itself until `last_iter` is reached
