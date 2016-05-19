@@ -21,16 +21,20 @@ with open(sys.argv[1], 'r') as f:
 timestamps = [l.split()[1] for l in log if l.startswith('I')]
 
 delta = [0] * len(timestamps)
+total = 0
 
 for i in range(len(timestamps) - 1):
     d = (str2time(timestamps[i+1]) - str2time(timestamps[i])).total_seconds()
     delta[i+1] = d
+    total = total + d
 
 steps = []
 steps.extend(range(0, len(delta)))
 
 plt.xlabel('log index')
 plt.ylabel('$\Delta t$')
+
+plt.title('total time = %s' % total)
 
 plt.text(50, 60, get('display', log), fontsize=15)
 plt.text(50, 55, get('test_interval', log), fontsize=15)
