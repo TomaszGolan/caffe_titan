@@ -85,6 +85,7 @@ def generate_updater(cfg):
     print >> pbsf, "#PBS -N", name
     print >> pbsf, "#PBS -o", out
     print >> pbsf, "#PBS -j oe"
+    print >> pbsf, "#PBS -m n"
 
     print >> pbsf, "cd " + cfg.get("path", "logs")
 
