@@ -42,4 +42,4 @@ plt.text(50, 50, get('batch_size', log), fontsize=15)
 plt.text(50, 45, get('snapshot', log), fontsize=15)
 
 plt.plot(steps, delta)
-plt.show()
+plt.savefig('caffe_log.png')
