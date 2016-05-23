@@ -3,6 +3,7 @@
 import os
 import sys
 from datetime import datetime
+import matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -29,14 +30,13 @@ def get_acc(log):
             temp.extend(l.split())
     return temp[-1]
 
+
 path = sys.argv[1]
 prefix = sys.argv[2]
 
-time_prefix = "Elapsed (wall clock) time (h:mm:ss or m:ss):"
-
 b = []
-t = []
 a = []
+l = []
 
 for logfile in ls(path):
     batch_size = int(logfile[len(prefix):].split('_')[0])
@@ -45,33 +45,43 @@ for logfile in ls(path):
         log = f.read().split('\n')
 
     try:
-        time = str2time((get(time_prefix, log)[len(time_prefix):].strip()))
-        time = 3600 * time.hour + 60 * time.minute + time.second
 
         acc = float(get_acc(log))
+        lrate = get("base_lr", log)
+        lrate = float(lrate.split()[1])
 
         b.append(batch_size)
-        t.append(time)
         a.append(acc)
+        l.append(lrate)
     except:
         pass
 
-data = zip(b, t, a)
-data.sort()
+fig, ax = plt.subplots(2, 5)
+fig.set_size_inches((5, 2) * fig.get_size_inches())
 
-b, t, a = zip(*data)
+for i in xrange(10, 110, 10):
+    x = []
+    y = []
 
-plt.figure(1)
+    for j, size in enumerate(b):
+        if size == i:
+            x.append(l[j] * 1000)
+            y.append(a[j])
 
-plt.xlabel('batch size')
-plt.ylabel('time [s]')
+    data = zip(x, y)
+    data.sort()
 
-plt.plot(b, t)
-plt.savefig('batch_size_vs_time.png')
+    posx = int(i > 50)
+    posy = i / 10 - 5 * posx - 1
+    ax[posx, posy].set_title("batch size = %d" % i)
+    ax[posx, posy].set_xlabel("learning rate [$10^{-3}$]")
+    ax[posx, posy].set_ylabel("accuracy")
+    ax[posx, posy].set_ylim([0.8, 1.0])
 
-plt.figure(2)
+    try:
+        x, y = zip(*data)
+        ax[posx, posy].plot(x, y)
+    except:
+        pass
 
-plt.ylabel('accuracy')
-
-plt.plot(b, a)
-plt.savefig('batch_size_vs_acc.png')
+plt.savefig('bslr.png')
