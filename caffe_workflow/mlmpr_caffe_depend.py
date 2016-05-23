@@ -225,7 +225,7 @@ def main():
 @click.option('-e', '--epoch', type=int, help='number of epochs', default=None)
 @click.option('-l', '--learn', type=int, help='no. of training samples', default=None)
 @click.option('-t', '--test', type=int, help='no. of testing samples', default=None)
-@click.option('-r', '--rate', type=float, help='learning rate', defult=None)
+@click.option('-r', '--rate', type=float, help='learning rate', default=None)
 def new(config, name, batch_size, epoch, learn, test, rate):
     """Prepare a job based on config file."""
     cfg = SafeConfigParser()
@@ -240,7 +240,7 @@ def new(config, name, batch_size, epoch, learn, test, rate):
         update_iterations(cfg, int(batch_size), int(epoch), int(learn), int(test))
 
     if rate:
-        cfg.set("caffe", "base_lr", rate)
+        cfg.set("caffe", "base_lr", (str(rate) + "\n"))
 
     cfg.add_section("status")
     cfg.set("status", "name", jobname)
