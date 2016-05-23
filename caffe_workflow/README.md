@@ -1,5 +1,19 @@
 # MLMPR Caffe @ Titan
 
+Note: `mlmpr_caffe_depend.py` uses:
+
+```
+qsub -W depend=afternotok:$PBS_JOBID next_job
+```
+
+so there is no need to make sure the job is done within 2 hours.
+It will run a job and "updater" will be in hold until the job is killed.
+If the job ends with error "updater" will run next job starting with last
+checkpoint (until max_iter is reached).
+
+---
+
+
 ```
 Usage: mlmpr_caffe.py [OPTIONS] COMMAND [ARGS]...
 
@@ -69,6 +83,6 @@ The continuation of already initialized job:
 
 * update `solver`, so max_iter = max_iter * current_run
 
-* look for last snapshot and update `pbs` script accordingly 
+* look for last snapshot and update `pbs` script accordingly
 
 * run itself until `last_iter` is reached
