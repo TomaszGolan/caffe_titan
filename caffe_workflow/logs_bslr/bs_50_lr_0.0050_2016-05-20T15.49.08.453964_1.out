@@ -1,0 +1,2573 @@
+2808329
+I0523 10:17:55.042251 32426 caffe.cpp:184] Using GPUs 0
+I0523 10:17:55.469636 32426 solver.cpp:48] Initializing solver from parameters: 
+test_iter: 3000
+test_interval: 6000
+base_lr: 0.005
+display: 300
+max_iter: 300000
+lr_policy: "fixed"
+momentum: 0.9
+weight_decay: 0.0001
+snapshot: 3000
+snapshot_prefix: "/lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964"
+solver_mode: GPU
+device_id: 0
+net: "/lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/logs_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964.prototxt"
+I0523 10:17:55.471524 32426 solver.cpp:91] Creating training net from net file: /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/logs_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964.prototxt
+I0523 10:17:55.482091 32426 net.cpp:322] The NetState phase (0) differed from the phase (1) specified by a rule in layer data_hdf5
+I0523 10:17:55.482151 32426 net.cpp:322] The NetState phase (0) differed from the phase (1) specified by a rule in layer accuracy
+I0523 10:17:55.482498 32426 net.cpp:49] Initializing net from parameters: 
+name: "caffe_test_127x50_x_unshifted"
+state {
+  phase: TRAIN
+}
+layer {
+  name: "data_hdf5"
+  type: "HDF5Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  hdf5_data_param {
+    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/minosmatch_nukecczdefs_127x50_x_unshifted_me1Bmc.trainlist"
+    batch_size: 50
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  convolution_param {
+    num_output: 12
+    pad: 0
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+    kernel_h: 8
+    kernel_w: 3
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  convolution_param {
+    num_output: 20
+    pad: 0
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+    kernel_h: 7
+    kernel_w: 3
+  }
+}
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+layer {
+  name: "conv3"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3"
+  convolution_param {
+    num_output: 28
+    pad: 0
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+    kernel_h: 6
+    kernel_w: 3
+  }
+}
+layer {
+  name: "relu3"
+  type: "ReLU"
+  bottom: "conv3"
+  top: "conv3"
+}
+layer {
+  name: "pool3"
+  type: "Pooling"
+  bottom: "conv3"
+  top: "pool3"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+layer {
+  name: "conv4"
+  type: "Convolution"
+  bottom: "pool3"
+  top: "conv4"
+  convolution_param {
+    num_output: 36
+    pad: 0
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+    kernel_h: 6
+    kernel_w: 3
+  }
+}
+layer {
+  name: "relu4"
+  type: "ReLU"
+  bottom: "conv4"
+  top: "conv4"
+}
+layer {
+  name: "pool4"
+  type: "Pooling"
+  bottom: "conv4"
+  top: "pool4"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "pool4"
+  top: "ip1"
+  inner_product_param {
+    num_output: 196
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu5"
+  type: "ReLU"
+  bottom: "ip1"
+  top: "ip1"
+}
+layer {
+  name: "drop1"
+  type: "Dropout"
+  bottom: "ip1"
+  top: "ip1"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "ip2"
+  type: "InnerProduct"
+  bottom: "ip1"
+  top: "ip2"
+  inner_product_param {
+    num_output: 98
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu6"
+  type: "ReLU"
+  bottom: "ip2"
+  top: "ip2"
+}
+layer {
+  name: "drop2"
+  type: "Dropout"
+  bottom: "ip2"
+  top: "ip2"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "ip3"
+  type: "InnerProduct"
+  bottom: "ip2"
+  top: "ip3"
+  inner_product_param {
+    num_output: 11
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "drop3"
+  type: "Dropout"
+  bottom: "ip3"
+  top: "ip3"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip3"
+  bottom: "label"
+  top: "loss"
+}
+I0523 10:17:55.482681 32426 layer_factory.hpp:77] Creating layer data_hdf5
+I0523 10:17:55.482704 32426 net.cpp:106] Creating Layer data_hdf5
+I0523 10:17:55.482719 32426 net.cpp:411] data_hdf5 -> data
+I0523 10:17:55.482753 32426 net.cpp:411] data_hdf5 -> label
+I0523 10:17:55.482786 32426 hdf5_data_layer.cpp:79] Loading list of HDF5 filenames from: /lustre/atlas/proj-shared/hep105/caffe_titan/minosmatch_nukecczdefs_127x50_x_unshifted_me1Bmc.trainlist
+I0523 10:17:55.484174 32426 hdf5_data_layer.cpp:93] Number of HDF5 files: 15
+I0523 10:17:55.486488 32426 hdf5.cpp:32] Datatype class: H5T_FLOAT
+I0523 10:18:16.995899 32426 hdf5.cpp:35] Datatype class: H5T_INTEGER
+I0523 10:18:17.001134 32426 net.cpp:150] Setting up data_hdf5
+I0523 10:18:17.001175 32426 net.cpp:157] Top shape: 50 1 127 50 (317500)
+I0523 10:18:17.001190 32426 net.cpp:157] Top shape: 50 (50)
+I0523 10:18:17.001201 32426 net.cpp:165] Memory required for data: 1270200
+I0523 10:18:17.001215 32426 layer_factory.hpp:77] Creating layer conv1
+I0523 10:18:17.001250 32426 net.cpp:106] Creating Layer conv1
+I0523 10:18:17.001260 32426 net.cpp:454] conv1 <- data
+I0523 10:18:17.001281 32426 net.cpp:411] conv1 -> conv1
+I0523 10:18:17.366245 32426 net.cpp:150] Setting up conv1
+I0523 10:18:17.366291 32426 net.cpp:157] Top shape: 50 12 120 48 (3456000)
+I0523 10:18:17.366302 32426 net.cpp:165] Memory required for data: 15094200
+I0523 10:18:17.366333 32426 layer_factory.hpp:77] Creating layer relu1
+I0523 10:18:17.366353 32426 net.cpp:106] Creating Layer relu1
+I0523 10:18:17.366364 32426 net.cpp:454] relu1 <- conv1
+I0523 10:18:17.366379 32426 net.cpp:397] relu1 -> conv1 (in-place)
+I0523 10:18:17.366901 32426 net.cpp:150] Setting up relu1
+I0523 10:18:17.366919 32426 net.cpp:157] Top shape: 50 12 120 48 (3456000)
+I0523 10:18:17.366930 32426 net.cpp:165] Memory required for data: 28918200
+I0523 10:18:17.366940 32426 layer_factory.hpp:77] Creating layer pool1
+I0523 10:18:17.366956 32426 net.cpp:106] Creating Layer pool1
+I0523 10:18:17.366966 32426 net.cpp:454] pool1 <- conv1
+I0523 10:18:17.366979 32426 net.cpp:411] pool1 -> pool1
+I0523 10:18:17.367060 32426 net.cpp:150] Setting up pool1
+I0523 10:18:17.367074 32426 net.cpp:157] Top shape: 50 12 60 48 (1728000)
+I0523 10:18:17.367084 32426 net.cpp:165] Memory required for data: 35830200
+I0523 10:18:17.367092 32426 layer_factory.hpp:77] Creating layer conv2
+I0523 10:18:17.367115 32426 net.cpp:106] Creating Layer conv2
+I0523 10:18:17.367125 32426 net.cpp:454] conv2 <- pool1
+I0523 10:18:17.367137 32426 net.cpp:411] conv2 -> conv2
+I0523 10:18:17.369801 32426 net.cpp:150] Setting up conv2
+I0523 10:18:17.369824 32426 net.cpp:157] Top shape: 50 20 54 46 (2484000)
+I0523 10:18:17.369834 32426 net.cpp:165] Memory required for data: 45766200
+I0523 10:18:17.369854 32426 layer_factory.hpp:77] Creating layer relu2
+I0523 10:18:17.369869 32426 net.cpp:106] Creating Layer relu2
+I0523 10:18:17.369879 32426 net.cpp:454] relu2 <- conv2
+I0523 10:18:17.369892 32426 net.cpp:397] relu2 -> conv2 (in-place)
+I0523 10:18:17.370225 32426 net.cpp:150] Setting up relu2
+I0523 10:18:17.370239 32426 net.cpp:157] Top shape: 50 20 54 46 (2484000)
+I0523 10:18:17.370249 32426 net.cpp:165] Memory required for data: 55702200
+I0523 10:18:17.370260 32426 layer_factory.hpp:77] Creating layer pool2
+I0523 10:18:17.370272 32426 net.cpp:106] Creating Layer pool2
+I0523 10:18:17.370282 32426 net.cpp:454] pool2 <- conv2
+I0523 10:18:17.370296 32426 net.cpp:411] pool2 -> pool2
+I0523 10:18:17.370378 32426 net.cpp:150] Setting up pool2
+I0523 10:18:17.370391 32426 net.cpp:157] Top shape: 50 20 27 46 (1242000)
+I0523 10:18:17.370400 32426 net.cpp:165] Memory required for data: 60670200
+I0523 10:18:17.370410 32426 layer_factory.hpp:77] Creating layer conv3
+I0523 10:18:17.370429 32426 net.cpp:106] Creating Layer conv3
+I0523 10:18:17.370440 32426 net.cpp:454] conv3 <- pool2
+I0523 10:18:17.370453 32426 net.cpp:411] conv3 -> conv3
+I0523 10:18:17.372405 32426 net.cpp:150] Setting up conv3
+I0523 10:18:17.372428 32426 net.cpp:157] Top shape: 50 28 22 44 (1355200)
+I0523 10:18:17.372442 32426 net.cpp:165] Memory required for data: 66091000
+I0523 10:18:17.372459 32426 layer_factory.hpp:77] Creating layer relu3
+I0523 10:18:17.372475 32426 net.cpp:106] Creating Layer relu3
+I0523 10:18:17.372485 32426 net.cpp:454] relu3 <- conv3
+I0523 10:18:17.372498 32426 net.cpp:397] relu3 -> conv3 (in-place)
+I0523 10:18:17.372967 32426 net.cpp:150] Setting up relu3
+I0523 10:18:17.372985 32426 net.cpp:157] Top shape: 50 28 22 44 (1355200)
+I0523 10:18:17.372995 32426 net.cpp:165] Memory required for data: 71511800
+I0523 10:18:17.373006 32426 layer_factory.hpp:77] Creating layer pool3
+I0523 10:18:17.373019 32426 net.cpp:106] Creating Layer pool3
+I0523 10:18:17.373028 32426 net.cpp:454] pool3 <- conv3
+I0523 10:18:17.373041 32426 net.cpp:411] pool3 -> pool3
+I0523 10:18:17.373109 32426 net.cpp:150] Setting up pool3
+I0523 10:18:17.373122 32426 net.cpp:157] Top shape: 50 28 11 44 (677600)
+I0523 10:18:17.373131 32426 net.cpp:165] Memory required for data: 74222200
+I0523 10:18:17.373142 32426 layer_factory.hpp:77] Creating layer conv4
+I0523 10:18:17.373159 32426 net.cpp:106] Creating Layer conv4
+I0523 10:18:17.373170 32426 net.cpp:454] conv4 <- pool3
+I0523 10:18:17.373183 32426 net.cpp:411] conv4 -> conv4
+I0523 10:18:17.375931 32426 net.cpp:150] Setting up conv4
+I0523 10:18:17.375958 32426 net.cpp:157] Top shape: 50 36 6 42 (453600)
+I0523 10:18:17.375970 32426 net.cpp:165] Memory required for data: 76036600
+I0523 10:18:17.375987 32426 layer_factory.hpp:77] Creating layer relu4
+I0523 10:18:17.376000 32426 net.cpp:106] Creating Layer relu4
+I0523 10:18:17.376010 32426 net.cpp:454] relu4 <- conv4
+I0523 10:18:17.376024 32426 net.cpp:397] relu4 -> conv4 (in-place)
+I0523 10:18:17.376495 32426 net.cpp:150] Setting up relu4
+I0523 10:18:17.376513 32426 net.cpp:157] Top shape: 50 36 6 42 (453600)
+I0523 10:18:17.376523 32426 net.cpp:165] Memory required for data: 77851000
+I0523 10:18:17.376533 32426 layer_factory.hpp:77] Creating layer pool4
+I0523 10:18:17.376546 32426 net.cpp:106] Creating Layer pool4
+I0523 10:18:17.376556 32426 net.cpp:454] pool4 <- conv4
+I0523 10:18:17.376570 32426 net.cpp:411] pool4 -> pool4
+I0523 10:18:17.376638 32426 net.cpp:150] Setting up pool4
+I0523 10:18:17.376652 32426 net.cpp:157] Top shape: 50 36 3 42 (226800)
+I0523 10:18:17.376663 32426 net.cpp:165] Memory required for data: 78758200
+I0523 10:18:17.376673 32426 layer_factory.hpp:77] Creating layer ip1
+I0523 10:18:17.376691 32426 net.cpp:106] Creating Layer ip1
+I0523 10:18:17.376701 32426 net.cpp:454] ip1 <- pool4
+I0523 10:18:17.376714 32426 net.cpp:411] ip1 -> ip1
+I0523 10:18:17.392055 32426 net.cpp:150] Setting up ip1
+I0523 10:18:17.392083 32426 net.cpp:157] Top shape: 50 196 (9800)
+I0523 10:18:17.392096 32426 net.cpp:165] Memory required for data: 78797400
+I0523 10:18:17.392118 32426 layer_factory.hpp:77] Creating layer relu5
+I0523 10:18:17.392133 32426 net.cpp:106] Creating Layer relu5
+I0523 10:18:17.392143 32426 net.cpp:454] relu5 <- ip1
+I0523 10:18:17.392158 32426 net.cpp:397] relu5 -> ip1 (in-place)
+I0523 10:18:17.392498 32426 net.cpp:150] Setting up relu5
+I0523 10:18:17.392513 32426 net.cpp:157] Top shape: 50 196 (9800)
+I0523 10:18:17.392524 32426 net.cpp:165] Memory required for data: 78836600
+I0523 10:18:17.392534 32426 layer_factory.hpp:77] Creating layer drop1
+I0523 10:18:17.392554 32426 net.cpp:106] Creating Layer drop1
+I0523 10:18:17.392565 32426 net.cpp:454] drop1 <- ip1
+I0523 10:18:17.392577 32426 net.cpp:397] drop1 -> ip1 (in-place)
+I0523 10:18:17.392635 32426 net.cpp:150] Setting up drop1
+I0523 10:18:17.392649 32426 net.cpp:157] Top shape: 50 196 (9800)
+I0523 10:18:17.392660 32426 net.cpp:165] Memory required for data: 78875800
+I0523 10:18:17.392670 32426 layer_factory.hpp:77] Creating layer ip2
+I0523 10:18:17.392689 32426 net.cpp:106] Creating Layer ip2
+I0523 10:18:17.392700 32426 net.cpp:454] ip2 <- ip1
+I0523 10:18:17.392712 32426 net.cpp:411] ip2 -> ip2
+I0523 10:18:17.393173 32426 net.cpp:150] Setting up ip2
+I0523 10:18:17.393187 32426 net.cpp:157] Top shape: 50 98 (4900)
+I0523 10:18:17.393196 32426 net.cpp:165] Memory required for data: 78895400
+I0523 10:18:17.393211 32426 layer_factory.hpp:77] Creating layer relu6
+I0523 10:18:17.393225 32426 net.cpp:106] Creating Layer relu6
+I0523 10:18:17.393234 32426 net.cpp:454] relu6 <- ip2
+I0523 10:18:17.393249 32426 net.cpp:397] relu6 -> ip2 (in-place)
+I0523 10:18:17.393769 32426 net.cpp:150] Setting up relu6
+I0523 10:18:17.393785 32426 net.cpp:157] Top shape: 50 98 (4900)
+I0523 10:18:17.393796 32426 net.cpp:165] Memory required for data: 78915000
+I0523 10:18:17.393807 32426 layer_factory.hpp:77] Creating layer drop2
+I0523 10:18:17.393821 32426 net.cpp:106] Creating Layer drop2
+I0523 10:18:17.393831 32426 net.cpp:454] drop2 <- ip2
+I0523 10:18:17.393843 32426 net.cpp:397] drop2 -> ip2 (in-place)
+I0523 10:18:17.393885 32426 net.cpp:150] Setting up drop2
+I0523 10:18:17.393899 32426 net.cpp:157] Top shape: 50 98 (4900)
+I0523 10:18:17.393909 32426 net.cpp:165] Memory required for data: 78934600
+I0523 10:18:17.393919 32426 layer_factory.hpp:77] Creating layer ip3
+I0523 10:18:17.393934 32426 net.cpp:106] Creating Layer ip3
+I0523 10:18:17.393942 32426 net.cpp:454] ip3 <- ip2
+I0523 10:18:17.393956 32426 net.cpp:411] ip3 -> ip3
+I0523 10:18:17.394167 32426 net.cpp:150] Setting up ip3
+I0523 10:18:17.394181 32426 net.cpp:157] Top shape: 50 11 (550)
+I0523 10:18:17.394191 32426 net.cpp:165] Memory required for data: 78936800
+I0523 10:18:17.394207 32426 layer_factory.hpp:77] Creating layer drop3
+I0523 10:18:17.394218 32426 net.cpp:106] Creating Layer drop3
+I0523 10:18:17.394228 32426 net.cpp:454] drop3 <- ip3
+I0523 10:18:17.394240 32426 net.cpp:397] drop3 -> ip3 (in-place)
+I0523 10:18:17.394279 32426 net.cpp:150] Setting up drop3
+I0523 10:18:17.394292 32426 net.cpp:157] Top shape: 50 11 (550)
+I0523 10:18:17.394302 32426 net.cpp:165] Memory required for data: 78939000
+I0523 10:18:17.394312 32426 layer_factory.hpp:77] Creating layer loss
+I0523 10:18:17.394332 32426 net.cpp:106] Creating Layer loss
+I0523 10:18:17.394342 32426 net.cpp:454] loss <- ip3
+I0523 10:18:17.394353 32426 net.cpp:454] loss <- label
+I0523 10:18:17.394366 32426 net.cpp:411] loss -> loss
+I0523 10:18:17.394382 32426 layer_factory.hpp:77] Creating layer loss
+I0523 10:18:17.395020 32426 net.cpp:150] Setting up loss
+I0523 10:18:17.395041 32426 net.cpp:157] Top shape: (1)
+I0523 10:18:17.395054 32426 net.cpp:160]     with loss weight 1
+I0523 10:18:17.395097 32426 net.cpp:165] Memory required for data: 78939004
+I0523 10:18:17.395107 32426 net.cpp:226] loss needs backward computation.
+I0523 10:18:17.395118 32426 net.cpp:226] drop3 needs backward computation.
+I0523 10:18:17.395128 32426 net.cpp:226] ip3 needs backward computation.
+I0523 10:18:17.395138 32426 net.cpp:226] drop2 needs backward computation.
+I0523 10:18:17.395148 32426 net.cpp:226] relu6 needs backward computation.
+I0523 10:18:17.395159 32426 net.cpp:226] ip2 needs backward computation.
+I0523 10:18:17.395167 32426 net.cpp:226] drop1 needs backward computation.
+I0523 10:18:17.395177 32426 net.cpp:226] relu5 needs backward computation.
+I0523 10:18:17.395187 32426 net.cpp:226] ip1 needs backward computation.
+I0523 10:18:17.395197 32426 net.cpp:226] pool4 needs backward computation.
+I0523 10:18:17.395207 32426 net.cpp:226] relu4 needs backward computation.
+I0523 10:18:17.395217 32426 net.cpp:226] conv4 needs backward computation.
+I0523 10:18:17.395228 32426 net.cpp:226] pool3 needs backward computation.
+I0523 10:18:17.395239 32426 net.cpp:226] relu3 needs backward computation.
+I0523 10:18:17.395249 32426 net.cpp:226] conv3 needs backward computation.
+I0523 10:18:17.395268 32426 net.cpp:226] pool2 needs backward computation.
+I0523 10:18:17.395279 32426 net.cpp:226] relu2 needs backward computation.
+I0523 10:18:17.395289 32426 net.cpp:226] conv2 needs backward computation.
+I0523 10:18:17.395300 32426 net.cpp:226] pool1 needs backward computation.
+I0523 10:18:17.395311 32426 net.cpp:226] relu1 needs backward computation.
+I0523 10:18:17.395321 32426 net.cpp:226] conv1 needs backward computation.
+I0523 10:18:17.395333 32426 net.cpp:228] data_hdf5 does not need backward computation.
+I0523 10:18:17.395342 32426 net.cpp:270] This network produces output loss
+I0523 10:18:17.395365 32426 net.cpp:283] Network initialization done.
+I0523 10:18:17.397100 32426 solver.cpp:181] Creating test net (#0) specified by net file: /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/logs_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964.prototxt
+I0523 10:18:17.397172 32426 net.cpp:322] The NetState phase (1) differed from the phase (0) specified by a rule in layer data_hdf5
+I0523 10:18:17.397528 32426 net.cpp:49] Initializing net from parameters: 
+name: "caffe_test_127x50_x_unshifted"
+state {
+  phase: TEST
+}
+layer {
+  name: "data_hdf5"
+  type: "HDF5Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  hdf5_data_param {
+    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/minosmatch_nukecczdefs_127x50_x_unshifted_me1Bmc.testlist"
+    batch_size: 50
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  convolution_param {
+    num_output: 12
+    pad: 0
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+    kernel_h: 8
+    kernel_w: 3
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  convolution_param {
+    num_output: 20
+    pad: 0
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+    kernel_h: 7
+    kernel_w: 3
+  }
+}
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+layer {
+  name: "conv3"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3"
+  convolution_param {
+    num_output: 28
+    pad: 0
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+    kernel_h: 6
+    kernel_w: 3
+  }
+}
+layer {
+  name: "relu3"
+  type: "ReLU"
+  bottom: "conv3"
+  top: "conv3"
+}
+layer {
+  name: "pool3"
+  type: "Pooling"
+  bottom: "conv3"
+  top: "pool3"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+layer {
+  name: "conv4"
+  type: "Convolution"
+  bottom: "pool3"
+  top: "conv4"
+  convolution_param {
+    num_output: 36
+    pad: 0
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+    kernel_h: 6
+    kernel_w: 3
+  }
+}
+layer {
+  name: "relu4"
+  type: "ReLU"
+  bottom: "conv4"
+  top: "conv4"
+}
+layer {
+  name: "pool4"
+  type: "Pooling"
+  bottom: "conv4"
+  top: "pool4"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "pool4"
+  top: "ip1"
+  inner_product_param {
+    num_output: 196
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu5"
+  type: "ReLU"
+  bottom: "ip1"
+  top: "ip1"
+}
+layer {
+  name: "drop1"
+  type: "Dropout"
+  bottom: "ip1"
+  top: "ip1"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "ip2"
+  type: "InnerProduct"
+  bottom: "ip1"
+  top: "ip2"
+  inner_product_param {
+    num_output: 98
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu6"
+  type: "ReLU"
+  bottom: "ip2"
+  top: "ip2"
+}
+layer {
+  name: "drop2"
+  type: "Dropout"
+  bottom: "ip2"
+  top: "ip2"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "ip3"
+  type: "InnerProduct"
+  bottom: "ip2"
+  top: "ip3"
+  inner_product_param {
+    num_output: 11
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "drop3"
+  type: "Dropout"
+  bottom: "ip3"
+  top: "ip3"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "ip3"
+  bottom: "label"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip3"
+  bottom: "label"
+  top: "loss"
+}
+I0523 10:18:17.397717 32426 layer_factory.hpp:77] Creating layer data_hdf5
+I0523 10:18:17.397732 32426 net.cpp:106] Creating Layer data_hdf5
+I0523 10:18:17.397744 32426 net.cpp:411] data_hdf5 -> data
+I0523 10:18:17.397761 32426 net.cpp:411] data_hdf5 -> label
+I0523 10:18:17.397776 32426 hdf5_data_layer.cpp:79] Loading list of HDF5 filenames from: /lustre/atlas/proj-shared/hep105/caffe_titan/minosmatch_nukecczdefs_127x50_x_unshifted_me1Bmc.testlist
+I0523 10:18:17.399044 32426 hdf5_data_layer.cpp:93] Number of HDF5 files: 3
+I0523 10:18:38.727224 32426 net.cpp:150] Setting up data_hdf5
+I0523 10:18:38.727393 32426 net.cpp:157] Top shape: 50 1 127 50 (317500)
+I0523 10:18:38.727408 32426 net.cpp:157] Top shape: 50 (50)
+I0523 10:18:38.727419 32426 net.cpp:165] Memory required for data: 1270200
+I0523 10:18:38.727433 32426 layer_factory.hpp:77] Creating layer label_data_hdf5_1_split
+I0523 10:18:38.727461 32426 net.cpp:106] Creating Layer label_data_hdf5_1_split
+I0523 10:18:38.727473 32426 net.cpp:454] label_data_hdf5_1_split <- label
+I0523 10:18:38.727488 32426 net.cpp:411] label_data_hdf5_1_split -> label_data_hdf5_1_split_0
+I0523 10:18:38.727509 32426 net.cpp:411] label_data_hdf5_1_split -> label_data_hdf5_1_split_1
+I0523 10:18:38.727581 32426 net.cpp:150] Setting up label_data_hdf5_1_split
+I0523 10:18:38.727596 32426 net.cpp:157] Top shape: 50 (50)
+I0523 10:18:38.727607 32426 net.cpp:157] Top shape: 50 (50)
+I0523 10:18:38.727617 32426 net.cpp:165] Memory required for data: 1270600
+I0523 10:18:38.727627 32426 layer_factory.hpp:77] Creating layer conv1
+I0523 10:18:38.727649 32426 net.cpp:106] Creating Layer conv1
+I0523 10:18:38.727659 32426 net.cpp:454] conv1 <- data
+I0523 10:18:38.727674 32426 net.cpp:411] conv1 -> conv1
+I0523 10:18:38.729634 32426 net.cpp:150] Setting up conv1
+I0523 10:18:38.729653 32426 net.cpp:157] Top shape: 50 12 120 48 (3456000)
+I0523 10:18:38.729663 32426 net.cpp:165] Memory required for data: 15094600
+I0523 10:18:38.729684 32426 layer_factory.hpp:77] Creating layer relu1
+I0523 10:18:38.729699 32426 net.cpp:106] Creating Layer relu1
+I0523 10:18:38.729709 32426 net.cpp:454] relu1 <- conv1
+I0523 10:18:38.729723 32426 net.cpp:397] relu1 -> conv1 (in-place)
+I0523 10:18:38.730219 32426 net.cpp:150] Setting up relu1
+I0523 10:18:38.730237 32426 net.cpp:157] Top shape: 50 12 120 48 (3456000)
+I0523 10:18:38.730247 32426 net.cpp:165] Memory required for data: 28918600
+I0523 10:18:38.730257 32426 layer_factory.hpp:77] Creating layer pool1
+I0523 10:18:38.730273 32426 net.cpp:106] Creating Layer pool1
+I0523 10:18:38.730283 32426 net.cpp:454] pool1 <- conv1
+I0523 10:18:38.730295 32426 net.cpp:411] pool1 -> pool1
+I0523 10:18:38.730370 32426 net.cpp:150] Setting up pool1
+I0523 10:18:38.730383 32426 net.cpp:157] Top shape: 50 12 60 48 (1728000)
+I0523 10:18:38.730392 32426 net.cpp:165] Memory required for data: 35830600
+I0523 10:18:38.730401 32426 layer_factory.hpp:77] Creating layer conv2
+I0523 10:18:38.730418 32426 net.cpp:106] Creating Layer conv2
+I0523 10:18:38.730429 32426 net.cpp:454] conv2 <- pool1
+I0523 10:18:38.730443 32426 net.cpp:411] conv2 -> conv2
+I0523 10:18:38.732360 32426 net.cpp:150] Setting up conv2
+I0523 10:18:38.732383 32426 net.cpp:157] Top shape: 50 20 54 46 (2484000)
+I0523 10:18:38.732396 32426 net.cpp:165] Memory required for data: 45766600
+I0523 10:18:38.732414 32426 layer_factory.hpp:77] Creating layer relu2
+I0523 10:18:38.732427 32426 net.cpp:106] Creating Layer relu2
+I0523 10:18:38.732437 32426 net.cpp:454] relu2 <- conv2
+I0523 10:18:38.732450 32426 net.cpp:397] relu2 -> conv2 (in-place)
+I0523 10:18:38.732784 32426 net.cpp:150] Setting up relu2
+I0523 10:18:38.732798 32426 net.cpp:157] Top shape: 50 20 54 46 (2484000)
+I0523 10:18:38.732808 32426 net.cpp:165] Memory required for data: 55702600
+I0523 10:18:38.732818 32426 layer_factory.hpp:77] Creating layer pool2
+I0523 10:18:38.732831 32426 net.cpp:106] Creating Layer pool2
+I0523 10:18:38.732841 32426 net.cpp:454] pool2 <- conv2
+I0523 10:18:38.732853 32426 net.cpp:411] pool2 -> pool2
+I0523 10:18:38.732925 32426 net.cpp:150] Setting up pool2
+I0523 10:18:38.732939 32426 net.cpp:157] Top shape: 50 20 27 46 (1242000)
+I0523 10:18:38.732949 32426 net.cpp:165] Memory required for data: 60670600
+I0523 10:18:38.732959 32426 layer_factory.hpp:77] Creating layer conv3
+I0523 10:18:38.732977 32426 net.cpp:106] Creating Layer conv3
+I0523 10:18:38.732987 32426 net.cpp:454] conv3 <- pool2
+I0523 10:18:38.733001 32426 net.cpp:411] conv3 -> conv3
+I0523 10:18:38.734971 32426 net.cpp:150] Setting up conv3
+I0523 10:18:38.734992 32426 net.cpp:157] Top shape: 50 28 22 44 (1355200)
+I0523 10:18:38.735005 32426 net.cpp:165] Memory required for data: 66091400
+I0523 10:18:38.735038 32426 layer_factory.hpp:77] Creating layer relu3
+I0523 10:18:38.735051 32426 net.cpp:106] Creating Layer relu3
+I0523 10:18:38.735062 32426 net.cpp:454] relu3 <- conv3
+I0523 10:18:38.735074 32426 net.cpp:397] relu3 -> conv3 (in-place)
+I0523 10:18:38.735544 32426 net.cpp:150] Setting up relu3
+I0523 10:18:38.735561 32426 net.cpp:157] Top shape: 50 28 22 44 (1355200)
+I0523 10:18:38.735572 32426 net.cpp:165] Memory required for data: 71512200
+I0523 10:18:38.735582 32426 layer_factory.hpp:77] Creating layer pool3
+I0523 10:18:38.735595 32426 net.cpp:106] Creating Layer pool3
+I0523 10:18:38.735605 32426 net.cpp:454] pool3 <- conv3
+I0523 10:18:38.735617 32426 net.cpp:411] pool3 -> pool3
+I0523 10:18:38.735689 32426 net.cpp:150] Setting up pool3
+I0523 10:18:38.735702 32426 net.cpp:157] Top shape: 50 28 11 44 (677600)
+I0523 10:18:38.735713 32426 net.cpp:165] Memory required for data: 74222600
+I0523 10:18:38.735723 32426 layer_factory.hpp:77] Creating layer conv4
+I0523 10:18:38.735745 32426 net.cpp:106] Creating Layer conv4
+I0523 10:18:38.735756 32426 net.cpp:454] conv4 <- pool3
+I0523 10:18:38.735769 32426 net.cpp:411] conv4 -> conv4
+I0523 10:18:38.737826 32426 net.cpp:150] Setting up conv4
+I0523 10:18:38.737844 32426 net.cpp:157] Top shape: 50 36 6 42 (453600)
+I0523 10:18:38.737855 32426 net.cpp:165] Memory required for data: 76037000
+I0523 10:18:38.737870 32426 layer_factory.hpp:77] Creating layer relu4
+I0523 10:18:38.737884 32426 net.cpp:106] Creating Layer relu4
+I0523 10:18:38.737895 32426 net.cpp:454] relu4 <- conv4
+I0523 10:18:38.737907 32426 net.cpp:397] relu4 -> conv4 (in-place)
+I0523 10:18:38.738379 32426 net.cpp:150] Setting up relu4
+I0523 10:18:38.738394 32426 net.cpp:157] Top shape: 50 36 6 42 (453600)
+I0523 10:18:38.738405 32426 net.cpp:165] Memory required for data: 77851400
+I0523 10:18:38.738415 32426 layer_factory.hpp:77] Creating layer pool4
+I0523 10:18:38.738428 32426 net.cpp:106] Creating Layer pool4
+I0523 10:18:38.738438 32426 net.cpp:454] pool4 <- conv4
+I0523 10:18:38.738452 32426 net.cpp:411] pool4 -> pool4
+I0523 10:18:38.738524 32426 net.cpp:150] Setting up pool4
+I0523 10:18:38.738538 32426 net.cpp:157] Top shape: 50 36 3 42 (226800)
+I0523 10:18:38.738546 32426 net.cpp:165] Memory required for data: 78758600
+I0523 10:18:38.738557 32426 layer_factory.hpp:77] Creating layer ip1
+I0523 10:18:38.738572 32426 net.cpp:106] Creating Layer ip1
+I0523 10:18:38.738584 32426 net.cpp:454] ip1 <- pool4
+I0523 10:18:38.738596 32426 net.cpp:411] ip1 -> ip1
+I0523 10:18:38.754098 32426 net.cpp:150] Setting up ip1
+I0523 10:18:38.754127 32426 net.cpp:157] Top shape: 50 196 (9800)
+I0523 10:18:38.754138 32426 net.cpp:165] Memory required for data: 78797800
+I0523 10:18:38.754160 32426 layer_factory.hpp:77] Creating layer relu5
+I0523 10:18:38.754175 32426 net.cpp:106] Creating Layer relu5
+I0523 10:18:38.754186 32426 net.cpp:454] relu5 <- ip1
+I0523 10:18:38.754199 32426 net.cpp:397] relu5 -> ip1 (in-place)
+I0523 10:18:38.754547 32426 net.cpp:150] Setting up relu5
+I0523 10:18:38.754561 32426 net.cpp:157] Top shape: 50 196 (9800)
+I0523 10:18:38.754571 32426 net.cpp:165] Memory required for data: 78837000
+I0523 10:18:38.754581 32426 layer_factory.hpp:77] Creating layer drop1
+I0523 10:18:38.754601 32426 net.cpp:106] Creating Layer drop1
+I0523 10:18:38.754611 32426 net.cpp:454] drop1 <- ip1
+I0523 10:18:38.754623 32426 net.cpp:397] drop1 -> ip1 (in-place)
+I0523 10:18:38.754669 32426 net.cpp:150] Setting up drop1
+I0523 10:18:38.754683 32426 net.cpp:157] Top shape: 50 196 (9800)
+I0523 10:18:38.754693 32426 net.cpp:165] Memory required for data: 78876200
+I0523 10:18:38.754701 32426 layer_factory.hpp:77] Creating layer ip2
+I0523 10:18:38.754716 32426 net.cpp:106] Creating Layer ip2
+I0523 10:18:38.754725 32426 net.cpp:454] ip2 <- ip1
+I0523 10:18:38.754739 32426 net.cpp:411] ip2 -> ip2
+I0523 10:18:38.755218 32426 net.cpp:150] Setting up ip2
+I0523 10:18:38.755230 32426 net.cpp:157] Top shape: 50 98 (4900)
+I0523 10:18:38.755240 32426 net.cpp:165] Memory required for data: 78895800
+I0523 10:18:38.755255 32426 layer_factory.hpp:77] Creating layer relu6
+I0523 10:18:38.755281 32426 net.cpp:106] Creating Layer relu6
+I0523 10:18:38.755291 32426 net.cpp:454] relu6 <- ip2
+I0523 10:18:38.755303 32426 net.cpp:397] relu6 -> ip2 (in-place)
+I0523 10:18:38.755844 32426 net.cpp:150] Setting up relu6
+I0523 10:18:38.755867 32426 net.cpp:157] Top shape: 50 98 (4900)
+I0523 10:18:38.755877 32426 net.cpp:165] Memory required for data: 78915400
+I0523 10:18:38.755887 32426 layer_factory.hpp:77] Creating layer drop2
+I0523 10:18:38.755902 32426 net.cpp:106] Creating Layer drop2
+I0523 10:18:38.755911 32426 net.cpp:454] drop2 <- ip2
+I0523 10:18:38.755924 32426 net.cpp:397] drop2 -> ip2 (in-place)
+I0523 10:18:38.755970 32426 net.cpp:150] Setting up drop2
+I0523 10:18:38.755982 32426 net.cpp:157] Top shape: 50 98 (4900)
+I0523 10:18:38.755992 32426 net.cpp:165] Memory required for data: 78935000
+I0523 10:18:38.756002 32426 layer_factory.hpp:77] Creating layer ip3
+I0523 10:18:38.756016 32426 net.cpp:106] Creating Layer ip3
+I0523 10:18:38.756027 32426 net.cpp:454] ip3 <- ip2
+I0523 10:18:38.756042 32426 net.cpp:411] ip3 -> ip3
+I0523 10:18:38.756265 32426 net.cpp:150] Setting up ip3
+I0523 10:18:38.756278 32426 net.cpp:157] Top shape: 50 11 (550)
+I0523 10:18:38.756289 32426 net.cpp:165] Memory required for data: 78937200
+I0523 10:18:38.756304 32426 layer_factory.hpp:77] Creating layer drop3
+I0523 10:18:38.756316 32426 net.cpp:106] Creating Layer drop3
+I0523 10:18:38.756326 32426 net.cpp:454] drop3 <- ip3
+I0523 10:18:38.756340 32426 net.cpp:397] drop3 -> ip3 (in-place)
+I0523 10:18:38.756381 32426 net.cpp:150] Setting up drop3
+I0523 10:18:38.756393 32426 net.cpp:157] Top shape: 50 11 (550)
+I0523 10:18:38.756402 32426 net.cpp:165] Memory required for data: 78939400
+I0523 10:18:38.756412 32426 layer_factory.hpp:77] Creating layer ip3_drop3_0_split
+I0523 10:18:38.756425 32426 net.cpp:106] Creating Layer ip3_drop3_0_split
+I0523 10:18:38.756435 32426 net.cpp:454] ip3_drop3_0_split <- ip3
+I0523 10:18:38.756448 32426 net.cpp:411] ip3_drop3_0_split -> ip3_drop3_0_split_0
+I0523 10:18:38.756464 32426 net.cpp:411] ip3_drop3_0_split -> ip3_drop3_0_split_1
+I0523 10:18:38.756538 32426 net.cpp:150] Setting up ip3_drop3_0_split
+I0523 10:18:38.756551 32426 net.cpp:157] Top shape: 50 11 (550)
+I0523 10:18:38.756563 32426 net.cpp:157] Top shape: 50 11 (550)
+I0523 10:18:38.756573 32426 net.cpp:165] Memory required for data: 78943800
+I0523 10:18:38.756583 32426 layer_factory.hpp:77] Creating layer accuracy
+I0523 10:18:38.756604 32426 net.cpp:106] Creating Layer accuracy
+I0523 10:18:38.756615 32426 net.cpp:454] accuracy <- ip3_drop3_0_split_0
+I0523 10:18:38.756626 32426 net.cpp:454] accuracy <- label_data_hdf5_1_split_0
+I0523 10:18:38.756640 32426 net.cpp:411] accuracy -> accuracy
+I0523 10:18:38.756664 32426 net.cpp:150] Setting up accuracy
+I0523 10:18:38.756676 32426 net.cpp:157] Top shape: (1)
+I0523 10:18:38.756686 32426 net.cpp:165] Memory required for data: 78943804
+I0523 10:18:38.756695 32426 layer_factory.hpp:77] Creating layer loss
+I0523 10:18:38.756710 32426 net.cpp:106] Creating Layer loss
+I0523 10:18:38.756721 32426 net.cpp:454] loss <- ip3_drop3_0_split_1
+I0523 10:18:38.756731 32426 net.cpp:454] loss <- label_data_hdf5_1_split_1
+I0523 10:18:38.756744 32426 net.cpp:411] loss -> loss
+I0523 10:18:38.756762 32426 layer_factory.hpp:77] Creating layer loss
+I0523 10:18:38.757248 32426 net.cpp:150] Setting up loss
+I0523 10:18:38.757262 32426 net.cpp:157] Top shape: (1)
+I0523 10:18:38.757272 32426 net.cpp:160]     with loss weight 1
+I0523 10:18:38.757290 32426 net.cpp:165] Memory required for data: 78943808
+I0523 10:18:38.757302 32426 net.cpp:226] loss needs backward computation.
+I0523 10:18:38.757313 32426 net.cpp:228] accuracy does not need backward computation.
+I0523 10:18:38.757323 32426 net.cpp:226] ip3_drop3_0_split needs backward computation.
+I0523 10:18:38.757334 32426 net.cpp:226] drop3 needs backward computation.
+I0523 10:18:38.757342 32426 net.cpp:226] ip3 needs backward computation.
+I0523 10:18:38.757354 32426 net.cpp:226] drop2 needs backward computation.
+I0523 10:18:38.757364 32426 net.cpp:226] relu6 needs backward computation.
+I0523 10:18:38.757380 32426 net.cpp:226] ip2 needs backward computation.
+I0523 10:18:38.757391 32426 net.cpp:226] drop1 needs backward computation.
+I0523 10:18:38.757401 32426 net.cpp:226] relu5 needs backward computation.
+I0523 10:18:38.757411 32426 net.cpp:226] ip1 needs backward computation.
+I0523 10:18:38.757421 32426 net.cpp:226] pool4 needs backward computation.
+I0523 10:18:38.757431 32426 net.cpp:226] relu4 needs backward computation.
+I0523 10:18:38.757442 32426 net.cpp:226] conv4 needs backward computation.
+I0523 10:18:38.757450 32426 net.cpp:226] pool3 needs backward computation.
+I0523 10:18:38.757462 32426 net.cpp:226] relu3 needs backward computation.
+I0523 10:18:38.757472 32426 net.cpp:226] conv3 needs backward computation.
+I0523 10:18:38.757483 32426 net.cpp:226] pool2 needs backward computation.
+I0523 10:18:38.757493 32426 net.cpp:226] relu2 needs backward computation.
+I0523 10:18:38.757503 32426 net.cpp:226] conv2 needs backward computation.
+I0523 10:18:38.757513 32426 net.cpp:226] pool1 needs backward computation.
+I0523 10:18:38.757524 32426 net.cpp:226] relu1 needs backward computation.
+I0523 10:18:38.757534 32426 net.cpp:226] conv1 needs backward computation.
+I0523 10:18:38.757545 32426 net.cpp:228] label_data_hdf5_1_split does not need backward computation.
+I0523 10:18:38.757556 32426 net.cpp:228] data_hdf5 does not need backward computation.
+I0523 10:18:38.757566 32426 net.cpp:270] This network produces output accuracy
+I0523 10:18:38.757575 32426 net.cpp:270] This network produces output loss
+I0523 10:18:38.757603 32426 net.cpp:283] Network initialization done.
+I0523 10:18:38.757738 32426 solver.cpp:60] Solver scaffolding done.
+I0523 10:18:38.758869 32426 caffe.cpp:212] Starting Optimization
+I0523 10:18:38.758888 32426 solver.cpp:288] Solving caffe_test_127x50_x_unshifted
+I0523 10:18:38.758903 32426 solver.cpp:289] Learning Rate Policy: fixed
+I0523 10:18:38.760130 32426 solver.cpp:341] Iteration 0, Testing net (#0)
+I0523 10:19:27.479562 32426 solver.cpp:409]     Test net output #0: accuracy = 0.0696932
+I0523 10:19:27.479727 32426 solver.cpp:409]     Test net output #1: loss = 2.39715 (* 1 = 2.39715 loss)
+I0523 10:19:27.504040 32426 solver.cpp:237] Iteration 0, loss = 2.39676
+I0523 10:19:27.504077 32426 solver.cpp:253]     Train net output #0: loss = 2.39676 (* 1 = 2.39676 loss)
+I0523 10:19:27.504096 32426 sgd_solver.cpp:106] Iteration 0, lr = 0.005
+I0523 10:19:36.782021 32426 solver.cpp:237] Iteration 300, loss = 2.07773
+I0523 10:19:36.782057 32426 solver.cpp:253]     Train net output #0: loss = 2.07773 (* 1 = 2.07773 loss)
+I0523 10:19:36.782073 32426 sgd_solver.cpp:106] Iteration 300, lr = 0.005
+I0523 10:19:46.061689 32426 solver.cpp:237] Iteration 600, loss = 1.85842
+I0523 10:19:46.061734 32426 solver.cpp:253]     Train net output #0: loss = 1.85842 (* 1 = 1.85842 loss)
+I0523 10:19:46.061751 32426 sgd_solver.cpp:106] Iteration 600, lr = 0.005
+I0523 10:19:55.340219 32426 solver.cpp:237] Iteration 900, loss = 1.80829
+I0523 10:19:55.340255 32426 solver.cpp:253]     Train net output #0: loss = 1.80829 (* 1 = 1.80829 loss)
+I0523 10:19:55.340271 32426 sgd_solver.cpp:106] Iteration 900, lr = 0.005
+I0523 10:20:04.620695 32426 solver.cpp:237] Iteration 1200, loss = 1.78397
+I0523 10:20:04.620844 32426 solver.cpp:253]     Train net output #0: loss = 1.78397 (* 1 = 1.78397 loss)
+I0523 10:20:04.620858 32426 sgd_solver.cpp:106] Iteration 1200, lr = 0.005
+I0523 10:20:13.900060 32426 solver.cpp:237] Iteration 1500, loss = 1.76166
+I0523 10:20:13.900095 32426 solver.cpp:253]     Train net output #0: loss = 1.76166 (* 1 = 1.76166 loss)
+I0523 10:20:13.900117 32426 sgd_solver.cpp:106] Iteration 1500, lr = 0.005
+I0523 10:20:23.178242 32426 solver.cpp:237] Iteration 1800, loss = 1.7565
+I0523 10:20:23.178278 32426 solver.cpp:253]     Train net output #0: loss = 1.7565 (* 1 = 1.7565 loss)
+I0523 10:20:23.178295 32426 sgd_solver.cpp:106] Iteration 1800, lr = 0.005
+I0523 10:20:54.583255 32426 solver.cpp:237] Iteration 2100, loss = 1.39794
+I0523 10:20:54.583418 32426 solver.cpp:253]     Train net output #0: loss = 1.39794 (* 1 = 1.39794 loss)
+I0523 10:20:54.583432 32426 sgd_solver.cpp:106] Iteration 2100, lr = 0.005
+I0523 10:21:03.866508 32426 solver.cpp:237] Iteration 2400, loss = 1.64747
+I0523 10:21:03.866552 32426 solver.cpp:253]     Train net output #0: loss = 1.64747 (* 1 = 1.64747 loss)
+I0523 10:21:03.866570 32426 sgd_solver.cpp:106] Iteration 2400, lr = 0.005
+I0523 10:21:13.151648 32426 solver.cpp:237] Iteration 2700, loss = 1.75483
+I0523 10:21:13.151684 32426 solver.cpp:253]     Train net output #0: loss = 1.75483 (* 1 = 1.75483 loss)
+I0523 10:21:13.151700 32426 sgd_solver.cpp:106] Iteration 2700, lr = 0.005
+I0523 10:21:22.403131 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_3000.caffemodel
+I0523 10:21:22.465777 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_3000.solverstate
+I0523 10:21:22.500691 32426 solver.cpp:237] Iteration 3000, loss = 1.52845
+I0523 10:21:22.500733 32426 solver.cpp:253]     Train net output #0: loss = 1.52845 (* 1 = 1.52845 loss)
+I0523 10:21:22.500754 32426 sgd_solver.cpp:106] Iteration 3000, lr = 0.005
+I0523 10:21:31.783064 32426 solver.cpp:237] Iteration 3300, loss = 1.78249
+I0523 10:21:31.783206 32426 solver.cpp:253]     Train net output #0: loss = 1.78249 (* 1 = 1.78249 loss)
+I0523 10:21:31.783220 32426 sgd_solver.cpp:106] Iteration 3300, lr = 0.005
+I0523 10:21:41.068083 32426 solver.cpp:237] Iteration 3600, loss = 1.66864
+I0523 10:21:41.068117 32426 solver.cpp:253]     Train net output #0: loss = 1.66864 (* 1 = 1.66864 loss)
+I0523 10:21:41.068135 32426 sgd_solver.cpp:106] Iteration 3600, lr = 0.005
+I0523 10:21:50.354377 32426 solver.cpp:237] Iteration 3900, loss = 1.18851
+I0523 10:21:50.354423 32426 solver.cpp:253]     Train net output #0: loss = 1.18851 (* 1 = 1.18851 loss)
+I0523 10:21:50.354441 32426 sgd_solver.cpp:106] Iteration 3900, lr = 0.005
+I0523 10:22:21.785306 32426 solver.cpp:237] Iteration 4200, loss = 1.27187
+I0523 10:22:21.785465 32426 solver.cpp:253]     Train net output #0: loss = 1.27187 (* 1 = 1.27187 loss)
+I0523 10:22:21.785480 32426 sgd_solver.cpp:106] Iteration 4200, lr = 0.005
+I0523 10:22:31.075052 32426 solver.cpp:237] Iteration 4500, loss = 1.21737
+I0523 10:22:31.075088 32426 solver.cpp:253]     Train net output #0: loss = 1.21737 (* 1 = 1.21737 loss)
+I0523 10:22:31.075103 32426 sgd_solver.cpp:106] Iteration 4500, lr = 0.005
+I0523 10:22:40.360862 32426 solver.cpp:237] Iteration 4800, loss = 1.51438
+I0523 10:22:40.360903 32426 solver.cpp:253]     Train net output #0: loss = 1.51438 (* 1 = 1.51438 loss)
+I0523 10:22:40.360926 32426 sgd_solver.cpp:106] Iteration 4800, lr = 0.005
+I0523 10:22:49.647855 32426 solver.cpp:237] Iteration 5100, loss = 1.40359
+I0523 10:22:49.647891 32426 solver.cpp:253]     Train net output #0: loss = 1.40359 (* 1 = 1.40359 loss)
+I0523 10:22:49.647907 32426 sgd_solver.cpp:106] Iteration 5100, lr = 0.005
+I0523 10:22:58.930950 32426 solver.cpp:237] Iteration 5400, loss = 1.18873
+I0523 10:22:58.931097 32426 solver.cpp:253]     Train net output #0: loss = 1.18873 (* 1 = 1.18873 loss)
+I0523 10:22:58.931112 32426 sgd_solver.cpp:106] Iteration 5400, lr = 0.005
+I0523 10:23:08.215785 32426 solver.cpp:237] Iteration 5700, loss = 1.37753
+I0523 10:23:08.215826 32426 solver.cpp:253]     Train net output #0: loss = 1.37753 (* 1 = 1.37753 loss)
+I0523 10:23:08.215844 32426 sgd_solver.cpp:106] Iteration 5700, lr = 0.005
+I0523 10:23:17.472242 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_6000.caffemodel
+I0523 10:23:17.531592 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_6000.solverstate
+I0523 10:23:17.556605 32426 solver.cpp:341] Iteration 6000, Testing net (#0)
+I0523 10:24:05.325896 32426 solver.cpp:409]     Test net output #0: accuracy = 0.827962
+I0523 10:24:05.326057 32426 solver.cpp:409]     Test net output #1: loss = 0.554701 (* 1 = 0.554701 loss)
+I0523 10:24:27.468076 32426 solver.cpp:237] Iteration 6000, loss = 1.29853
+I0523 10:24:27.468132 32426 solver.cpp:253]     Train net output #0: loss = 1.29853 (* 1 = 1.29853 loss)
+I0523 10:24:27.468147 32426 sgd_solver.cpp:106] Iteration 6000, lr = 0.005
+I0523 10:24:36.752667 32426 solver.cpp:237] Iteration 6300, loss = 1.06279
+I0523 10:24:36.752810 32426 solver.cpp:253]     Train net output #0: loss = 1.06279 (* 1 = 1.06279 loss)
+I0523 10:24:36.752823 32426 sgd_solver.cpp:106] Iteration 6300, lr = 0.005
+I0523 10:24:46.037416 32426 solver.cpp:237] Iteration 6600, loss = 1.56348
+I0523 10:24:46.037462 32426 solver.cpp:253]     Train net output #0: loss = 1.56348 (* 1 = 1.56348 loss)
+I0523 10:24:46.037479 32426 sgd_solver.cpp:106] Iteration 6600, lr = 0.005
+I0523 10:24:55.319087 32426 solver.cpp:237] Iteration 6900, loss = 1.39183
+I0523 10:24:55.319124 32426 solver.cpp:253]     Train net output #0: loss = 1.39183 (* 1 = 1.39183 loss)
+I0523 10:24:55.319139 32426 sgd_solver.cpp:106] Iteration 6900, lr = 0.005
+I0523 10:25:04.602267 32426 solver.cpp:237] Iteration 7200, loss = 1.32302
+I0523 10:25:04.602303 32426 solver.cpp:253]     Train net output #0: loss = 1.32302 (* 1 = 1.32302 loss)
+I0523 10:25:04.602318 32426 sgd_solver.cpp:106] Iteration 7200, lr = 0.005
+I0523 10:25:13.885954 32426 solver.cpp:237] Iteration 7500, loss = 1.60944
+I0523 10:25:13.886106 32426 solver.cpp:253]     Train net output #0: loss = 1.60944 (* 1 = 1.60944 loss)
+I0523 10:25:13.886121 32426 sgd_solver.cpp:106] Iteration 7500, lr = 0.005
+I0523 10:25:23.173224 32426 solver.cpp:237] Iteration 7800, loss = 1.29075
+I0523 10:25:23.173259 32426 solver.cpp:253]     Train net output #0: loss = 1.29075 (* 1 = 1.29075 loss)
+I0523 10:25:23.173276 32426 sgd_solver.cpp:106] Iteration 7800, lr = 0.005
+I0523 10:25:54.618800 32426 solver.cpp:237] Iteration 8100, loss = 1.34892
+I0523 10:25:54.618965 32426 solver.cpp:253]     Train net output #0: loss = 1.34892 (* 1 = 1.34892 loss)
+I0523 10:25:54.618983 32426 sgd_solver.cpp:106] Iteration 8100, lr = 0.005
+I0523 10:26:03.902040 32426 solver.cpp:237] Iteration 8400, loss = 1.12691
+I0523 10:26:03.902086 32426 solver.cpp:253]     Train net output #0: loss = 1.12691 (* 1 = 1.12691 loss)
+I0523 10:26:03.902102 32426 sgd_solver.cpp:106] Iteration 8400, lr = 0.005
+I0523 10:26:13.187445 32426 solver.cpp:237] Iteration 8700, loss = 1.59297
+I0523 10:26:13.187480 32426 solver.cpp:253]     Train net output #0: loss = 1.59297 (* 1 = 1.59297 loss)
+I0523 10:26:13.187496 32426 sgd_solver.cpp:106] Iteration 8700, lr = 0.005
+I0523 10:26:22.439834 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_9000.caffemodel
+I0523 10:26:22.500833 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_9000.solverstate
+I0523 10:26:22.537441 32426 solver.cpp:237] Iteration 9000, loss = 1.59718
+I0523 10:26:22.537492 32426 solver.cpp:253]     Train net output #0: loss = 1.59718 (* 1 = 1.59718 loss)
+I0523 10:26:22.537505 32426 sgd_solver.cpp:106] Iteration 9000, lr = 0.005
+I0523 10:26:31.822028 32426 solver.cpp:237] Iteration 9300, loss = 1.14214
+I0523 10:26:31.822180 32426 solver.cpp:253]     Train net output #0: loss = 1.14214 (* 1 = 1.14214 loss)
+I0523 10:26:31.822194 32426 sgd_solver.cpp:106] Iteration 9300, lr = 0.005
+I0523 10:26:41.105093 32426 solver.cpp:237] Iteration 9600, loss = 1.20948
+I0523 10:26:41.105129 32426 solver.cpp:253]     Train net output #0: loss = 1.20948 (* 1 = 1.20948 loss)
+I0523 10:26:41.105145 32426 sgd_solver.cpp:106] Iteration 9600, lr = 0.005
+I0523 10:26:50.385757 32426 solver.cpp:237] Iteration 9900, loss = 1.47522
+I0523 10:26:50.385802 32426 solver.cpp:253]     Train net output #0: loss = 1.47522 (* 1 = 1.47522 loss)
+I0523 10:26:50.385820 32426 sgd_solver.cpp:106] Iteration 9900, lr = 0.005
+I0523 10:27:21.810902 32426 solver.cpp:237] Iteration 10200, loss = 1.27013
+I0523 10:27:21.811069 32426 solver.cpp:253]     Train net output #0: loss = 1.27013 (* 1 = 1.27013 loss)
+I0523 10:27:21.811082 32426 sgd_solver.cpp:106] Iteration 10200, lr = 0.005
+I0523 10:27:31.096174 32426 solver.cpp:237] Iteration 10500, loss = 1.12075
+I0523 10:27:31.096210 32426 solver.cpp:253]     Train net output #0: loss = 1.12075 (* 1 = 1.12075 loss)
+I0523 10:27:31.096226 32426 sgd_solver.cpp:106] Iteration 10500, lr = 0.005
+I0523 10:27:40.377147 32426 solver.cpp:237] Iteration 10800, loss = 1.06068
+I0523 10:27:40.377197 32426 solver.cpp:253]     Train net output #0: loss = 1.06068 (* 1 = 1.06068 loss)
+I0523 10:27:40.377210 32426 sgd_solver.cpp:106] Iteration 10800, lr = 0.005
+I0523 10:27:49.660234 32426 solver.cpp:237] Iteration 11100, loss = 0.925543
+I0523 10:27:49.660270 32426 solver.cpp:253]     Train net output #0: loss = 0.925543 (* 1 = 0.925543 loss)
+I0523 10:27:49.660286 32426 sgd_solver.cpp:106] Iteration 11100, lr = 0.005
+I0523 10:27:58.941519 32426 solver.cpp:237] Iteration 11400, loss = 1.27189
+I0523 10:27:58.941669 32426 solver.cpp:253]     Train net output #0: loss = 1.27189 (* 1 = 1.27189 loss)
+I0523 10:27:58.941682 32426 sgd_solver.cpp:106] Iteration 11400, lr = 0.005
+I0523 10:28:08.225224 32426 solver.cpp:237] Iteration 11700, loss = 1.07848
+I0523 10:28:08.225270 32426 solver.cpp:253]     Train net output #0: loss = 1.07848 (* 1 = 1.07848 loss)
+I0523 10:28:08.225286 32426 sgd_solver.cpp:106] Iteration 11700, lr = 0.005
+I0523 10:28:17.477579 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_12000.caffemodel
+I0523 10:28:17.547520 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_12000.solverstate
+I0523 10:28:17.574504 32426 solver.cpp:341] Iteration 12000, Testing net (#0)
+I0523 10:29:26.151449 32426 solver.cpp:409]     Test net output #0: accuracy = 0.847048
+I0523 10:29:26.151604 32426 solver.cpp:409]     Test net output #1: loss = 0.554686 (* 1 = 0.554686 loss)
+I0523 10:29:48.370714 32426 solver.cpp:237] Iteration 12000, loss = 1.21379
+I0523 10:29:48.370769 32426 solver.cpp:253]     Train net output #0: loss = 1.21379 (* 1 = 1.21379 loss)
+I0523 10:29:48.370784 32426 sgd_solver.cpp:106] Iteration 12000, lr = 0.005
+I0523 10:29:57.674255 32426 solver.cpp:237] Iteration 12300, loss = 1.12085
+I0523 10:29:57.674417 32426 solver.cpp:253]     Train net output #0: loss = 1.12085 (* 1 = 1.12085 loss)
+I0523 10:29:57.674429 32426 sgd_solver.cpp:106] Iteration 12300, lr = 0.005
+I0523 10:30:06.978157 32426 solver.cpp:237] Iteration 12600, loss = 1.40071
+I0523 10:30:06.978204 32426 solver.cpp:253]     Train net output #0: loss = 1.40071 (* 1 = 1.40071 loss)
+I0523 10:30:06.978221 32426 sgd_solver.cpp:106] Iteration 12600, lr = 0.005
+I0523 10:30:16.283401 32426 solver.cpp:237] Iteration 12900, loss = 1.17285
+I0523 10:30:16.283437 32426 solver.cpp:253]     Train net output #0: loss = 1.17285 (* 1 = 1.17285 loss)
+I0523 10:30:16.283453 32426 sgd_solver.cpp:106] Iteration 12900, lr = 0.005
+I0523 10:30:25.590828 32426 solver.cpp:237] Iteration 13200, loss = 1.59518
+I0523 10:30:25.590863 32426 solver.cpp:253]     Train net output #0: loss = 1.59518 (* 1 = 1.59518 loss)
+I0523 10:30:25.590879 32426 sgd_solver.cpp:106] Iteration 13200, lr = 0.005
+I0523 10:30:34.897003 32426 solver.cpp:237] Iteration 13500, loss = 1.08271
+I0523 10:30:34.897159 32426 solver.cpp:253]     Train net output #0: loss = 1.08271 (* 1 = 1.08271 loss)
+I0523 10:30:34.897173 32426 sgd_solver.cpp:106] Iteration 13500, lr = 0.005
+I0523 10:30:44.200454 32426 solver.cpp:237] Iteration 13800, loss = 1.08449
+I0523 10:30:44.200489 32426 solver.cpp:253]     Train net output #0: loss = 1.08449 (* 1 = 1.08449 loss)
+I0523 10:30:44.200505 32426 sgd_solver.cpp:106] Iteration 13800, lr = 0.005
+I0523 10:31:15.679950 32426 solver.cpp:237] Iteration 14100, loss = 1.56185
+I0523 10:31:15.680114 32426 solver.cpp:253]     Train net output #0: loss = 1.56185 (* 1 = 1.56185 loss)
+I0523 10:31:15.680129 32426 sgd_solver.cpp:106] Iteration 14100, lr = 0.005
+I0523 10:31:24.983851 32426 solver.cpp:237] Iteration 14400, loss = 1.06982
+I0523 10:31:24.983892 32426 solver.cpp:253]     Train net output #0: loss = 1.06982 (* 1 = 1.06982 loss)
+I0523 10:31:24.983913 32426 sgd_solver.cpp:106] Iteration 14400, lr = 0.005
+I0523 10:31:34.288053 32426 solver.cpp:237] Iteration 14700, loss = 1.12439
+I0523 10:31:34.288089 32426 solver.cpp:253]     Train net output #0: loss = 1.12439 (* 1 = 1.12439 loss)
+I0523 10:31:34.288105 32426 sgd_solver.cpp:106] Iteration 14700, lr = 0.005
+I0523 10:31:43.561811 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_15000.caffemodel
+I0523 10:31:43.622992 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_15000.solverstate
+I0523 10:31:43.660302 32426 solver.cpp:237] Iteration 15000, loss = 1.01688
+I0523 10:31:43.660352 32426 solver.cpp:253]     Train net output #0: loss = 1.01688 (* 1 = 1.01688 loss)
+I0523 10:31:43.660367 32426 sgd_solver.cpp:106] Iteration 15000, lr = 0.005
+I0523 10:31:52.967458 32426 solver.cpp:237] Iteration 15300, loss = 1.33024
+I0523 10:31:52.967615 32426 solver.cpp:253]     Train net output #0: loss = 1.33024 (* 1 = 1.33024 loss)
+I0523 10:31:52.967629 32426 sgd_solver.cpp:106] Iteration 15300, lr = 0.005
+I0523 10:32:02.271028 32426 solver.cpp:237] Iteration 15600, loss = 1.26495
+I0523 10:32:02.271062 32426 solver.cpp:253]     Train net output #0: loss = 1.26495 (* 1 = 1.26495 loss)
+I0523 10:32:02.271080 32426 sgd_solver.cpp:106] Iteration 15600, lr = 0.005
+I0523 10:32:11.577889 32426 solver.cpp:237] Iteration 15900, loss = 1.31274
+I0523 10:32:11.577924 32426 solver.cpp:253]     Train net output #0: loss = 1.31274 (* 1 = 1.31274 loss)
+I0523 10:32:11.577940 32426 sgd_solver.cpp:106] Iteration 15900, lr = 0.005
+I0523 10:32:43.055001 32426 solver.cpp:237] Iteration 16200, loss = 1.10992
+I0523 10:32:43.055171 32426 solver.cpp:253]     Train net output #0: loss = 1.10992 (* 1 = 1.10992 loss)
+I0523 10:32:43.055186 32426 sgd_solver.cpp:106] Iteration 16200, lr = 0.005
+I0523 10:32:52.358666 32426 solver.cpp:237] Iteration 16500, loss = 1.19348
+I0523 10:32:52.358702 32426 solver.cpp:253]     Train net output #0: loss = 1.19348 (* 1 = 1.19348 loss)
+I0523 10:32:52.358718 32426 sgd_solver.cpp:106] Iteration 16500, lr = 0.005
+I0523 10:33:01.661288 32426 solver.cpp:237] Iteration 16800, loss = 1.36985
+I0523 10:33:01.661324 32426 solver.cpp:253]     Train net output #0: loss = 1.36985 (* 1 = 1.36985 loss)
+I0523 10:33:01.661340 32426 sgd_solver.cpp:106] Iteration 16800, lr = 0.005
+I0523 10:33:10.968045 32426 solver.cpp:237] Iteration 17100, loss = 1.27259
+I0523 10:33:10.968091 32426 solver.cpp:253]     Train net output #0: loss = 1.27259 (* 1 = 1.27259 loss)
+I0523 10:33:10.968107 32426 sgd_solver.cpp:106] Iteration 17100, lr = 0.005
+I0523 10:33:20.270830 32426 solver.cpp:237] Iteration 17400, loss = 1.25075
+I0523 10:33:20.270973 32426 solver.cpp:253]     Train net output #0: loss = 1.25075 (* 1 = 1.25075 loss)
+I0523 10:33:20.270987 32426 sgd_solver.cpp:106] Iteration 17400, lr = 0.005
+I0523 10:33:29.577286 32426 solver.cpp:237] Iteration 17700, loss = 1.06336
+I0523 10:33:29.577330 32426 solver.cpp:253]     Train net output #0: loss = 1.06336 (* 1 = 1.06336 loss)
+I0523 10:33:29.577347 32426 sgd_solver.cpp:106] Iteration 17700, lr = 0.005
+I0523 10:33:38.849025 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_18000.caffemodel
+I0523 10:33:38.907963 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_18000.solverstate
+I0523 10:33:38.934545 32426 solver.cpp:341] Iteration 18000, Testing net (#0)
+I0523 10:34:26.404418 32426 solver.cpp:409]     Test net output #0: accuracy = 0.867557
+I0523 10:34:26.404582 32426 solver.cpp:409]     Test net output #1: loss = 0.423607 (* 1 = 0.423607 loss)
+I0523 10:34:48.551990 32426 solver.cpp:237] Iteration 18000, loss = 1.15395
+I0523 10:34:48.552042 32426 solver.cpp:253]     Train net output #0: loss = 1.15395 (* 1 = 1.15395 loss)
+I0523 10:34:48.552058 32426 sgd_solver.cpp:106] Iteration 18000, lr = 0.005
+I0523 10:34:57.833073 32426 solver.cpp:237] Iteration 18300, loss = 1.02825
+I0523 10:34:57.833232 32426 solver.cpp:253]     Train net output #0: loss = 1.02825 (* 1 = 1.02825 loss)
+I0523 10:34:57.833245 32426 sgd_solver.cpp:106] Iteration 18300, lr = 0.005
+I0523 10:35:07.117296 32426 solver.cpp:237] Iteration 18600, loss = 1.25422
+I0523 10:35:07.117342 32426 solver.cpp:253]     Train net output #0: loss = 1.25422 (* 1 = 1.25422 loss)
+I0523 10:35:07.117355 32426 sgd_solver.cpp:106] Iteration 18600, lr = 0.005
+I0523 10:35:16.398913 32426 solver.cpp:237] Iteration 18900, loss = 0.87811
+I0523 10:35:16.398949 32426 solver.cpp:253]     Train net output #0: loss = 0.87811 (* 1 = 0.87811 loss)
+I0523 10:35:16.398963 32426 sgd_solver.cpp:106] Iteration 18900, lr = 0.005
+I0523 10:35:25.682781 32426 solver.cpp:237] Iteration 19200, loss = 1.18795
+I0523 10:35:25.682816 32426 solver.cpp:253]     Train net output #0: loss = 1.18795 (* 1 = 1.18795 loss)
+I0523 10:35:25.682832 32426 sgd_solver.cpp:106] Iteration 19200, lr = 0.005
+I0523 10:35:34.969135 32426 solver.cpp:237] Iteration 19500, loss = 1.27424
+I0523 10:35:34.969295 32426 solver.cpp:253]     Train net output #0: loss = 1.27424 (* 1 = 1.27424 loss)
+I0523 10:35:34.969308 32426 sgd_solver.cpp:106] Iteration 19500, lr = 0.005
+I0523 10:35:44.252734 32426 solver.cpp:237] Iteration 19800, loss = 1.05032
+I0523 10:35:44.252769 32426 solver.cpp:253]     Train net output #0: loss = 1.05032 (* 1 = 1.05032 loss)
+I0523 10:35:44.252786 32426 sgd_solver.cpp:106] Iteration 19800, lr = 0.005
+I0523 10:36:15.698475 32426 solver.cpp:237] Iteration 20100, loss = 1.29729
+I0523 10:36:15.698647 32426 solver.cpp:253]     Train net output #0: loss = 1.29729 (* 1 = 1.29729 loss)
+I0523 10:36:15.698660 32426 sgd_solver.cpp:106] Iteration 20100, lr = 0.005
+I0523 10:36:24.981403 32426 solver.cpp:237] Iteration 20400, loss = 1.36806
+I0523 10:36:24.981448 32426 solver.cpp:253]     Train net output #0: loss = 1.36806 (* 1 = 1.36806 loss)
+I0523 10:36:24.981465 32426 sgd_solver.cpp:106] Iteration 20400, lr = 0.005
+I0523 10:36:34.264405 32426 solver.cpp:237] Iteration 20700, loss = 1.10276
+I0523 10:36:34.264441 32426 solver.cpp:253]     Train net output #0: loss = 1.10276 (* 1 = 1.10276 loss)
+I0523 10:36:34.264458 32426 sgd_solver.cpp:106] Iteration 20700, lr = 0.005
+I0523 10:36:43.519685 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_21000.caffemodel
+I0523 10:36:43.578773 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_21000.solverstate
+I0523 10:36:43.615137 32426 solver.cpp:237] Iteration 21000, loss = 1.27914
+I0523 10:36:43.615182 32426 solver.cpp:253]     Train net output #0: loss = 1.27914 (* 1 = 1.27914 loss)
+I0523 10:36:43.615201 32426 sgd_solver.cpp:106] Iteration 21000, lr = 0.005
+I0523 10:36:52.894788 32426 solver.cpp:237] Iteration 21300, loss = 1.21087
+I0523 10:36:52.894951 32426 solver.cpp:253]     Train net output #0: loss = 1.21087 (* 1 = 1.21087 loss)
+I0523 10:36:52.894965 32426 sgd_solver.cpp:106] Iteration 21300, lr = 0.005
+I0523 10:37:02.178355 32426 solver.cpp:237] Iteration 21600, loss = 1.06741
+I0523 10:37:02.178391 32426 solver.cpp:253]     Train net output #0: loss = 1.06741 (* 1 = 1.06741 loss)
+I0523 10:37:02.178408 32426 sgd_solver.cpp:106] Iteration 21600, lr = 0.005
+I0523 10:37:11.459697 32426 solver.cpp:237] Iteration 21900, loss = 0.889132
+I0523 10:37:11.459744 32426 solver.cpp:253]     Train net output #0: loss = 0.889132 (* 1 = 0.889132 loss)
+I0523 10:37:11.459759 32426 sgd_solver.cpp:106] Iteration 21900, lr = 0.005
+I0523 10:37:42.930060 32426 solver.cpp:237] Iteration 22200, loss = 1.17602
+I0523 10:37:42.930228 32426 solver.cpp:253]     Train net output #0: loss = 1.17602 (* 1 = 1.17602 loss)
+I0523 10:37:42.930243 32426 sgd_solver.cpp:106] Iteration 22200, lr = 0.005
+I0523 10:37:52.216390 32426 solver.cpp:237] Iteration 22500, loss = 1.52057
+I0523 10:37:52.216425 32426 solver.cpp:253]     Train net output #0: loss = 1.52057 (* 1 = 1.52057 loss)
+I0523 10:37:52.216441 32426 sgd_solver.cpp:106] Iteration 22500, lr = 0.005
+I0523 10:38:01.499758 32426 solver.cpp:237] Iteration 22800, loss = 1.02364
+I0523 10:38:01.499794 32426 solver.cpp:253]     Train net output #0: loss = 1.02364 (* 1 = 1.02364 loss)
+I0523 10:38:01.499810 32426 sgd_solver.cpp:106] Iteration 22800, lr = 0.005
+I0523 10:38:10.783335 32426 solver.cpp:237] Iteration 23100, loss = 1.47547
+I0523 10:38:10.783381 32426 solver.cpp:253]     Train net output #0: loss = 1.47547 (* 1 = 1.47547 loss)
+I0523 10:38:10.783398 32426 sgd_solver.cpp:106] Iteration 23100, lr = 0.005
+I0523 10:38:20.066565 32426 solver.cpp:237] Iteration 23400, loss = 0.931918
+I0523 10:38:20.066709 32426 solver.cpp:253]     Train net output #0: loss = 0.931918 (* 1 = 0.931918 loss)
+I0523 10:38:20.066725 32426 sgd_solver.cpp:106] Iteration 23400, lr = 0.005
+I0523 10:38:29.349112 32426 solver.cpp:237] Iteration 23700, loss = 0.988676
+I0523 10:38:29.349156 32426 solver.cpp:253]     Train net output #0: loss = 0.988676 (* 1 = 0.988676 loss)
+I0523 10:38:29.349174 32426 sgd_solver.cpp:106] Iteration 23700, lr = 0.005
+I0523 10:38:38.599856 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_24000.caffemodel
+I0523 10:38:38.659276 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_24000.solverstate
+I0523 10:38:38.685636 32426 solver.cpp:341] Iteration 24000, Testing net (#0)
+I0523 10:39:47.390871 32426 solver.cpp:409]     Test net output #0: accuracy = 0.866098
+I0523 10:39:47.391046 32426 solver.cpp:409]     Test net output #1: loss = 0.412456 (* 1 = 0.412456 loss)
+I0523 10:40:09.552088 32426 solver.cpp:237] Iteration 24000, loss = 1.31359
+I0523 10:40:09.552140 32426 solver.cpp:253]     Train net output #0: loss = 1.31359 (* 1 = 1.31359 loss)
+I0523 10:40:09.552155 32426 sgd_solver.cpp:106] Iteration 24000, lr = 0.005
+I0523 10:40:18.837757 32426 solver.cpp:237] Iteration 24300, loss = 1.30106
+I0523 10:40:18.837923 32426 solver.cpp:253]     Train net output #0: loss = 1.30106 (* 1 = 1.30106 loss)
+I0523 10:40:18.837936 32426 sgd_solver.cpp:106] Iteration 24300, lr = 0.005
+I0523 10:40:28.123337 32426 solver.cpp:237] Iteration 24600, loss = 1.3292
+I0523 10:40:28.123371 32426 solver.cpp:253]     Train net output #0: loss = 1.3292 (* 1 = 1.3292 loss)
+I0523 10:40:28.123389 32426 sgd_solver.cpp:106] Iteration 24600, lr = 0.005
+I0523 10:40:37.407168 32426 solver.cpp:237] Iteration 24900, loss = 0.95227
+I0523 10:40:37.407217 32426 solver.cpp:253]     Train net output #0: loss = 0.95227 (* 1 = 0.95227 loss)
+I0523 10:40:37.407232 32426 sgd_solver.cpp:106] Iteration 24900, lr = 0.005
+I0523 10:40:46.691570 32426 solver.cpp:237] Iteration 25200, loss = 0.979179
+I0523 10:40:46.691606 32426 solver.cpp:253]     Train net output #0: loss = 0.979179 (* 1 = 0.979179 loss)
+I0523 10:40:46.691622 32426 sgd_solver.cpp:106] Iteration 25200, lr = 0.005
+I0523 10:40:55.977499 32426 solver.cpp:237] Iteration 25500, loss = 1.05307
+I0523 10:40:55.977646 32426 solver.cpp:253]     Train net output #0: loss = 1.05307 (* 1 = 1.05307 loss)
+I0523 10:40:55.977660 32426 sgd_solver.cpp:106] Iteration 25500, lr = 0.005
+I0523 10:41:05.261704 32426 solver.cpp:237] Iteration 25800, loss = 1.25463
+I0523 10:41:05.261744 32426 solver.cpp:253]     Train net output #0: loss = 1.25463 (* 1 = 1.25463 loss)
+I0523 10:41:05.261765 32426 sgd_solver.cpp:106] Iteration 25800, lr = 0.005
+I0523 10:41:36.692966 32426 solver.cpp:237] Iteration 26100, loss = 1.11124
+I0523 10:41:36.693135 32426 solver.cpp:253]     Train net output #0: loss = 1.11124 (* 1 = 1.11124 loss)
+I0523 10:41:36.693150 32426 sgd_solver.cpp:106] Iteration 26100, lr = 0.005
+I0523 10:41:45.981875 32426 solver.cpp:237] Iteration 26400, loss = 1.259
+I0523 10:41:45.981905 32426 solver.cpp:253]     Train net output #0: loss = 1.259 (* 1 = 1.259 loss)
+I0523 10:41:45.981919 32426 sgd_solver.cpp:106] Iteration 26400, lr = 0.005
+I0523 10:41:55.269145 32426 solver.cpp:237] Iteration 26700, loss = 1.2269
+I0523 10:41:55.269183 32426 solver.cpp:253]     Train net output #0: loss = 1.2269 (* 1 = 1.2269 loss)
+I0523 10:41:55.269204 32426 sgd_solver.cpp:106] Iteration 26700, lr = 0.005
+I0523 10:42:04.528595 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_27000.caffemodel
+I0523 10:42:04.590694 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_27000.solverstate
+I0523 10:42:04.629113 32426 solver.cpp:237] Iteration 27000, loss = 1.51278
+I0523 10:42:04.629163 32426 solver.cpp:253]     Train net output #0: loss = 1.51278 (* 1 = 1.51278 loss)
+I0523 10:42:04.629178 32426 sgd_solver.cpp:106] Iteration 27000, lr = 0.005
+I0523 10:42:13.915289 32426 solver.cpp:237] Iteration 27300, loss = 1.32853
+I0523 10:42:13.915464 32426 solver.cpp:253]     Train net output #0: loss = 1.32853 (* 1 = 1.32853 loss)
+I0523 10:42:13.915478 32426 sgd_solver.cpp:106] Iteration 27300, lr = 0.005
+I0523 10:42:23.198834 32426 solver.cpp:237] Iteration 27600, loss = 1.16437
+I0523 10:42:23.198868 32426 solver.cpp:253]     Train net output #0: loss = 1.16437 (* 1 = 1.16437 loss)
+I0523 10:42:23.198886 32426 sgd_solver.cpp:106] Iteration 27600, lr = 0.005
+I0523 10:42:32.486094 32426 solver.cpp:237] Iteration 27900, loss = 1.29458
+I0523 10:42:32.486130 32426 solver.cpp:253]     Train net output #0: loss = 1.29458 (* 1 = 1.29458 loss)
+I0523 10:42:32.486146 32426 sgd_solver.cpp:106] Iteration 27900, lr = 0.005
+I0523 10:43:03.901932 32426 solver.cpp:237] Iteration 28200, loss = 1.06006
+I0523 10:43:03.902112 32426 solver.cpp:253]     Train net output #0: loss = 1.06006 (* 1 = 1.06006 loss)
+I0523 10:43:03.902127 32426 sgd_solver.cpp:106] Iteration 28200, lr = 0.005
+I0523 10:43:13.188946 32426 solver.cpp:237] Iteration 28500, loss = 1.20252
+I0523 10:43:13.188982 32426 solver.cpp:253]     Train net output #0: loss = 1.20252 (* 1 = 1.20252 loss)
+I0523 10:43:13.188998 32426 sgd_solver.cpp:106] Iteration 28500, lr = 0.005
+I0523 10:43:22.475237 32426 solver.cpp:237] Iteration 28800, loss = 1.41215
+I0523 10:43:22.475273 32426 solver.cpp:253]     Train net output #0: loss = 1.41215 (* 1 = 1.41215 loss)
+I0523 10:43:22.475289 32426 sgd_solver.cpp:106] Iteration 28800, lr = 0.005
+I0523 10:43:31.759665 32426 solver.cpp:237] Iteration 29100, loss = 1.24693
+I0523 10:43:31.759706 32426 solver.cpp:253]     Train net output #0: loss = 1.24693 (* 1 = 1.24693 loss)
+I0523 10:43:31.759723 32426 sgd_solver.cpp:106] Iteration 29100, lr = 0.005
+I0523 10:43:41.043359 32426 solver.cpp:237] Iteration 29400, loss = 1.18452
+I0523 10:43:41.043508 32426 solver.cpp:253]     Train net output #0: loss = 1.18452 (* 1 = 1.18452 loss)
+I0523 10:43:41.043520 32426 sgd_solver.cpp:106] Iteration 29400, lr = 0.005
+I0523 10:43:50.330303 32426 solver.cpp:237] Iteration 29700, loss = 1.26496
+I0523 10:43:50.330338 32426 solver.cpp:253]     Train net output #0: loss = 1.26496 (* 1 = 1.26496 loss)
+I0523 10:43:50.330355 32426 sgd_solver.cpp:106] Iteration 29700, lr = 0.005
+I0523 10:43:59.584296 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_30000.caffemodel
+I0523 10:43:59.645303 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_30000.solverstate
+I0523 10:43:59.673857 32426 solver.cpp:341] Iteration 30000, Testing net (#0)
+I0523 10:44:47.425552 32426 solver.cpp:409]     Test net output #0: accuracy = 0.881527
+I0523 10:44:47.425715 32426 solver.cpp:409]     Test net output #1: loss = 0.412001 (* 1 = 0.412001 loss)
+I0523 10:45:08.277277 32426 solver.cpp:237] Iteration 30000, loss = 1.08734
+I0523 10:45:08.277330 32426 solver.cpp:253]     Train net output #0: loss = 1.08734 (* 1 = 1.08734 loss)
+I0523 10:45:08.277348 32426 sgd_solver.cpp:106] Iteration 30000, lr = 0.005
+I0523 10:45:17.559236 32426 solver.cpp:237] Iteration 30300, loss = 0.88422
+I0523 10:45:17.559391 32426 solver.cpp:253]     Train net output #0: loss = 0.88422 (* 1 = 0.88422 loss)
+I0523 10:45:17.559404 32426 sgd_solver.cpp:106] Iteration 30300, lr = 0.005
+I0523 10:45:26.843106 32426 solver.cpp:237] Iteration 30600, loss = 1.23972
+I0523 10:45:26.843139 32426 solver.cpp:253]     Train net output #0: loss = 1.23972 (* 1 = 1.23972 loss)
+I0523 10:45:26.843158 32426 sgd_solver.cpp:106] Iteration 30600, lr = 0.005
+I0523 10:45:36.124053 32426 solver.cpp:237] Iteration 30900, loss = 1.3303
+I0523 10:45:36.124094 32426 solver.cpp:253]     Train net output #0: loss = 1.3303 (* 1 = 1.3303 loss)
+I0523 10:45:36.124109 32426 sgd_solver.cpp:106] Iteration 30900, lr = 0.005
+I0523 10:45:45.407388 32426 solver.cpp:237] Iteration 31200, loss = 1.01009
+I0523 10:45:45.407423 32426 solver.cpp:253]     Train net output #0: loss = 1.01009 (* 1 = 1.01009 loss)
+I0523 10:45:45.407439 32426 sgd_solver.cpp:106] Iteration 31200, lr = 0.005
+I0523 10:45:54.694166 32426 solver.cpp:237] Iteration 31500, loss = 1.11797
+I0523 10:45:54.694319 32426 solver.cpp:253]     Train net output #0: loss = 1.11797 (* 1 = 1.11797 loss)
+I0523 10:45:54.694334 32426 sgd_solver.cpp:106] Iteration 31500, lr = 0.005
+I0523 10:46:03.973562 32426 solver.cpp:237] Iteration 31800, loss = 1.43433
+I0523 10:46:03.973603 32426 solver.cpp:253]     Train net output #0: loss = 1.43433 (* 1 = 1.43433 loss)
+I0523 10:46:03.973619 32426 sgd_solver.cpp:106] Iteration 31800, lr = 0.005
+I0523 10:46:34.130414 32426 solver.cpp:237] Iteration 32100, loss = 1.3209
+I0523 10:46:34.130589 32426 solver.cpp:253]     Train net output #0: loss = 1.3209 (* 1 = 1.3209 loss)
+I0523 10:46:34.130604 32426 sgd_solver.cpp:106] Iteration 32100, lr = 0.005
+I0523 10:46:43.413591 32426 solver.cpp:237] Iteration 32400, loss = 0.970875
+I0523 10:46:43.413626 32426 solver.cpp:253]     Train net output #0: loss = 0.970875 (* 1 = 0.970875 loss)
+I0523 10:46:43.413643 32426 sgd_solver.cpp:106] Iteration 32400, lr = 0.005
+I0523 10:46:52.697259 32426 solver.cpp:237] Iteration 32700, loss = 1.61298
+I0523 10:46:52.697304 32426 solver.cpp:253]     Train net output #0: loss = 1.61298 (* 1 = 1.61298 loss)
+I0523 10:46:52.697321 32426 sgd_solver.cpp:106] Iteration 32700, lr = 0.005
+I0523 10:47:01.948305 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_33000.caffemodel
+I0523 10:47:02.013236 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_33000.solverstate
+I0523 10:47:02.049577 32426 solver.cpp:237] Iteration 33000, loss = 1.10553
+I0523 10:47:02.049623 32426 solver.cpp:253]     Train net output #0: loss = 1.10553 (* 1 = 1.10553 loss)
+I0523 10:47:02.049638 32426 sgd_solver.cpp:106] Iteration 33000, lr = 0.005
+I0523 10:47:11.333443 32426 solver.cpp:237] Iteration 33300, loss = 1.44294
+I0523 10:47:11.333600 32426 solver.cpp:253]     Train net output #0: loss = 1.44294 (* 1 = 1.44294 loss)
+I0523 10:47:11.333613 32426 sgd_solver.cpp:106] Iteration 33300, lr = 0.005
+I0523 10:47:20.615694 32426 solver.cpp:237] Iteration 33600, loss = 1.41032
+I0523 10:47:20.615743 32426 solver.cpp:253]     Train net output #0: loss = 1.41032 (* 1 = 1.41032 loss)
+I0523 10:47:20.615757 32426 sgd_solver.cpp:106] Iteration 33600, lr = 0.005
+I0523 10:47:29.898517 32426 solver.cpp:237] Iteration 33900, loss = 0.892734
+I0523 10:47:29.898553 32426 solver.cpp:253]     Train net output #0: loss = 0.892734 (* 1 = 0.892734 loss)
+I0523 10:47:29.898569 32426 sgd_solver.cpp:106] Iteration 33900, lr = 0.005
+I0523 10:48:00.040330 32426 solver.cpp:237] Iteration 34200, loss = 1.401
+I0523 10:48:00.040501 32426 solver.cpp:253]     Train net output #0: loss = 1.401 (* 1 = 1.401 loss)
+I0523 10:48:00.040516 32426 sgd_solver.cpp:106] Iteration 34200, lr = 0.005
+I0523 10:48:09.324843 32426 solver.cpp:237] Iteration 34500, loss = 1.04828
+I0523 10:48:09.324890 32426 solver.cpp:253]     Train net output #0: loss = 1.04828 (* 1 = 1.04828 loss)
+I0523 10:48:09.324906 32426 sgd_solver.cpp:106] Iteration 34500, lr = 0.005
+I0523 10:48:18.610474 32426 solver.cpp:237] Iteration 34800, loss = 1.24132
+I0523 10:48:18.610509 32426 solver.cpp:253]     Train net output #0: loss = 1.24132 (* 1 = 1.24132 loss)
+I0523 10:48:18.610527 32426 sgd_solver.cpp:106] Iteration 34800, lr = 0.005
+I0523 10:48:27.890367 32426 solver.cpp:237] Iteration 35100, loss = 1.31128
+I0523 10:48:27.890406 32426 solver.cpp:253]     Train net output #0: loss = 1.31128 (* 1 = 1.31128 loss)
+I0523 10:48:27.890425 32426 sgd_solver.cpp:106] Iteration 35100, lr = 0.005
+I0523 10:48:37.176074 32426 solver.cpp:237] Iteration 35400, loss = 1.31318
+I0523 10:48:37.176223 32426 solver.cpp:253]     Train net output #0: loss = 1.31318 (* 1 = 1.31318 loss)
+I0523 10:48:37.176236 32426 sgd_solver.cpp:106] Iteration 35400, lr = 0.005
+I0523 10:48:46.459620 32426 solver.cpp:237] Iteration 35700, loss = 1.10494
+I0523 10:48:46.459656 32426 solver.cpp:253]     Train net output #0: loss = 1.10494 (* 1 = 1.10494 loss)
+I0523 10:48:46.459673 32426 sgd_solver.cpp:106] Iteration 35700, lr = 0.005
+I0523 10:48:55.713050 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_36000.caffemodel
+I0523 10:48:55.772290 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_36000.solverstate
+I0523 10:48:55.798764 32426 solver.cpp:341] Iteration 36000, Testing net (#0)
+I0523 10:50:04.420832 32426 solver.cpp:409]     Test net output #0: accuracy = 0.885907
+I0523 10:50:04.421021 32426 solver.cpp:409]     Test net output #1: loss = 0.361976 (* 1 = 0.361976 loss)
+I0523 10:50:25.274417 32426 solver.cpp:237] Iteration 36000, loss = 1.01025
+I0523 10:50:25.274471 32426 solver.cpp:253]     Train net output #0: loss = 1.01025 (* 1 = 1.01025 loss)
+I0523 10:50:25.274487 32426 sgd_solver.cpp:106] Iteration 36000, lr = 0.005
+I0523 10:50:34.575556 32426 solver.cpp:237] Iteration 36300, loss = 1.13391
+I0523 10:50:34.575724 32426 solver.cpp:253]     Train net output #0: loss = 1.13391 (* 1 = 1.13391 loss)
+I0523 10:50:34.575745 32426 sgd_solver.cpp:106] Iteration 36300, lr = 0.005
+I0523 10:50:43.878541 32426 solver.cpp:237] Iteration 36600, loss = 0.957246
+I0523 10:50:43.878576 32426 solver.cpp:253]     Train net output #0: loss = 0.957246 (* 1 = 0.957246 loss)
+I0523 10:50:43.878594 32426 sgd_solver.cpp:106] Iteration 36600, lr = 0.005
+I0523 10:50:53.179294 32426 solver.cpp:237] Iteration 36900, loss = 1.16807
+I0523 10:50:53.179330 32426 solver.cpp:253]     Train net output #0: loss = 1.16807 (* 1 = 1.16807 loss)
+I0523 10:50:53.179344 32426 sgd_solver.cpp:106] Iteration 36900, lr = 0.005
+I0523 10:51:02.486321 32426 solver.cpp:237] Iteration 37200, loss = 1.07154
+I0523 10:51:02.486367 32426 solver.cpp:253]     Train net output #0: loss = 1.07154 (* 1 = 1.07154 loss)
+I0523 10:51:02.486385 32426 sgd_solver.cpp:106] Iteration 37200, lr = 0.005
+I0523 10:51:11.789641 32426 solver.cpp:237] Iteration 37500, loss = 1.25486
+I0523 10:51:11.789793 32426 solver.cpp:253]     Train net output #0: loss = 1.25486 (* 1 = 1.25486 loss)
+I0523 10:51:11.789806 32426 sgd_solver.cpp:106] Iteration 37500, lr = 0.005
+I0523 10:51:21.096505 32426 solver.cpp:237] Iteration 37800, loss = 1.23305
+I0523 10:51:21.096540 32426 solver.cpp:253]     Train net output #0: loss = 1.23305 (* 1 = 1.23305 loss)
+I0523 10:51:21.096556 32426 sgd_solver.cpp:106] Iteration 37800, lr = 0.005
+I0523 10:51:51.239100 32426 solver.cpp:237] Iteration 38100, loss = 1.18113
+I0523 10:51:51.239272 32426 solver.cpp:253]     Train net output #0: loss = 1.18113 (* 1 = 1.18113 loss)
+I0523 10:51:51.239289 32426 sgd_solver.cpp:106] Iteration 38100, lr = 0.005
+I0523 10:52:00.544741 32426 solver.cpp:237] Iteration 38400, loss = 1.2299
+I0523 10:52:00.544775 32426 solver.cpp:253]     Train net output #0: loss = 1.2299 (* 1 = 1.2299 loss)
+I0523 10:52:00.544790 32426 sgd_solver.cpp:106] Iteration 38400, lr = 0.005
+I0523 10:52:09.848729 32426 solver.cpp:237] Iteration 38700, loss = 1.01015
+I0523 10:52:09.848767 32426 solver.cpp:253]     Train net output #0: loss = 1.01015 (* 1 = 1.01015 loss)
+I0523 10:52:09.848783 32426 sgd_solver.cpp:106] Iteration 38700, lr = 0.005
+I0523 10:52:19.121098 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_39000.caffemodel
+I0523 10:52:19.180578 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_39000.solverstate
+I0523 10:52:19.216698 32426 solver.cpp:237] Iteration 39000, loss = 1.00603
+I0523 10:52:19.216739 32426 solver.cpp:253]     Train net output #0: loss = 1.00603 (* 1 = 1.00603 loss)
+I0523 10:52:19.216758 32426 sgd_solver.cpp:106] Iteration 39000, lr = 0.005
+I0523 10:52:28.522326 32426 solver.cpp:237] Iteration 39300, loss = 1.03773
+I0523 10:52:28.522500 32426 solver.cpp:253]     Train net output #0: loss = 1.03773 (* 1 = 1.03773 loss)
+I0523 10:52:28.522513 32426 sgd_solver.cpp:106] Iteration 39300, lr = 0.005
+I0523 10:52:37.830760 32426 solver.cpp:237] Iteration 39600, loss = 1.21665
+I0523 10:52:37.830801 32426 solver.cpp:253]     Train net output #0: loss = 1.21665 (* 1 = 1.21665 loss)
+I0523 10:52:37.830822 32426 sgd_solver.cpp:106] Iteration 39600, lr = 0.005
+I0523 10:52:47.136417 32426 solver.cpp:237] Iteration 39900, loss = 1.23277
+I0523 10:52:47.136453 32426 solver.cpp:253]     Train net output #0: loss = 1.23277 (* 1 = 1.23277 loss)
+I0523 10:52:47.136471 32426 sgd_solver.cpp:106] Iteration 39900, lr = 0.005
+I0523 10:53:17.300423 32426 solver.cpp:237] Iteration 40200, loss = 0.991393
+I0523 10:53:17.300600 32426 solver.cpp:253]     Train net output #0: loss = 0.991393 (* 1 = 0.991393 loss)
+I0523 10:53:17.300614 32426 sgd_solver.cpp:106] Iteration 40200, lr = 0.005
+I0523 10:53:26.603958 32426 solver.cpp:237] Iteration 40500, loss = 1.18129
+I0523 10:53:26.603993 32426 solver.cpp:253]     Train net output #0: loss = 1.18129 (* 1 = 1.18129 loss)
+I0523 10:53:26.604010 32426 sgd_solver.cpp:106] Iteration 40500, lr = 0.005
+I0523 10:53:35.909610 32426 solver.cpp:237] Iteration 40800, loss = 1.30106
+I0523 10:53:35.909653 32426 solver.cpp:253]     Train net output #0: loss = 1.30106 (* 1 = 1.30106 loss)
+I0523 10:53:35.909672 32426 sgd_solver.cpp:106] Iteration 40800, lr = 0.005
+I0523 10:53:45.212558 32426 solver.cpp:237] Iteration 41100, loss = 1.18548
+I0523 10:53:45.212592 32426 solver.cpp:253]     Train net output #0: loss = 1.18548 (* 1 = 1.18548 loss)
+I0523 10:53:45.212609 32426 sgd_solver.cpp:106] Iteration 41100, lr = 0.005
+I0523 10:53:54.516811 32426 solver.cpp:237] Iteration 41400, loss = 1.21774
+I0523 10:53:54.516974 32426 solver.cpp:253]     Train net output #0: loss = 1.21774 (* 1 = 1.21774 loss)
+I0523 10:53:54.516988 32426 sgd_solver.cpp:106] Iteration 41400, lr = 0.005
+I0523 10:54:03.820053 32426 solver.cpp:237] Iteration 41700, loss = 1.24644
+I0523 10:54:03.820085 32426 solver.cpp:253]     Train net output #0: loss = 1.24644 (* 1 = 1.24644 loss)
+I0523 10:54:03.820097 32426 sgd_solver.cpp:106] Iteration 41700, lr = 0.005
+I0523 10:54:13.093758 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_42000.caffemodel
+I0523 10:54:13.153142 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_42000.solverstate
+I0523 10:54:13.179666 32426 solver.cpp:341] Iteration 42000, Testing net (#0)
+I0523 10:55:00.664769 32426 solver.cpp:409]     Test net output #0: accuracy = 0.884838
+I0523 10:55:00.664940 32426 solver.cpp:409]     Test net output #1: loss = 0.417144 (* 1 = 0.417144 loss)
+I0523 10:55:21.566944 32426 solver.cpp:237] Iteration 42000, loss = 1.0635
+I0523 10:55:21.566998 32426 solver.cpp:253]     Train net output #0: loss = 1.0635 (* 1 = 1.0635 loss)
+I0523 10:55:21.567013 32426 sgd_solver.cpp:106] Iteration 42000, lr = 0.005
+I0523 10:55:30.848073 32426 solver.cpp:237] Iteration 42300, loss = 1.11039
+I0523 10:55:30.848240 32426 solver.cpp:253]     Train net output #0: loss = 1.11039 (* 1 = 1.11039 loss)
+I0523 10:55:30.848254 32426 sgd_solver.cpp:106] Iteration 42300, lr = 0.005
+I0523 10:55:40.131291 32426 solver.cpp:237] Iteration 42600, loss = 1.03893
+I0523 10:55:40.131340 32426 solver.cpp:253]     Train net output #0: loss = 1.03893 (* 1 = 1.03893 loss)
+I0523 10:55:40.131355 32426 sgd_solver.cpp:106] Iteration 42600, lr = 0.005
+I0523 10:55:49.411387 32426 solver.cpp:237] Iteration 42900, loss = 1.13318
+I0523 10:55:49.411423 32426 solver.cpp:253]     Train net output #0: loss = 1.13318 (* 1 = 1.13318 loss)
+I0523 10:55:49.411439 32426 sgd_solver.cpp:106] Iteration 42900, lr = 0.005
+I0523 10:55:58.694520 32426 solver.cpp:237] Iteration 43200, loss = 1.36753
+I0523 10:55:58.694567 32426 solver.cpp:253]     Train net output #0: loss = 1.36753 (* 1 = 1.36753 loss)
+I0523 10:55:58.694581 32426 sgd_solver.cpp:106] Iteration 43200, lr = 0.005
+I0523 10:56:07.977283 32426 solver.cpp:237] Iteration 43500, loss = 1.26325
+I0523 10:56:07.977455 32426 solver.cpp:253]     Train net output #0: loss = 1.26325 (* 1 = 1.26325 loss)
+I0523 10:56:07.977470 32426 sgd_solver.cpp:106] Iteration 43500, lr = 0.005
+I0523 10:56:17.258034 32426 solver.cpp:237] Iteration 43800, loss = 1.10765
+I0523 10:56:17.258069 32426 solver.cpp:253]     Train net output #0: loss = 1.10765 (* 1 = 1.10765 loss)
+I0523 10:56:17.258086 32426 sgd_solver.cpp:106] Iteration 43800, lr = 0.005
+I0523 10:56:47.424031 32426 solver.cpp:237] Iteration 44100, loss = 1.15116
+I0523 10:56:47.424206 32426 solver.cpp:253]     Train net output #0: loss = 1.15116 (* 1 = 1.15116 loss)
+I0523 10:56:47.424221 32426 sgd_solver.cpp:106] Iteration 44100, lr = 0.005
+I0523 10:56:56.708129 32426 solver.cpp:237] Iteration 44400, loss = 1.263
+I0523 10:56:56.708163 32426 solver.cpp:253]     Train net output #0: loss = 1.263 (* 1 = 1.263 loss)
+I0523 10:56:56.708181 32426 sgd_solver.cpp:106] Iteration 44400, lr = 0.005
+I0523 10:57:05.991808 32426 solver.cpp:237] Iteration 44700, loss = 0.872296
+I0523 10:57:05.991845 32426 solver.cpp:253]     Train net output #0: loss = 0.872296 (* 1 = 0.872296 loss)
+I0523 10:57:05.991860 32426 sgd_solver.cpp:106] Iteration 44700, lr = 0.005
+I0523 10:57:15.247295 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_45000.caffemodel
+I0523 10:57:15.308399 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_45000.solverstate
+I0523 10:57:15.346772 32426 solver.cpp:237] Iteration 45000, loss = 1.03063
+I0523 10:57:15.346822 32426 solver.cpp:253]     Train net output #0: loss = 1.03063 (* 1 = 1.03063 loss)
+I0523 10:57:15.346838 32426 sgd_solver.cpp:106] Iteration 45000, lr = 0.005
+I0523 10:57:24.631393 32426 solver.cpp:237] Iteration 45300, loss = 0.980506
+I0523 10:57:24.631553 32426 solver.cpp:253]     Train net output #0: loss = 0.980506 (* 1 = 0.980506 loss)
+I0523 10:57:24.631567 32426 sgd_solver.cpp:106] Iteration 45300, lr = 0.005
+I0523 10:57:33.915510 32426 solver.cpp:237] Iteration 45600, loss = 1.20166
+I0523 10:57:33.915547 32426 solver.cpp:253]     Train net output #0: loss = 1.20166 (* 1 = 1.20166 loss)
+I0523 10:57:33.915562 32426 sgd_solver.cpp:106] Iteration 45600, lr = 0.005
+I0523 10:57:43.199795 32426 solver.cpp:237] Iteration 45900, loss = 1.08453
+I0523 10:57:43.199838 32426 solver.cpp:253]     Train net output #0: loss = 1.08453 (* 1 = 1.08453 loss)
+I0523 10:57:43.199856 32426 sgd_solver.cpp:106] Iteration 45900, lr = 0.005
+I0523 10:58:13.428102 32426 solver.cpp:237] Iteration 46200, loss = 1.10524
+I0523 10:58:13.428274 32426 solver.cpp:253]     Train net output #0: loss = 1.10524 (* 1 = 1.10524 loss)
+I0523 10:58:13.428290 32426 sgd_solver.cpp:106] Iteration 46200, lr = 0.005
+I0523 10:58:22.708703 32426 solver.cpp:237] Iteration 46500, loss = 1.18887
+I0523 10:58:22.708739 32426 solver.cpp:253]     Train net output #0: loss = 1.18887 (* 1 = 1.18887 loss)
+I0523 10:58:22.708753 32426 sgd_solver.cpp:106] Iteration 46500, lr = 0.005
+I0523 10:58:31.995124 32426 solver.cpp:237] Iteration 46800, loss = 1.04016
+I0523 10:58:31.995172 32426 solver.cpp:253]     Train net output #0: loss = 1.04016 (* 1 = 1.04016 loss)
+I0523 10:58:31.995187 32426 sgd_solver.cpp:106] Iteration 46800, lr = 0.005
+I0523 10:58:41.273200 32426 solver.cpp:237] Iteration 47100, loss = 1.27656
+I0523 10:58:41.273236 32426 solver.cpp:253]     Train net output #0: loss = 1.27656 (* 1 = 1.27656 loss)
+I0523 10:58:41.273252 32426 sgd_solver.cpp:106] Iteration 47100, lr = 0.005
+I0523 10:58:50.557520 32426 solver.cpp:237] Iteration 47400, loss = 0.944338
+I0523 10:58:50.557682 32426 solver.cpp:253]     Train net output #0: loss = 0.944338 (* 1 = 0.944338 loss)
+I0523 10:58:50.557696 32426 sgd_solver.cpp:106] Iteration 47400, lr = 0.005
+I0523 10:58:59.834760 32426 solver.cpp:237] Iteration 47700, loss = 1.09303
+I0523 10:58:59.834807 32426 solver.cpp:253]     Train net output #0: loss = 1.09303 (* 1 = 1.09303 loss)
+I0523 10:58:59.834823 32426 sgd_solver.cpp:106] Iteration 47700, lr = 0.005
+I0523 10:59:09.082782 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_48000.caffemodel
+I0523 10:59:09.142035 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_48000.solverstate
+I0523 10:59:09.168460 32426 solver.cpp:341] Iteration 48000, Testing net (#0)
+I0523 11:00:17.817879 32426 solver.cpp:409]     Test net output #0: accuracy = 0.889832
+I0523 11:00:17.818056 32426 solver.cpp:409]     Test net output #1: loss = 0.348803 (* 1 = 0.348803 loss)
+I0523 11:00:38.683058 32426 solver.cpp:237] Iteration 48000, loss = 1.09466
+I0523 11:00:38.683111 32426 solver.cpp:253]     Train net output #0: loss = 1.09466 (* 1 = 1.09466 loss)
+I0523 11:00:38.683126 32426 sgd_solver.cpp:106] Iteration 48000, lr = 0.005
+I0523 11:00:47.965323 32426 solver.cpp:237] Iteration 48300, loss = 1.21423
+I0523 11:00:47.965490 32426 solver.cpp:253]     Train net output #0: loss = 1.21423 (* 1 = 1.21423 loss)
+I0523 11:00:47.965504 32426 sgd_solver.cpp:106] Iteration 48300, lr = 0.005
+I0523 11:00:57.252243 32426 solver.cpp:237] Iteration 48600, loss = 1.23252
+I0523 11:00:57.252288 32426 solver.cpp:253]     Train net output #0: loss = 1.23252 (* 1 = 1.23252 loss)
+I0523 11:00:57.252302 32426 sgd_solver.cpp:106] Iteration 48600, lr = 0.005
+I0523 11:01:06.532243 32426 solver.cpp:237] Iteration 48900, loss = 1.16013
+I0523 11:01:06.532279 32426 solver.cpp:253]     Train net output #0: loss = 1.16013 (* 1 = 1.16013 loss)
+I0523 11:01:06.532296 32426 sgd_solver.cpp:106] Iteration 48900, lr = 0.005
+I0523 11:01:15.815099 32426 solver.cpp:237] Iteration 49200, loss = 0.939563
+I0523 11:01:15.815136 32426 solver.cpp:253]     Train net output #0: loss = 0.939563 (* 1 = 0.939563 loss)
+I0523 11:01:15.815150 32426 sgd_solver.cpp:106] Iteration 49200, lr = 0.005
+I0523 11:01:25.103639 32426 solver.cpp:237] Iteration 49500, loss = 1.1826
+I0523 11:01:25.103818 32426 solver.cpp:253]     Train net output #0: loss = 1.1826 (* 1 = 1.1826 loss)
+I0523 11:01:25.103832 32426 sgd_solver.cpp:106] Iteration 49500, lr = 0.005
+I0523 11:01:34.390027 32426 solver.cpp:237] Iteration 49800, loss = 0.961054
+I0523 11:01:34.390063 32426 solver.cpp:253]     Train net output #0: loss = 0.961054 (* 1 = 0.961054 loss)
+I0523 11:01:34.390079 32426 sgd_solver.cpp:106] Iteration 49800, lr = 0.005
+I0523 11:02:04.559834 32426 solver.cpp:237] Iteration 50100, loss = 1.09229
+I0523 11:02:04.560009 32426 solver.cpp:253]     Train net output #0: loss = 1.09229 (* 1 = 1.09229 loss)
+I0523 11:02:04.560024 32426 sgd_solver.cpp:106] Iteration 50100, lr = 0.005
+I0523 11:02:13.845223 32426 solver.cpp:237] Iteration 50400, loss = 1.32205
+I0523 11:02:13.845269 32426 solver.cpp:253]     Train net output #0: loss = 1.32205 (* 1 = 1.32205 loss)
+I0523 11:02:13.845288 32426 sgd_solver.cpp:106] Iteration 50400, lr = 0.005
+I0523 11:02:23.128180 32426 solver.cpp:237] Iteration 50700, loss = 1.15909
+I0523 11:02:23.128216 32426 solver.cpp:253]     Train net output #0: loss = 1.15909 (* 1 = 1.15909 loss)
+I0523 11:02:23.128232 32426 sgd_solver.cpp:106] Iteration 50700, lr = 0.005
+I0523 11:02:32.385987 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_51000.caffemodel
+I0523 11:02:32.446353 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_51000.solverstate
+I0523 11:02:32.483055 32426 solver.cpp:237] Iteration 51000, loss = 1.19662
+I0523 11:02:32.483103 32426 solver.cpp:253]     Train net output #0: loss = 1.19662 (* 1 = 1.19662 loss)
+I0523 11:02:32.483117 32426 sgd_solver.cpp:106] Iteration 51000, lr = 0.005
+I0523 11:02:41.770689 32426 solver.cpp:237] Iteration 51300, loss = 1.16459
+I0523 11:02:41.770869 32426 solver.cpp:253]     Train net output #0: loss = 1.16459 (* 1 = 1.16459 loss)
+I0523 11:02:41.770882 32426 sgd_solver.cpp:106] Iteration 51300, lr = 0.005
+I0523 11:02:51.055555 32426 solver.cpp:237] Iteration 51600, loss = 1.14486
+I0523 11:02:51.055589 32426 solver.cpp:253]     Train net output #0: loss = 1.14486 (* 1 = 1.14486 loss)
+I0523 11:02:51.055603 32426 sgd_solver.cpp:106] Iteration 51600, lr = 0.005
+I0523 11:03:00.344460 32426 solver.cpp:237] Iteration 51900, loss = 1.46256
+I0523 11:03:00.344496 32426 solver.cpp:253]     Train net output #0: loss = 1.46256 (* 1 = 1.46256 loss)
+I0523 11:03:00.344511 32426 sgd_solver.cpp:106] Iteration 51900, lr = 0.005
+I0523 11:03:30.508101 32426 solver.cpp:237] Iteration 52200, loss = 1.12337
+I0523 11:03:30.508280 32426 solver.cpp:253]     Train net output #0: loss = 1.12337 (* 1 = 1.12337 loss)
+I0523 11:03:30.508296 32426 sgd_solver.cpp:106] Iteration 52200, lr = 0.005
+I0523 11:03:39.792237 32426 solver.cpp:237] Iteration 52500, loss = 1.31135
+I0523 11:03:39.792271 32426 solver.cpp:253]     Train net output #0: loss = 1.31135 (* 1 = 1.31135 loss)
+I0523 11:03:39.792289 32426 sgd_solver.cpp:106] Iteration 52500, lr = 0.005
+I0523 11:03:49.080935 32426 solver.cpp:237] Iteration 52800, loss = 1.02112
+I0523 11:03:49.080971 32426 solver.cpp:253]     Train net output #0: loss = 1.02112 (* 1 = 1.02112 loss)
+I0523 11:03:49.080986 32426 sgd_solver.cpp:106] Iteration 52800, lr = 0.005
+I0523 11:03:58.364176 32426 solver.cpp:237] Iteration 53100, loss = 1.16369
+I0523 11:03:58.364220 32426 solver.cpp:253]     Train net output #0: loss = 1.16369 (* 1 = 1.16369 loss)
+I0523 11:03:58.364238 32426 sgd_solver.cpp:106] Iteration 53100, lr = 0.005
+I0523 11:04:07.649682 32426 solver.cpp:237] Iteration 53400, loss = 1.29475
+I0523 11:04:07.649837 32426 solver.cpp:253]     Train net output #0: loss = 1.29475 (* 1 = 1.29475 loss)
+I0523 11:04:07.649850 32426 sgd_solver.cpp:106] Iteration 53400, lr = 0.005
+I0523 11:04:16.939774 32426 solver.cpp:237] Iteration 53700, loss = 0.973047
+I0523 11:04:16.939812 32426 solver.cpp:253]     Train net output #0: loss = 0.973047 (* 1 = 0.973047 loss)
+I0523 11:04:16.939831 32426 sgd_solver.cpp:106] Iteration 53700, lr = 0.005
+I0523 11:04:26.194936 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_54000.caffemodel
+I0523 11:04:26.255473 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_54000.solverstate
+I0523 11:04:26.281983 32426 solver.cpp:341] Iteration 54000, Testing net (#0)
+I0523 11:05:14.029650 32426 solver.cpp:409]     Test net output #0: accuracy = 0.891192
+I0523 11:05:14.029822 32426 solver.cpp:409]     Test net output #1: loss = 0.344634 (* 1 = 0.344634 loss)
+I0523 11:05:34.930619 32426 solver.cpp:237] Iteration 54000, loss = 1.2089
+I0523 11:05:34.930673 32426 solver.cpp:253]     Train net output #0: loss = 1.2089 (* 1 = 1.2089 loss)
+I0523 11:05:34.930688 32426 sgd_solver.cpp:106] Iteration 54000, lr = 0.005
+I0523 11:05:44.214010 32426 solver.cpp:237] Iteration 54300, loss = 1.39094
+I0523 11:05:44.214181 32426 solver.cpp:253]     Train net output #0: loss = 1.39094 (* 1 = 1.39094 loss)
+I0523 11:05:44.214196 32426 sgd_solver.cpp:106] Iteration 54300, lr = 0.005
+I0523 11:05:53.499758 32426 solver.cpp:237] Iteration 54600, loss = 1.20385
+I0523 11:05:53.499794 32426 solver.cpp:253]     Train net output #0: loss = 1.20385 (* 1 = 1.20385 loss)
+I0523 11:05:53.499811 32426 sgd_solver.cpp:106] Iteration 54600, lr = 0.005
+I0523 11:06:02.784297 32426 solver.cpp:237] Iteration 54900, loss = 0.979702
+I0523 11:06:02.784348 32426 solver.cpp:253]     Train net output #0: loss = 0.979702 (* 1 = 0.979702 loss)
+I0523 11:06:02.784363 32426 sgd_solver.cpp:106] Iteration 54900, lr = 0.005
+I0523 11:06:12.068842 32426 solver.cpp:237] Iteration 55200, loss = 1.19491
+I0523 11:06:12.068877 32426 solver.cpp:253]     Train net output #0: loss = 1.19491 (* 1 = 1.19491 loss)
+I0523 11:06:12.068894 32426 sgd_solver.cpp:106] Iteration 55200, lr = 0.005
+I0523 11:06:21.349942 32426 solver.cpp:237] Iteration 55500, loss = 1.24689
+I0523 11:06:21.350111 32426 solver.cpp:253]     Train net output #0: loss = 1.24689 (* 1 = 1.24689 loss)
+I0523 11:06:21.350126 32426 sgd_solver.cpp:106] Iteration 55500, lr = 0.005
+I0523 11:06:30.631681 32426 solver.cpp:237] Iteration 55800, loss = 0.952669
+I0523 11:06:30.631726 32426 solver.cpp:253]     Train net output #0: loss = 0.952669 (* 1 = 0.952669 loss)
+I0523 11:06:30.631747 32426 sgd_solver.cpp:106] Iteration 55800, lr = 0.005
+I0523 11:07:00.785711 32426 solver.cpp:237] Iteration 56100, loss = 1.27487
+I0523 11:07:00.785889 32426 solver.cpp:253]     Train net output #0: loss = 1.27487 (* 1 = 1.27487 loss)
+I0523 11:07:00.785905 32426 sgd_solver.cpp:106] Iteration 56100, lr = 0.005
+I0523 11:07:10.068725 32426 solver.cpp:237] Iteration 56400, loss = 1.15464
+I0523 11:07:10.068760 32426 solver.cpp:253]     Train net output #0: loss = 1.15464 (* 1 = 1.15464 loss)
+I0523 11:07:10.068778 32426 sgd_solver.cpp:106] Iteration 56400, lr = 0.005
+I0523 11:07:19.352845 32426 solver.cpp:237] Iteration 56700, loss = 1.34164
+I0523 11:07:19.352885 32426 solver.cpp:253]     Train net output #0: loss = 1.34164 (* 1 = 1.34164 loss)
+I0523 11:07:19.352905 32426 sgd_solver.cpp:106] Iteration 56700, lr = 0.005
+I0523 11:07:28.606545 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_57000.caffemodel
+I0523 11:07:28.668931 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_57000.solverstate
+I0523 11:07:28.706957 32426 solver.cpp:237] Iteration 57000, loss = 1.48433
+I0523 11:07:28.707007 32426 solver.cpp:253]     Train net output #0: loss = 1.48433 (* 1 = 1.48433 loss)
+I0523 11:07:28.707020 32426 sgd_solver.cpp:106] Iteration 57000, lr = 0.005
+I0523 11:07:37.991516 32426 solver.cpp:237] Iteration 57300, loss = 1.00919
+I0523 11:07:37.991685 32426 solver.cpp:253]     Train net output #0: loss = 1.00919 (* 1 = 1.00919 loss)
+I0523 11:07:37.991699 32426 sgd_solver.cpp:106] Iteration 57300, lr = 0.005
+I0523 11:07:47.275389 32426 solver.cpp:237] Iteration 57600, loss = 1.50471
+I0523 11:07:47.275424 32426 solver.cpp:253]     Train net output #0: loss = 1.50471 (* 1 = 1.50471 loss)
+I0523 11:07:47.275441 32426 sgd_solver.cpp:106] Iteration 57600, lr = 0.005
+I0523 11:07:56.558794 32426 solver.cpp:237] Iteration 57900, loss = 0.932548
+I0523 11:07:56.558830 32426 solver.cpp:253]     Train net output #0: loss = 0.932548 (* 1 = 0.932548 loss)
+I0523 11:07:56.558846 32426 sgd_solver.cpp:106] Iteration 57900, lr = 0.005
+I0523 11:08:26.754984 32426 solver.cpp:237] Iteration 58200, loss = 1.11122
+I0523 11:08:26.755167 32426 solver.cpp:253]     Train net output #0: loss = 1.11122 (* 1 = 1.11122 loss)
+I0523 11:08:26.755182 32426 sgd_solver.cpp:106] Iteration 58200, lr = 0.005
+I0523 11:08:36.036113 32426 solver.cpp:237] Iteration 58500, loss = 1.05524
+I0523 11:08:36.036154 32426 solver.cpp:253]     Train net output #0: loss = 1.05524 (* 1 = 1.05524 loss)
+I0523 11:08:36.036175 32426 sgd_solver.cpp:106] Iteration 58500, lr = 0.005
+I0523 11:08:45.321153 32426 solver.cpp:237] Iteration 58800, loss = 1.09031
+I0523 11:08:45.321189 32426 solver.cpp:253]     Train net output #0: loss = 1.09031 (* 1 = 1.09031 loss)
+I0523 11:08:45.321203 32426 sgd_solver.cpp:106] Iteration 58800, lr = 0.005
+I0523 11:08:54.604873 32426 solver.cpp:237] Iteration 59100, loss = 0.97372
+I0523 11:08:54.604920 32426 solver.cpp:253]     Train net output #0: loss = 0.97372 (* 1 = 0.97372 loss)
+I0523 11:08:54.604938 32426 sgd_solver.cpp:106] Iteration 59100, lr = 0.005
+I0523 11:09:03.890350 32426 solver.cpp:237] Iteration 59400, loss = 1.23152
+I0523 11:09:03.890521 32426 solver.cpp:253]     Train net output #0: loss = 1.23152 (* 1 = 1.23152 loss)
+I0523 11:09:03.890535 32426 sgd_solver.cpp:106] Iteration 59400, lr = 0.005
+I0523 11:09:13.174679 32426 solver.cpp:237] Iteration 59700, loss = 1.1158
+I0523 11:09:13.174713 32426 solver.cpp:253]     Train net output #0: loss = 1.1158 (* 1 = 1.1158 loss)
+I0523 11:09:13.174726 32426 sgd_solver.cpp:106] Iteration 59700, lr = 0.005
+I0523 11:09:22.427769 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_60000.caffemodel
+I0523 11:09:22.489382 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_60000.solverstate
+I0523 11:09:22.517904 32426 solver.cpp:341] Iteration 60000, Testing net (#0)
+I0523 11:10:31.212616 32426 solver.cpp:409]     Test net output #0: accuracy = 0.893125
+I0523 11:10:31.212795 32426 solver.cpp:409]     Test net output #1: loss = 0.361308 (* 1 = 0.361308 loss)
+I0523 11:10:52.082177 32426 solver.cpp:237] Iteration 60000, loss = 0.916091
+I0523 11:10:52.082229 32426 solver.cpp:253]     Train net output #0: loss = 0.916091 (* 1 = 0.916091 loss)
+I0523 11:10:52.082247 32426 sgd_solver.cpp:106] Iteration 60000, lr = 0.005
+I0523 11:11:01.390096 32426 solver.cpp:237] Iteration 60300, loss = 1.09272
+I0523 11:11:01.390267 32426 solver.cpp:253]     Train net output #0: loss = 1.09272 (* 1 = 1.09272 loss)
+I0523 11:11:01.390282 32426 sgd_solver.cpp:106] Iteration 60300, lr = 0.005
+I0523 11:11:10.693660 32426 solver.cpp:237] Iteration 60600, loss = 1.48568
+I0523 11:11:10.693694 32426 solver.cpp:253]     Train net output #0: loss = 1.48568 (* 1 = 1.48568 loss)
+I0523 11:11:10.693711 32426 sgd_solver.cpp:106] Iteration 60600, lr = 0.005
+I0523 11:11:19.996043 32426 solver.cpp:237] Iteration 60900, loss = 1.22323
+I0523 11:11:19.996079 32426 solver.cpp:253]     Train net output #0: loss = 1.22323 (* 1 = 1.22323 loss)
+I0523 11:11:19.996095 32426 sgd_solver.cpp:106] Iteration 60900, lr = 0.005
+I0523 11:11:29.293774 32426 solver.cpp:237] Iteration 61200, loss = 0.887378
+I0523 11:11:29.293822 32426 solver.cpp:253]     Train net output #0: loss = 0.887378 (* 1 = 0.887378 loss)
+I0523 11:11:29.293839 32426 sgd_solver.cpp:106] Iteration 61200, lr = 0.005
+I0523 11:11:38.596093 32426 solver.cpp:237] Iteration 61500, loss = 1.1758
+I0523 11:11:38.596251 32426 solver.cpp:253]     Train net output #0: loss = 1.1758 (* 1 = 1.1758 loss)
+I0523 11:11:38.596266 32426 sgd_solver.cpp:106] Iteration 61500, lr = 0.005
+I0523 11:11:47.898422 32426 solver.cpp:237] Iteration 61800, loss = 1.38954
+I0523 11:11:47.898465 32426 solver.cpp:253]     Train net output #0: loss = 1.38954 (* 1 = 1.38954 loss)
+I0523 11:11:47.898486 32426 sgd_solver.cpp:106] Iteration 61800, lr = 0.005
+I0523 11:12:18.106859 32426 solver.cpp:237] Iteration 62100, loss = 1.14595
+I0523 11:12:18.107038 32426 solver.cpp:253]     Train net output #0: loss = 1.14595 (* 1 = 1.14595 loss)
+I0523 11:12:18.107053 32426 sgd_solver.cpp:106] Iteration 62100, lr = 0.005
+I0523 11:12:27.409644 32426 solver.cpp:237] Iteration 62400, loss = 1.10691
+I0523 11:12:27.409680 32426 solver.cpp:253]     Train net output #0: loss = 1.10691 (* 1 = 1.10691 loss)
+I0523 11:12:27.409698 32426 sgd_solver.cpp:106] Iteration 62400, lr = 0.005
+I0523 11:12:36.709202 32426 solver.cpp:237] Iteration 62700, loss = 1.21926
+I0523 11:12:36.709238 32426 solver.cpp:253]     Train net output #0: loss = 1.21926 (* 1 = 1.21926 loss)
+I0523 11:12:36.709254 32426 sgd_solver.cpp:106] Iteration 62700, lr = 0.005
+I0523 11:12:45.976999 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_63000.caffemodel
+I0523 11:12:46.036672 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_63000.solverstate
+I0523 11:12:46.073078 32426 solver.cpp:237] Iteration 63000, loss = 1.21655
+I0523 11:12:46.073123 32426 solver.cpp:253]     Train net output #0: loss = 1.21655 (* 1 = 1.21655 loss)
+I0523 11:12:46.073143 32426 sgd_solver.cpp:106] Iteration 63000, lr = 0.005
+I0523 11:12:55.380954 32426 solver.cpp:237] Iteration 63300, loss = 1.3141
+I0523 11:12:55.381134 32426 solver.cpp:253]     Train net output #0: loss = 1.3141 (* 1 = 1.3141 loss)
+I0523 11:12:55.381148 32426 sgd_solver.cpp:106] Iteration 63300, lr = 0.005
+I0523 11:13:04.688539 32426 solver.cpp:237] Iteration 63600, loss = 1.10213
+I0523 11:13:04.688581 32426 solver.cpp:253]     Train net output #0: loss = 1.10213 (* 1 = 1.10213 loss)
+I0523 11:13:04.688601 32426 sgd_solver.cpp:106] Iteration 63600, lr = 0.005
+I0523 11:13:13.984308 32426 solver.cpp:237] Iteration 63900, loss = 1.07097
+I0523 11:13:13.984344 32426 solver.cpp:253]     Train net output #0: loss = 1.07097 (* 1 = 1.07097 loss)
+I0523 11:13:13.984359 32426 sgd_solver.cpp:106] Iteration 63900, lr = 0.005
+I0523 11:13:44.158099 32426 solver.cpp:237] Iteration 64200, loss = 1.05971
+I0523 11:13:44.158278 32426 solver.cpp:253]     Train net output #0: loss = 1.05971 (* 1 = 1.05971 loss)
+I0523 11:13:44.158294 32426 sgd_solver.cpp:106] Iteration 64200, lr = 0.005
+I0523 11:13:53.459648 32426 solver.cpp:237] Iteration 64500, loss = 1.09203
+I0523 11:13:53.459694 32426 solver.cpp:253]     Train net output #0: loss = 1.09203 (* 1 = 1.09203 loss)
+I0523 11:13:53.459713 32426 sgd_solver.cpp:106] Iteration 64500, lr = 0.005
+I0523 11:14:02.759179 32426 solver.cpp:237] Iteration 64800, loss = 1.31739
+I0523 11:14:02.759215 32426 solver.cpp:253]     Train net output #0: loss = 1.31739 (* 1 = 1.31739 loss)
+I0523 11:14:02.759232 32426 sgd_solver.cpp:106] Iteration 64800, lr = 0.005
+I0523 11:14:12.063181 32426 solver.cpp:237] Iteration 65100, loss = 1.09793
+I0523 11:14:12.063216 32426 solver.cpp:253]     Train net output #0: loss = 1.09793 (* 1 = 1.09793 loss)
+I0523 11:14:12.063232 32426 sgd_solver.cpp:106] Iteration 65100, lr = 0.005
+I0523 11:14:21.363837 32426 solver.cpp:237] Iteration 65400, loss = 1.09632
+I0523 11:14:21.364008 32426 solver.cpp:253]     Train net output #0: loss = 1.09632 (* 1 = 1.09632 loss)
+I0523 11:14:21.364022 32426 sgd_solver.cpp:106] Iteration 65400, lr = 0.005
+I0523 11:14:30.666103 32426 solver.cpp:237] Iteration 65700, loss = 1.33026
+I0523 11:14:30.666138 32426 solver.cpp:253]     Train net output #0: loss = 1.33026 (* 1 = 1.33026 loss)
+I0523 11:14:30.666155 32426 sgd_solver.cpp:106] Iteration 65700, lr = 0.005
+I0523 11:14:39.935997 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_66000.caffemodel
+I0523 11:14:39.995681 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_66000.solverstate
+I0523 11:14:40.022208 32426 solver.cpp:341] Iteration 66000, Testing net (#0)
+I0523 11:15:27.553166 32426 solver.cpp:409]     Test net output #0: accuracy = 0.89573
+I0523 11:15:27.553354 32426 solver.cpp:409]     Test net output #1: loss = 0.32798 (* 1 = 0.32798 loss)
+I0523 11:15:48.503794 32426 solver.cpp:237] Iteration 66000, loss = 1.00968
+I0523 11:15:48.503847 32426 solver.cpp:253]     Train net output #0: loss = 1.00968 (* 1 = 1.00968 loss)
+I0523 11:15:48.503864 32426 sgd_solver.cpp:106] Iteration 66000, lr = 0.005
+I0523 11:15:57.784615 32426 solver.cpp:237] Iteration 66300, loss = 1.19222
+I0523 11:15:57.784797 32426 solver.cpp:253]     Train net output #0: loss = 1.19222 (* 1 = 1.19222 loss)
+I0523 11:15:57.784811 32426 sgd_solver.cpp:106] Iteration 66300, lr = 0.005
+I0523 11:16:07.066390 32426 solver.cpp:237] Iteration 66600, loss = 1.09843
+I0523 11:16:07.066424 32426 solver.cpp:253]     Train net output #0: loss = 1.09843 (* 1 = 1.09843 loss)
+I0523 11:16:07.066442 32426 sgd_solver.cpp:106] Iteration 66600, lr = 0.005
+I0523 11:16:16.349614 32426 solver.cpp:237] Iteration 66900, loss = 1.12776
+I0523 11:16:16.349650 32426 solver.cpp:253]     Train net output #0: loss = 1.12776 (* 1 = 1.12776 loss)
+I0523 11:16:16.349666 32426 sgd_solver.cpp:106] Iteration 66900, lr = 0.005
+I0523 11:16:25.630025 32426 solver.cpp:237] Iteration 67200, loss = 1.46852
+I0523 11:16:25.630072 32426 solver.cpp:253]     Train net output #0: loss = 1.46852 (* 1 = 1.46852 loss)
+I0523 11:16:25.630089 32426 sgd_solver.cpp:106] Iteration 67200, lr = 0.005
+I0523 11:16:34.915606 32426 solver.cpp:237] Iteration 67500, loss = 1.26977
+I0523 11:16:34.915786 32426 solver.cpp:253]     Train net output #0: loss = 1.26977 (* 1 = 1.26977 loss)
+I0523 11:16:34.915799 32426 sgd_solver.cpp:106] Iteration 67500, lr = 0.005
+I0523 11:16:44.198694 32426 solver.cpp:237] Iteration 67800, loss = 1.40872
+I0523 11:16:44.198729 32426 solver.cpp:253]     Train net output #0: loss = 1.40872 (* 1 = 1.40872 loss)
+I0523 11:16:44.198745 32426 sgd_solver.cpp:106] Iteration 67800, lr = 0.005
+I0523 11:17:14.370448 32426 solver.cpp:237] Iteration 68100, loss = 1.33996
+I0523 11:17:14.370628 32426 solver.cpp:253]     Train net output #0: loss = 1.33996 (* 1 = 1.33996 loss)
+I0523 11:17:14.370645 32426 sgd_solver.cpp:106] Iteration 68100, lr = 0.005
+I0523 11:17:23.654602 32426 solver.cpp:237] Iteration 68400, loss = 0.778218
+I0523 11:17:23.654636 32426 solver.cpp:253]     Train net output #0: loss = 0.778218 (* 1 = 0.778218 loss)
+I0523 11:17:23.654654 32426 sgd_solver.cpp:106] Iteration 68400, lr = 0.005
+I0523 11:17:32.933440 32426 solver.cpp:237] Iteration 68700, loss = 1.33646
+I0523 11:17:32.933476 32426 solver.cpp:253]     Train net output #0: loss = 1.33646 (* 1 = 1.33646 loss)
+I0523 11:17:32.933493 32426 sgd_solver.cpp:106] Iteration 68700, lr = 0.005
+I0523 11:17:42.182829 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_69000.caffemodel
+I0523 11:17:42.242012 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_69000.solverstate
+I0523 11:17:42.278408 32426 solver.cpp:237] Iteration 69000, loss = 1.2287
+I0523 11:17:42.278450 32426 solver.cpp:253]     Train net output #0: loss = 1.2287 (* 1 = 1.2287 loss)
+I0523 11:17:42.278468 32426 sgd_solver.cpp:106] Iteration 69000, lr = 0.005
+I0523 11:17:51.559279 32426 solver.cpp:237] Iteration 69300, loss = 1.4266
+I0523 11:17:51.559442 32426 solver.cpp:253]     Train net output #0: loss = 1.4266 (* 1 = 1.4266 loss)
+I0523 11:17:51.559458 32426 sgd_solver.cpp:106] Iteration 69300, lr = 0.005
+I0523 11:18:00.842412 32426 solver.cpp:237] Iteration 69600, loss = 1.13338
+I0523 11:18:00.842447 32426 solver.cpp:253]     Train net output #0: loss = 1.13338 (* 1 = 1.13338 loss)
+I0523 11:18:00.842464 32426 sgd_solver.cpp:106] Iteration 69600, lr = 0.005
+I0523 11:18:10.123097 32426 solver.cpp:237] Iteration 69900, loss = 1.18606
+I0523 11:18:10.123144 32426 solver.cpp:253]     Train net output #0: loss = 1.18606 (* 1 = 1.18606 loss)
+I0523 11:18:10.123162 32426 sgd_solver.cpp:106] Iteration 69900, lr = 0.005
+I0523 11:18:40.285948 32426 solver.cpp:237] Iteration 70200, loss = 0.916701
+I0523 11:18:40.286128 32426 solver.cpp:253]     Train net output #0: loss = 0.916701 (* 1 = 0.916701 loss)
+I0523 11:18:40.286144 32426 sgd_solver.cpp:106] Iteration 70200, lr = 0.005
+I0523 11:18:49.568608 32426 solver.cpp:237] Iteration 70500, loss = 1.01396
+I0523 11:18:49.568642 32426 solver.cpp:253]     Train net output #0: loss = 1.01396 (* 1 = 1.01396 loss)
+I0523 11:18:49.568658 32426 sgd_solver.cpp:106] Iteration 70500, lr = 0.005
+I0523 11:18:58.849400 32426 solver.cpp:237] Iteration 70800, loss = 1.26842
+I0523 11:18:58.849447 32426 solver.cpp:253]     Train net output #0: loss = 1.26842 (* 1 = 1.26842 loss)
+I0523 11:18:58.849464 32426 sgd_solver.cpp:106] Iteration 70800, lr = 0.005
+I0523 11:19:08.132658 32426 solver.cpp:237] Iteration 71100, loss = 1.0037
+I0523 11:19:08.132694 32426 solver.cpp:253]     Train net output #0: loss = 1.0037 (* 1 = 1.0037 loss)
+I0523 11:19:08.132710 32426 sgd_solver.cpp:106] Iteration 71100, lr = 0.005
+I0523 11:19:17.414016 32426 solver.cpp:237] Iteration 71400, loss = 1.19649
+I0523 11:19:17.414197 32426 solver.cpp:253]     Train net output #0: loss = 1.19649 (* 1 = 1.19649 loss)
+I0523 11:19:17.414212 32426 sgd_solver.cpp:106] Iteration 71400, lr = 0.005
+I0523 11:19:26.700516 32426 solver.cpp:237] Iteration 71700, loss = 0.911046
+I0523 11:19:26.700552 32426 solver.cpp:253]     Train net output #0: loss = 0.911046 (* 1 = 0.911046 loss)
+I0523 11:19:26.700569 32426 sgd_solver.cpp:106] Iteration 71700, lr = 0.005
+I0523 11:19:35.953640 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_72000.caffemodel
+I0523 11:19:36.029760 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_72000.solverstate
+I0523 11:19:36.056324 32426 solver.cpp:341] Iteration 72000, Testing net (#0)
+I0523 11:20:44.718358 32426 solver.cpp:409]     Test net output #0: accuracy = 0.895658
+I0523 11:20:44.718536 32426 solver.cpp:409]     Test net output #1: loss = 0.375916 (* 1 = 0.375916 loss)
+I0523 11:21:05.575722 32426 solver.cpp:237] Iteration 72000, loss = 1.23362
+I0523 11:21:05.575781 32426 solver.cpp:253]     Train net output #0: loss = 1.23362 (* 1 = 1.23362 loss)
+I0523 11:21:05.575796 32426 sgd_solver.cpp:106] Iteration 72000, lr = 0.005
+I0523 11:21:14.859988 32426 solver.cpp:237] Iteration 72300, loss = 1.09978
+I0523 11:21:14.860152 32426 solver.cpp:253]     Train net output #0: loss = 1.09978 (* 1 = 1.09978 loss)
+I0523 11:21:14.860167 32426 sgd_solver.cpp:106] Iteration 72300, lr = 0.005
+I0523 11:21:24.144830 32426 solver.cpp:237] Iteration 72600, loss = 1.68124
+I0523 11:21:24.144875 32426 solver.cpp:253]     Train net output #0: loss = 1.68124 (* 1 = 1.68124 loss)
+I0523 11:21:24.144891 32426 sgd_solver.cpp:106] Iteration 72600, lr = 0.005
+I0523 11:21:33.435477 32426 solver.cpp:237] Iteration 72900, loss = 1.08774
+I0523 11:21:33.435511 32426 solver.cpp:253]     Train net output #0: loss = 1.08774 (* 1 = 1.08774 loss)
+I0523 11:21:33.435529 32426 sgd_solver.cpp:106] Iteration 72900, lr = 0.005
+I0523 11:21:42.720343 32426 solver.cpp:237] Iteration 73200, loss = 1.22406
+I0523 11:21:42.720378 32426 solver.cpp:253]     Train net output #0: loss = 1.22406 (* 1 = 1.22406 loss)
+I0523 11:21:42.720396 32426 sgd_solver.cpp:106] Iteration 73200, lr = 0.005
+I0523 11:21:52.002001 32426 solver.cpp:237] Iteration 73500, loss = 1.3215
+I0523 11:21:52.002174 32426 solver.cpp:253]     Train net output #0: loss = 1.3215 (* 1 = 1.3215 loss)
+I0523 11:21:52.002188 32426 sgd_solver.cpp:106] Iteration 73500, lr = 0.005
+I0523 11:22:01.286746 32426 solver.cpp:237] Iteration 73800, loss = 0.928045
+I0523 11:22:01.286782 32426 solver.cpp:253]     Train net output #0: loss = 0.928045 (* 1 = 0.928045 loss)
+I0523 11:22:01.286798 32426 sgd_solver.cpp:106] Iteration 73800, lr = 0.005
+I0523 11:22:31.423140 32426 solver.cpp:237] Iteration 74100, loss = 1.18853
+I0523 11:22:31.423322 32426 solver.cpp:253]     Train net output #0: loss = 1.18853 (* 1 = 1.18853 loss)
+I0523 11:22:31.423337 32426 sgd_solver.cpp:106] Iteration 74100, lr = 0.005
+I0523 11:22:40.709614 32426 solver.cpp:237] Iteration 74400, loss = 1.07308
+I0523 11:22:40.709653 32426 solver.cpp:253]     Train net output #0: loss = 1.07308 (* 1 = 1.07308 loss)
+I0523 11:22:40.709674 32426 sgd_solver.cpp:106] Iteration 74400, lr = 0.005
+I0523 11:22:49.994534 32426 solver.cpp:237] Iteration 74700, loss = 1.21516
+I0523 11:22:49.994568 32426 solver.cpp:253]     Train net output #0: loss = 1.21516 (* 1 = 1.21516 loss)
+I0523 11:22:49.994587 32426 sgd_solver.cpp:106] Iteration 74700, lr = 0.005
+I0523 11:22:59.249284 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_75000.caffemodel
+I0523 11:22:59.310597 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_75000.solverstate
+I0523 11:22:59.349190 32426 solver.cpp:237] Iteration 75000, loss = 1.19574
+I0523 11:22:59.349242 32426 solver.cpp:253]     Train net output #0: loss = 1.19574 (* 1 = 1.19574 loss)
+I0523 11:22:59.349257 32426 sgd_solver.cpp:106] Iteration 75000, lr = 0.005
+I0523 11:23:08.637279 32426 solver.cpp:237] Iteration 75300, loss = 0.919976
+I0523 11:23:08.637472 32426 solver.cpp:253]     Train net output #0: loss = 0.919976 (* 1 = 0.919976 loss)
+I0523 11:23:08.637486 32426 sgd_solver.cpp:106] Iteration 75300, lr = 0.005
+I0523 11:23:17.927341 32426 solver.cpp:237] Iteration 75600, loss = 1.26398
+I0523 11:23:17.927376 32426 solver.cpp:253]     Train net output #0: loss = 1.26398 (* 1 = 1.26398 loss)
+I0523 11:23:17.927394 32426 sgd_solver.cpp:106] Iteration 75600, lr = 0.005
+I0523 11:23:27.221590 32426 solver.cpp:237] Iteration 75900, loss = 0.938595
+I0523 11:23:27.221640 32426 solver.cpp:253]     Train net output #0: loss = 0.938595 (* 1 = 0.938595 loss)
+I0523 11:23:27.221654 32426 sgd_solver.cpp:106] Iteration 75900, lr = 0.005
+I0523 11:23:57.374924 32426 solver.cpp:237] Iteration 76200, loss = 1.02796
+I0523 11:23:57.375105 32426 solver.cpp:253]     Train net output #0: loss = 1.02796 (* 1 = 1.02796 loss)
+I0523 11:23:57.375120 32426 sgd_solver.cpp:106] Iteration 76200, lr = 0.005
+I0523 11:24:06.662674 32426 solver.cpp:237] Iteration 76500, loss = 1.03056
+I0523 11:24:06.662709 32426 solver.cpp:253]     Train net output #0: loss = 1.03056 (* 1 = 1.03056 loss)
+I0523 11:24:06.662724 32426 sgd_solver.cpp:106] Iteration 76500, lr = 0.005
+I0523 11:24:15.956171 32426 solver.cpp:237] Iteration 76800, loss = 1.06043
+I0523 11:24:15.956205 32426 solver.cpp:253]     Train net output #0: loss = 1.06043 (* 1 = 1.06043 loss)
+I0523 11:24:15.956223 32426 sgd_solver.cpp:106] Iteration 76800, lr = 0.005
+I0523 11:24:25.250120 32426 solver.cpp:237] Iteration 77100, loss = 1.15468
+I0523 11:24:25.250166 32426 solver.cpp:253]     Train net output #0: loss = 1.15468 (* 1 = 1.15468 loss)
+I0523 11:24:25.250183 32426 sgd_solver.cpp:106] Iteration 77100, lr = 0.005
+I0523 11:24:34.541764 32426 solver.cpp:237] Iteration 77400, loss = 1.3569
+I0523 11:24:34.541923 32426 solver.cpp:253]     Train net output #0: loss = 1.3569 (* 1 = 1.3569 loss)
+I0523 11:24:34.541935 32426 sgd_solver.cpp:106] Iteration 77400, lr = 0.005
+I0523 11:24:43.831025 32426 solver.cpp:237] Iteration 77700, loss = 0.886084
+I0523 11:24:43.831068 32426 solver.cpp:253]     Train net output #0: loss = 0.886084 (* 1 = 0.886084 loss)
+I0523 11:24:43.831089 32426 sgd_solver.cpp:106] Iteration 77700, lr = 0.005
+I0523 11:24:53.089998 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_78000.caffemodel
+I0523 11:24:53.149521 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_78000.solverstate
+I0523 11:24:53.175904 32426 solver.cpp:341] Iteration 78000, Testing net (#0)
+I0523 11:25:40.980238 32426 solver.cpp:409]     Test net output #0: accuracy = 0.897123
+I0523 11:25:40.980415 32426 solver.cpp:409]     Test net output #1: loss = 0.332613 (* 1 = 0.332613 loss)
+I0523 11:26:01.805364 32426 solver.cpp:237] Iteration 78000, loss = 0.894373
+I0523 11:26:01.805418 32426 solver.cpp:253]     Train net output #0: loss = 0.894373 (* 1 = 0.894373 loss)
+I0523 11:26:01.805433 32426 sgd_solver.cpp:106] Iteration 78000, lr = 0.005
+I0523 11:26:11.075381 32426 solver.cpp:237] Iteration 78300, loss = 1.17969
+I0523 11:26:11.075556 32426 solver.cpp:253]     Train net output #0: loss = 1.17969 (* 1 = 1.17969 loss)
+I0523 11:26:11.075570 32426 sgd_solver.cpp:106] Iteration 78300, lr = 0.005
+I0523 11:26:20.345199 32426 solver.cpp:237] Iteration 78600, loss = 1.42896
+I0523 11:26:20.345234 32426 solver.cpp:253]     Train net output #0: loss = 1.42896 (* 1 = 1.42896 loss)
+I0523 11:26:20.345252 32426 sgd_solver.cpp:106] Iteration 78600, lr = 0.005
+I0523 11:26:29.617302 32426 solver.cpp:237] Iteration 78900, loss = 0.996537
+I0523 11:26:29.617344 32426 solver.cpp:253]     Train net output #0: loss = 0.996537 (* 1 = 0.996537 loss)
+I0523 11:26:29.617364 32426 sgd_solver.cpp:106] Iteration 78900, lr = 0.005
+I0523 11:26:38.887150 32426 solver.cpp:237] Iteration 79200, loss = 1.27507
+I0523 11:26:38.887186 32426 solver.cpp:253]     Train net output #0: loss = 1.27507 (* 1 = 1.27507 loss)
+I0523 11:26:38.887202 32426 sgd_solver.cpp:106] Iteration 79200, lr = 0.005
+I0523 11:26:48.157847 32426 solver.cpp:237] Iteration 79500, loss = 1.24687
+I0523 11:26:48.158036 32426 solver.cpp:253]     Train net output #0: loss = 1.24687 (* 1 = 1.24687 loss)
+I0523 11:26:48.158049 32426 sgd_solver.cpp:106] Iteration 79500, lr = 0.005
+I0523 11:26:57.426228 32426 solver.cpp:237] Iteration 79800, loss = 0.889627
+I0523 11:26:57.426264 32426 solver.cpp:253]     Train net output #0: loss = 0.889627 (* 1 = 0.889627 loss)
+I0523 11:26:57.426280 32426 sgd_solver.cpp:106] Iteration 79800, lr = 0.005
+I0523 11:27:27.572029 32426 solver.cpp:237] Iteration 80100, loss = 0.944753
+I0523 11:27:27.572217 32426 solver.cpp:253]     Train net output #0: loss = 0.944753 (* 1 = 0.944753 loss)
+I0523 11:27:27.572232 32426 sgd_solver.cpp:106] Iteration 80100, lr = 0.005
+I0523 11:27:36.842517 32426 solver.cpp:237] Iteration 80400, loss = 1.19833
+I0523 11:27:36.842557 32426 solver.cpp:253]     Train net output #0: loss = 1.19833 (* 1 = 1.19833 loss)
+I0523 11:27:36.842576 32426 sgd_solver.cpp:106] Iteration 80400, lr = 0.005
+I0523 11:27:46.114449 32426 solver.cpp:237] Iteration 80700, loss = 1.25595
+I0523 11:27:46.114482 32426 solver.cpp:253]     Train net output #0: loss = 1.25595 (* 1 = 1.25595 loss)
+I0523 11:27:46.114500 32426 sgd_solver.cpp:106] Iteration 80700, lr = 0.005
+I0523 11:27:55.351557 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_81000.caffemodel
+I0523 11:27:55.411301 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_81000.solverstate
+I0523 11:27:55.447536 32426 solver.cpp:237] Iteration 81000, loss = 0.881115
+I0523 11:27:55.447578 32426 solver.cpp:253]     Train net output #0: loss = 0.881115 (* 1 = 0.881115 loss)
+I0523 11:27:55.447597 32426 sgd_solver.cpp:106] Iteration 81000, lr = 0.005
+I0523 11:28:04.719719 32426 solver.cpp:237] Iteration 81300, loss = 1.37755
+I0523 11:28:04.719902 32426 solver.cpp:253]     Train net output #0: loss = 1.37755 (* 1 = 1.37755 loss)
+I0523 11:28:04.719915 32426 sgd_solver.cpp:106] Iteration 81300, lr = 0.005
+I0523 11:28:13.988337 32426 solver.cpp:237] Iteration 81600, loss = 1.25543
+I0523 11:28:13.988373 32426 solver.cpp:253]     Train net output #0: loss = 1.25543 (* 1 = 1.25543 loss)
+I0523 11:28:13.988390 32426 sgd_solver.cpp:106] Iteration 81600, lr = 0.005
+I0523 11:28:23.260020 32426 solver.cpp:237] Iteration 81900, loss = 1.03705
+I0523 11:28:23.260056 32426 solver.cpp:253]     Train net output #0: loss = 1.03705 (* 1 = 1.03705 loss)
+I0523 11:28:23.260072 32426 sgd_solver.cpp:106] Iteration 81900, lr = 0.005
+I0523 11:28:53.385848 32426 solver.cpp:237] Iteration 82200, loss = 1.29054
+I0523 11:28:53.386031 32426 solver.cpp:253]     Train net output #0: loss = 1.29054 (* 1 = 1.29054 loss)
+I0523 11:28:53.386047 32426 sgd_solver.cpp:106] Iteration 82200, lr = 0.005
+I0523 11:29:02.653275 32426 solver.cpp:237] Iteration 82500, loss = 1.21906
+I0523 11:29:02.653309 32426 solver.cpp:253]     Train net output #0: loss = 1.21906 (* 1 = 1.21906 loss)
+I0523 11:29:02.653327 32426 sgd_solver.cpp:106] Iteration 82500, lr = 0.005
+I0523 11:29:11.923264 32426 solver.cpp:237] Iteration 82800, loss = 1.01368
+I0523 11:29:11.923298 32426 solver.cpp:253]     Train net output #0: loss = 1.01368 (* 1 = 1.01368 loss)
+I0523 11:29:11.923315 32426 sgd_solver.cpp:106] Iteration 82800, lr = 0.005
+I0523 11:29:21.193301 32426 solver.cpp:237] Iteration 83100, loss = 1.4627
+I0523 11:29:21.193347 32426 solver.cpp:253]     Train net output #0: loss = 1.4627 (* 1 = 1.4627 loss)
+I0523 11:29:21.193364 32426 sgd_solver.cpp:106] Iteration 83100, lr = 0.005
+I0523 11:29:30.460378 32426 solver.cpp:237] Iteration 83400, loss = 1.13408
+I0523 11:29:30.460549 32426 solver.cpp:253]     Train net output #0: loss = 1.13408 (* 1 = 1.13408 loss)
+I0523 11:29:30.460563 32426 sgd_solver.cpp:106] Iteration 83400, lr = 0.005
+I0523 11:29:39.730170 32426 solver.cpp:237] Iteration 83700, loss = 1.11583
+I0523 11:29:39.730204 32426 solver.cpp:253]     Train net output #0: loss = 1.11583 (* 1 = 1.11583 loss)
+I0523 11:29:39.730222 32426 sgd_solver.cpp:106] Iteration 83700, lr = 0.005
+I0523 11:29:48.968497 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_84000.caffemodel
+I0523 11:29:49.027842 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_84000.solverstate
+I0523 11:29:49.054397 32426 solver.cpp:341] Iteration 84000, Testing net (#0)
+I0523 11:30:57.659416 32426 solver.cpp:409]     Test net output #0: accuracy = 0.899637
+I0523 11:30:57.659600 32426 solver.cpp:409]     Test net output #1: loss = 0.320106 (* 1 = 0.320106 loss)
+I0523 11:31:18.489730 32426 solver.cpp:237] Iteration 84000, loss = 1.0012
+I0523 11:31:18.489783 32426 solver.cpp:253]     Train net output #0: loss = 1.0012 (* 1 = 1.0012 loss)
+I0523 11:31:18.489796 32426 sgd_solver.cpp:106] Iteration 84000, lr = 0.005
+I0523 11:31:27.792387 32426 solver.cpp:237] Iteration 84300, loss = 0.99154
+I0523 11:31:27.792568 32426 solver.cpp:253]     Train net output #0: loss = 0.99154 (* 1 = 0.99154 loss)
+I0523 11:31:27.792583 32426 sgd_solver.cpp:106] Iteration 84300, lr = 0.005
+I0523 11:31:37.100883 32426 solver.cpp:237] Iteration 84600, loss = 0.981302
+I0523 11:31:37.100920 32426 solver.cpp:253]     Train net output #0: loss = 0.981302 (* 1 = 0.981302 loss)
+I0523 11:31:37.100936 32426 sgd_solver.cpp:106] Iteration 84600, lr = 0.005
+I0523 11:31:46.405038 32426 solver.cpp:237] Iteration 84900, loss = 1.08648
+I0523 11:31:46.405073 32426 solver.cpp:253]     Train net output #0: loss = 1.08648 (* 1 = 1.08648 loss)
+I0523 11:31:46.405087 32426 sgd_solver.cpp:106] Iteration 84900, lr = 0.005
+I0523 11:31:55.690439 32426 solver.cpp:237] Iteration 85200, loss = 1.0679
+I0523 11:31:55.690487 32426 solver.cpp:253]     Train net output #0: loss = 1.0679 (* 1 = 1.0679 loss)
+I0523 11:31:55.690503 32426 sgd_solver.cpp:106] Iteration 85200, lr = 0.005
+I0523 11:32:04.973670 32426 solver.cpp:237] Iteration 85500, loss = 1.21932
+I0523 11:32:04.973835 32426 solver.cpp:253]     Train net output #0: loss = 1.21932 (* 1 = 1.21932 loss)
+I0523 11:32:04.973850 32426 sgd_solver.cpp:106] Iteration 85500, lr = 0.005
+I0523 11:32:14.265197 32426 solver.cpp:237] Iteration 85800, loss = 1.06482
+I0523 11:32:14.265236 32426 solver.cpp:253]     Train net output #0: loss = 1.06482 (* 1 = 1.06482 loss)
+I0523 11:32:14.265256 32426 sgd_solver.cpp:106] Iteration 85800, lr = 0.005
+I0523 11:32:44.370645 32426 solver.cpp:237] Iteration 86100, loss = 1.23086
+I0523 11:32:44.370828 32426 solver.cpp:253]     Train net output #0: loss = 1.23086 (* 1 = 1.23086 loss)
+I0523 11:32:44.370844 32426 sgd_solver.cpp:106] Iteration 86100, lr = 0.005
+I0523 11:32:53.658308 32426 solver.cpp:237] Iteration 86400, loss = 1.21627
+I0523 11:32:53.658344 32426 solver.cpp:253]     Train net output #0: loss = 1.21627 (* 1 = 1.21627 loss)
+I0523 11:32:53.658360 32426 sgd_solver.cpp:106] Iteration 86400, lr = 0.005
+I0523 11:33:02.949612 32426 solver.cpp:237] Iteration 86700, loss = 0.880612
+I0523 11:33:02.949661 32426 solver.cpp:253]     Train net output #0: loss = 0.880611 (* 1 = 0.880611 loss)
+I0523 11:33:02.949677 32426 sgd_solver.cpp:106] Iteration 86700, lr = 0.005
+I0523 11:33:12.205157 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_87000.caffemodel
+I0523 11:33:12.266587 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_87000.solverstate
+I0523 11:33:12.304728 32426 solver.cpp:237] Iteration 87000, loss = 1.41365
+I0523 11:33:12.304780 32426 solver.cpp:253]     Train net output #0: loss = 1.41365 (* 1 = 1.41365 loss)
+I0523 11:33:12.304793 32426 sgd_solver.cpp:106] Iteration 87000, lr = 0.005
+I0523 11:33:21.591727 32426 solver.cpp:237] Iteration 87300, loss = 1.197
+I0523 11:33:21.591914 32426 solver.cpp:253]     Train net output #0: loss = 1.197 (* 1 = 1.197 loss)
+I0523 11:33:21.591928 32426 sgd_solver.cpp:106] Iteration 87300, lr = 0.005
+I0523 11:33:30.882591 32426 solver.cpp:237] Iteration 87600, loss = 1.41758
+I0523 11:33:30.882638 32426 solver.cpp:253]     Train net output #0: loss = 1.41758 (* 1 = 1.41758 loss)
+I0523 11:33:30.882655 32426 sgd_solver.cpp:106] Iteration 87600, lr = 0.005
+I0523 11:33:40.171012 32426 solver.cpp:237] Iteration 87900, loss = 1.23638
+I0523 11:33:40.171047 32426 solver.cpp:253]     Train net output #0: loss = 1.23638 (* 1 = 1.23638 loss)
+I0523 11:33:40.171064 32426 sgd_solver.cpp:106] Iteration 87900, lr = 0.005
+I0523 11:34:10.312053 32426 solver.cpp:237] Iteration 88200, loss = 1.20625
+I0523 11:34:10.312240 32426 solver.cpp:253]     Train net output #0: loss = 1.20625 (* 1 = 1.20625 loss)
+I0523 11:34:10.312255 32426 sgd_solver.cpp:106] Iteration 88200, lr = 0.005
+I0523 11:34:19.600320 32426 solver.cpp:237] Iteration 88500, loss = 1.1119
+I0523 11:34:19.600358 32426 solver.cpp:253]     Train net output #0: loss = 1.1119 (* 1 = 1.1119 loss)
+I0523 11:34:19.600378 32426 sgd_solver.cpp:106] Iteration 88500, lr = 0.005
+I0523 11:34:28.886797 32426 solver.cpp:237] Iteration 88800, loss = 1.06191
+I0523 11:34:28.886833 32426 solver.cpp:253]     Train net output #0: loss = 1.06191 (* 1 = 1.06191 loss)
+I0523 11:34:28.886850 32426 sgd_solver.cpp:106] Iteration 88800, lr = 0.005
+I0523 11:34:38.176877 32426 solver.cpp:237] Iteration 89100, loss = 1.35463
+I0523 11:34:38.176911 32426 solver.cpp:253]     Train net output #0: loss = 1.35463 (* 1 = 1.35463 loss)
+I0523 11:34:38.176926 32426 sgd_solver.cpp:106] Iteration 89100, lr = 0.005
+I0523 11:34:47.467411 32426 solver.cpp:237] Iteration 89400, loss = 0.932347
+I0523 11:34:47.467592 32426 solver.cpp:253]     Train net output #0: loss = 0.932347 (* 1 = 0.932347 loss)
+I0523 11:34:47.467607 32426 sgd_solver.cpp:106] Iteration 89400, lr = 0.005
+I0523 11:34:56.755909 32426 solver.cpp:237] Iteration 89700, loss = 1.47104
+I0523 11:34:56.755944 32426 solver.cpp:253]     Train net output #0: loss = 1.47104 (* 1 = 1.47104 loss)
+I0523 11:34:56.755961 32426 sgd_solver.cpp:106] Iteration 89700, lr = 0.005
+I0523 11:35:06.011104 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_90000.caffemodel
+I0523 11:35:06.072448 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_90000.solverstate
+I0523 11:35:06.100890 32426 solver.cpp:341] Iteration 90000, Testing net (#0)
+I0523 11:35:53.538347 32426 solver.cpp:409]     Test net output #0: accuracy = 0.897657
+I0523 11:35:53.538542 32426 solver.cpp:409]     Test net output #1: loss = 0.33663 (* 1 = 0.33663 loss)
+I0523 11:36:14.414073 32426 solver.cpp:237] Iteration 90000, loss = 1.10688
+I0523 11:36:14.414124 32426 solver.cpp:253]     Train net output #0: loss = 1.10688 (* 1 = 1.10688 loss)
+I0523 11:36:14.414142 32426 sgd_solver.cpp:106] Iteration 90000, lr = 0.005
+I0523 11:36:23.713692 32426 solver.cpp:237] Iteration 90300, loss = 0.975069
+I0523 11:36:23.713874 32426 solver.cpp:253]     Train net output #0: loss = 0.975069 (* 1 = 0.975069 loss)
+I0523 11:36:23.713888 32426 sgd_solver.cpp:106] Iteration 90300, lr = 0.005
+I0523 11:36:33.007474 32426 solver.cpp:237] Iteration 90600, loss = 1.03572
+I0523 11:36:33.007508 32426 solver.cpp:253]     Train net output #0: loss = 1.03572 (* 1 = 1.03572 loss)
+I0523 11:36:33.007525 32426 sgd_solver.cpp:106] Iteration 90600, lr = 0.005
+I0523 11:36:42.302883 32426 solver.cpp:237] Iteration 90900, loss = 0.95475
+I0523 11:36:42.302920 32426 solver.cpp:253]     Train net output #0: loss = 0.95475 (* 1 = 0.95475 loss)
+I0523 11:36:42.302935 32426 sgd_solver.cpp:106] Iteration 90900, lr = 0.005
+I0523 11:36:51.594362 32426 solver.cpp:237] Iteration 91200, loss = 1.1489
+I0523 11:36:51.594410 32426 solver.cpp:253]     Train net output #0: loss = 1.1489 (* 1 = 1.1489 loss)
+I0523 11:36:51.594426 32426 sgd_solver.cpp:106] Iteration 91200, lr = 0.005
+I0523 11:37:00.890121 32426 solver.cpp:237] Iteration 91500, loss = 1.19199
+I0523 11:37:00.890286 32426 solver.cpp:253]     Train net output #0: loss = 1.19199 (* 1 = 1.19199 loss)
+I0523 11:37:00.890301 32426 sgd_solver.cpp:106] Iteration 91500, lr = 0.005
+I0523 11:37:10.185037 32426 solver.cpp:237] Iteration 91800, loss = 1.15212
+I0523 11:37:10.185071 32426 solver.cpp:253]     Train net output #0: loss = 1.15212 (* 1 = 1.15212 loss)
+I0523 11:37:10.185086 32426 sgd_solver.cpp:106] Iteration 91800, lr = 0.005
+I0523 11:37:40.296561 32426 solver.cpp:237] Iteration 92100, loss = 1.3998
+I0523 11:37:40.296749 32426 solver.cpp:253]     Train net output #0: loss = 1.3998 (* 1 = 1.3998 loss)
+I0523 11:37:40.296764 32426 sgd_solver.cpp:106] Iteration 92100, lr = 0.005
+I0523 11:37:49.588343 32426 solver.cpp:237] Iteration 92400, loss = 1.14673
+I0523 11:37:49.588378 32426 solver.cpp:253]     Train net output #0: loss = 1.14673 (* 1 = 1.14673 loss)
+I0523 11:37:49.588395 32426 sgd_solver.cpp:106] Iteration 92400, lr = 0.005
+I0523 11:37:58.881347 32426 solver.cpp:237] Iteration 92700, loss = 1.51443
+I0523 11:37:58.881382 32426 solver.cpp:253]     Train net output #0: loss = 1.51443 (* 1 = 1.51443 loss)
+I0523 11:37:58.881399 32426 sgd_solver.cpp:106] Iteration 92700, lr = 0.005
+I0523 11:38:08.141228 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_93000.caffemodel
+I0523 11:38:08.200685 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_93000.solverstate
+I0523 11:38:08.236872 32426 solver.cpp:237] Iteration 93000, loss = 1.08222
+I0523 11:38:08.236917 32426 solver.cpp:253]     Train net output #0: loss = 1.08222 (* 1 = 1.08222 loss)
+I0523 11:38:08.236933 32426 sgd_solver.cpp:106] Iteration 93000, lr = 0.005
+I0523 11:38:17.532727 32426 solver.cpp:237] Iteration 93300, loss = 1.13823
+I0523 11:38:17.532896 32426 solver.cpp:253]     Train net output #0: loss = 1.13823 (* 1 = 1.13823 loss)
+I0523 11:38:17.532910 32426 sgd_solver.cpp:106] Iteration 93300, lr = 0.005
+I0523 11:38:26.826792 32426 solver.cpp:237] Iteration 93600, loss = 0.985278
+I0523 11:38:26.826838 32426 solver.cpp:253]     Train net output #0: loss = 0.985278 (* 1 = 0.985278 loss)
+I0523 11:38:26.826854 32426 sgd_solver.cpp:106] Iteration 93600, lr = 0.005
+I0523 11:38:36.120403 32426 solver.cpp:237] Iteration 93900, loss = 0.870501
+I0523 11:38:36.120440 32426 solver.cpp:253]     Train net output #0: loss = 0.870501 (* 1 = 0.870501 loss)
+I0523 11:38:36.120455 32426 sgd_solver.cpp:106] Iteration 93900, lr = 0.005
+I0523 11:39:06.277837 32426 solver.cpp:237] Iteration 94200, loss = 1.20651
+I0523 11:39:06.278036 32426 solver.cpp:253]     Train net output #0: loss = 1.20651 (* 1 = 1.20651 loss)
+I0523 11:39:06.278053 32426 sgd_solver.cpp:106] Iteration 94200, lr = 0.005
+I0523 11:39:15.568666 32426 solver.cpp:237] Iteration 94500, loss = 0.779615
+I0523 11:39:15.568701 32426 solver.cpp:253]     Train net output #0: loss = 0.779615 (* 1 = 0.779615 loss)
+I0523 11:39:15.568719 32426 sgd_solver.cpp:106] Iteration 94500, lr = 0.005
+I0523 11:39:24.861805 32426 solver.cpp:237] Iteration 94800, loss = 1.32469
+I0523 11:39:24.861850 32426 solver.cpp:253]     Train net output #0: loss = 1.32469 (* 1 = 1.32469 loss)
+I0523 11:39:24.861866 32426 sgd_solver.cpp:106] Iteration 94800, lr = 0.005
+I0523 11:39:34.154942 32426 solver.cpp:237] Iteration 95100, loss = 1.0634
+I0523 11:39:34.154979 32426 solver.cpp:253]     Train net output #0: loss = 1.0634 (* 1 = 1.0634 loss)
+I0523 11:39:34.154994 32426 sgd_solver.cpp:106] Iteration 95100, lr = 0.005
+I0523 11:39:43.446408 32426 solver.cpp:237] Iteration 95400, loss = 1.11352
+I0523 11:39:43.446589 32426 solver.cpp:253]     Train net output #0: loss = 1.11352 (* 1 = 1.11352 loss)
+I0523 11:39:43.446604 32426 sgd_solver.cpp:106] Iteration 95400, lr = 0.005
+I0523 11:39:52.739159 32426 solver.cpp:237] Iteration 95700, loss = 1.02282
+I0523 11:39:52.739194 32426 solver.cpp:253]     Train net output #0: loss = 1.02282 (* 1 = 1.02282 loss)
+I0523 11:39:52.739212 32426 sgd_solver.cpp:106] Iteration 95700, lr = 0.005
+I0523 11:40:02.006633 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_96000.caffemodel
+I0523 11:40:02.065970 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_96000.solverstate
+I0523 11:40:02.092393 32426 solver.cpp:341] Iteration 96000, Testing net (#0)
+I0523 11:41:10.690923 32426 solver.cpp:409]     Test net output #0: accuracy = 0.899151
+I0523 11:41:10.691112 32426 solver.cpp:409]     Test net output #1: loss = 0.319378 (* 1 = 0.319378 loss)
+I0523 11:41:31.559264 32426 solver.cpp:237] Iteration 96000, loss = 1.24248
+I0523 11:41:31.559312 32426 solver.cpp:253]     Train net output #0: loss = 1.24248 (* 1 = 1.24248 loss)
+I0523 11:41:31.559330 32426 sgd_solver.cpp:106] Iteration 96000, lr = 0.005
+I0523 11:41:40.842177 32426 solver.cpp:237] Iteration 96300, loss = 1.18184
+I0523 11:41:40.842360 32426 solver.cpp:253]     Train net output #0: loss = 1.18184 (* 1 = 1.18184 loss)
+I0523 11:41:40.842373 32426 sgd_solver.cpp:106] Iteration 96300, lr = 0.005
+I0523 11:41:50.129667 32426 solver.cpp:237] Iteration 96600, loss = 1.09929
+I0523 11:41:50.129715 32426 solver.cpp:253]     Train net output #0: loss = 1.09929 (* 1 = 1.09929 loss)
+I0523 11:41:50.129729 32426 sgd_solver.cpp:106] Iteration 96600, lr = 0.005
+I0523 11:41:59.417412 32426 solver.cpp:237] Iteration 96900, loss = 1.1123
+I0523 11:41:59.417448 32426 solver.cpp:253]     Train net output #0: loss = 1.1123 (* 1 = 1.1123 loss)
+I0523 11:41:59.417464 32426 sgd_solver.cpp:106] Iteration 96900, lr = 0.005
+I0523 11:42:08.706506 32426 solver.cpp:237] Iteration 97200, loss = 1.1627
+I0523 11:42:08.706542 32426 solver.cpp:253]     Train net output #0: loss = 1.1627 (* 1 = 1.1627 loss)
+I0523 11:42:08.706558 32426 sgd_solver.cpp:106] Iteration 97200, lr = 0.005
+I0523 11:42:17.994195 32426 solver.cpp:237] Iteration 97500, loss = 1.05595
+I0523 11:42:17.994382 32426 solver.cpp:253]     Train net output #0: loss = 1.05595 (* 1 = 1.05595 loss)
+I0523 11:42:17.994396 32426 sgd_solver.cpp:106] Iteration 97500, lr = 0.005
+I0523 11:42:27.283517 32426 solver.cpp:237] Iteration 97800, loss = 1.33349
+I0523 11:42:27.283553 32426 solver.cpp:253]     Train net output #0: loss = 1.33349 (* 1 = 1.33349 loss)
+I0523 11:42:27.283571 32426 sgd_solver.cpp:106] Iteration 97800, lr = 0.005
+I0523 11:42:57.468050 32426 solver.cpp:237] Iteration 98100, loss = 1.0099
+I0523 11:42:57.468251 32426 solver.cpp:253]     Train net output #0: loss = 1.0099 (* 1 = 1.0099 loss)
+I0523 11:42:57.468266 32426 sgd_solver.cpp:106] Iteration 98100, lr = 0.005
+I0523 11:43:06.760221 32426 solver.cpp:237] Iteration 98400, loss = 1.03445
+I0523 11:43:06.760262 32426 solver.cpp:253]     Train net output #0: loss = 1.03445 (* 1 = 1.03445 loss)
+I0523 11:43:06.760282 32426 sgd_solver.cpp:106] Iteration 98400, lr = 0.005
+I0523 11:43:16.051739 32426 solver.cpp:237] Iteration 98700, loss = 1.1381
+I0523 11:43:16.051774 32426 solver.cpp:253]     Train net output #0: loss = 1.1381 (* 1 = 1.1381 loss)
+I0523 11:43:16.051791 32426 sgd_solver.cpp:106] Iteration 98700, lr = 0.005
+I0523 11:43:25.313591 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_99000.caffemodel
+I0523 11:43:25.372944 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_99000.solverstate
+I0523 11:43:25.409406 32426 solver.cpp:237] Iteration 99000, loss = 1.21712
+I0523 11:43:25.409451 32426 solver.cpp:253]     Train net output #0: loss = 1.21712 (* 1 = 1.21712 loss)
+I0523 11:43:25.409466 32426 sgd_solver.cpp:106] Iteration 99000, lr = 0.005
+I0523 11:43:34.700279 32426 solver.cpp:237] Iteration 99300, loss = 1.1583
+I0523 11:43:34.700466 32426 solver.cpp:253]     Train net output #0: loss = 1.1583 (* 1 = 1.1583 loss)
+I0523 11:43:34.700481 32426 sgd_solver.cpp:106] Iteration 99300, lr = 0.005
+I0523 11:43:43.991009 32426 solver.cpp:237] Iteration 99600, loss = 1.0133
+I0523 11:43:43.991044 32426 solver.cpp:253]     Train net output #0: loss = 1.0133 (* 1 = 1.0133 loss)
+I0523 11:43:43.991061 32426 sgd_solver.cpp:106] Iteration 99600, lr = 0.005
+I0523 11:43:53.282646 32426 solver.cpp:237] Iteration 99900, loss = 1.05369
+I0523 11:43:53.282691 32426 solver.cpp:253]     Train net output #0: loss = 1.05369 (* 1 = 1.05369 loss)
+I0523 11:43:53.282707 32426 sgd_solver.cpp:106] Iteration 99900, lr = 0.005
+I0523 11:44:23.447142 32426 solver.cpp:237] Iteration 100200, loss = 1.10339
+I0523 11:44:23.447334 32426 solver.cpp:253]     Train net output #0: loss = 1.10339 (* 1 = 1.10339 loss)
+I0523 11:44:23.447350 32426 sgd_solver.cpp:106] Iteration 100200, lr = 0.005
+I0523 11:44:32.738816 32426 solver.cpp:237] Iteration 100500, loss = 1.23041
+I0523 11:44:32.738849 32426 solver.cpp:253]     Train net output #0: loss = 1.23041 (* 1 = 1.23041 loss)
+I0523 11:44:32.738867 32426 sgd_solver.cpp:106] Iteration 100500, lr = 0.005
+I0523 11:44:42.029990 32426 solver.cpp:237] Iteration 100800, loss = 1.26558
+I0523 11:44:42.030040 32426 solver.cpp:253]     Train net output #0: loss = 1.26558 (* 1 = 1.26558 loss)
+I0523 11:44:42.030055 32426 sgd_solver.cpp:106] Iteration 100800, lr = 0.005
+I0523 11:44:51.319077 32426 solver.cpp:237] Iteration 101100, loss = 0.945935
+I0523 11:44:51.319113 32426 solver.cpp:253]     Train net output #0: loss = 0.945935 (* 1 = 0.945935 loss)
+I0523 11:44:51.319128 32426 sgd_solver.cpp:106] Iteration 101100, lr = 0.005
+I0523 11:45:00.607805 32426 solver.cpp:237] Iteration 101400, loss = 1.23394
+I0523 11:45:00.607974 32426 solver.cpp:253]     Train net output #0: loss = 1.23394 (* 1 = 1.23394 loss)
+I0523 11:45:00.607987 32426 sgd_solver.cpp:106] Iteration 101400, lr = 0.005
+I0523 11:45:09.898278 32426 solver.cpp:237] Iteration 101700, loss = 0.761046
+I0523 11:45:09.898324 32426 solver.cpp:253]     Train net output #0: loss = 0.761046 (* 1 = 0.761046 loss)
+I0523 11:45:09.898341 32426 sgd_solver.cpp:106] Iteration 101700, lr = 0.005
+I0523 11:45:19.156059 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_102000.caffemodel
+I0523 11:45:19.215416 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_102000.solverstate
+I0523 11:45:19.240694 32426 solver.cpp:341] Iteration 102000, Testing net (#0)
+I0523 11:46:07.051897 32426 solver.cpp:409]     Test net output #0: accuracy = 0.89847
+I0523 11:46:07.052094 32426 solver.cpp:409]     Test net output #1: loss = 0.350056 (* 1 = 0.350056 loss)
+I0523 11:46:27.948961 32426 solver.cpp:237] Iteration 102000, loss = 0.994294
+I0523 11:46:27.949014 32426 solver.cpp:253]     Train net output #0: loss = 0.994294 (* 1 = 0.994294 loss)
+I0523 11:46:27.949029 32426 sgd_solver.cpp:106] Iteration 102000, lr = 0.005
+I0523 11:46:37.224144 32426 solver.cpp:237] Iteration 102300, loss = 1.1139
+I0523 11:46:37.224321 32426 solver.cpp:253]     Train net output #0: loss = 1.1139 (* 1 = 1.1139 loss)
+I0523 11:46:37.224335 32426 sgd_solver.cpp:106] Iteration 102300, lr = 0.005
+I0523 11:46:46.494334 32426 solver.cpp:237] Iteration 102600, loss = 1.12897
+I0523 11:46:46.494369 32426 solver.cpp:253]     Train net output #0: loss = 1.12897 (* 1 = 1.12897 loss)
+I0523 11:46:46.494386 32426 sgd_solver.cpp:106] Iteration 102600, lr = 0.005
+I0523 11:46:55.771108 32426 solver.cpp:237] Iteration 102900, loss = 0.971985
+I0523 11:46:55.771147 32426 solver.cpp:253]     Train net output #0: loss = 0.971984 (* 1 = 0.971984 loss)
+I0523 11:46:55.771167 32426 sgd_solver.cpp:106] Iteration 102900, lr = 0.005
+I0523 11:47:05.042336 32426 solver.cpp:237] Iteration 103200, loss = 1.3915
+I0523 11:47:05.042372 32426 solver.cpp:253]     Train net output #0: loss = 1.3915 (* 1 = 1.3915 loss)
+I0523 11:47:05.042389 32426 sgd_solver.cpp:106] Iteration 103200, lr = 0.005
+I0523 11:47:14.313966 32426 solver.cpp:237] Iteration 103500, loss = 1.3611
+I0523 11:47:14.314142 32426 solver.cpp:253]     Train net output #0: loss = 1.3611 (* 1 = 1.3611 loss)
+I0523 11:47:14.314157 32426 sgd_solver.cpp:106] Iteration 103500, lr = 0.005
+I0523 11:47:23.586902 32426 solver.cpp:237] Iteration 103800, loss = 0.975595
+I0523 11:47:23.586938 32426 solver.cpp:253]     Train net output #0: loss = 0.975594 (* 1 = 0.975594 loss)
+I0523 11:47:23.586956 32426 sgd_solver.cpp:106] Iteration 103800, lr = 0.005
+I0523 11:47:53.747555 32426 solver.cpp:237] Iteration 104100, loss = 1.2174
+I0523 11:47:53.747753 32426 solver.cpp:253]     Train net output #0: loss = 1.2174 (* 1 = 1.2174 loss)
+I0523 11:47:53.747767 32426 sgd_solver.cpp:106] Iteration 104100, lr = 0.005
+I0523 11:48:03.021440 32426 solver.cpp:237] Iteration 104400, loss = 1.2033
+I0523 11:48:03.021481 32426 solver.cpp:253]     Train net output #0: loss = 1.2033 (* 1 = 1.2033 loss)
+I0523 11:48:03.021502 32426 sgd_solver.cpp:106] Iteration 104400, lr = 0.005
+I0523 11:48:12.294201 32426 solver.cpp:237] Iteration 104700, loss = 1.29977
+I0523 11:48:12.294236 32426 solver.cpp:253]     Train net output #0: loss = 1.29976 (* 1 = 1.29976 loss)
+I0523 11:48:12.294253 32426 sgd_solver.cpp:106] Iteration 104700, lr = 0.005
+I0523 11:48:21.537199 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_105000.caffemodel
+I0523 11:48:21.598768 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_105000.solverstate
+I0523 11:48:21.635998 32426 solver.cpp:237] Iteration 105000, loss = 1.48135
+I0523 11:48:21.636046 32426 solver.cpp:253]     Train net output #0: loss = 1.48135 (* 1 = 1.48135 loss)
+I0523 11:48:21.636061 32426 sgd_solver.cpp:106] Iteration 105000, lr = 0.005
+I0523 11:48:30.913538 32426 solver.cpp:237] Iteration 105300, loss = 0.983925
+I0523 11:48:30.913727 32426 solver.cpp:253]     Train net output #0: loss = 0.983925 (* 1 = 0.983925 loss)
+I0523 11:48:30.913743 32426 sgd_solver.cpp:106] Iteration 105300, lr = 0.005
+I0523 11:48:40.189539 32426 solver.cpp:237] Iteration 105600, loss = 1.2971
+I0523 11:48:40.189574 32426 solver.cpp:253]     Train net output #0: loss = 1.2971 (* 1 = 1.2971 loss)
+I0523 11:48:40.189591 32426 sgd_solver.cpp:106] Iteration 105600, lr = 0.005
+I0523 11:48:49.462927 32426 solver.cpp:237] Iteration 105900, loss = 1.08834
+I0523 11:48:49.462963 32426 solver.cpp:253]     Train net output #0: loss = 1.08834 (* 1 = 1.08834 loss)
+I0523 11:48:49.462980 32426 sgd_solver.cpp:106] Iteration 105900, lr = 0.005
+I0523 11:49:19.575819 32426 solver.cpp:237] Iteration 106200, loss = 1.25249
+I0523 11:49:19.576020 32426 solver.cpp:253]     Train net output #0: loss = 1.25249 (* 1 = 1.25249 loss)
+I0523 11:49:19.576036 32426 sgd_solver.cpp:106] Iteration 106200, lr = 0.005
+I0523 11:49:28.850891 32426 solver.cpp:237] Iteration 106500, loss = 1.0567
+I0523 11:49:28.850926 32426 solver.cpp:253]     Train net output #0: loss = 1.0567 (* 1 = 1.0567 loss)
+I0523 11:49:28.850945 32426 sgd_solver.cpp:106] Iteration 106500, lr = 0.005
+I0523 11:49:38.121104 32426 solver.cpp:237] Iteration 106800, loss = 1.14918
+I0523 11:49:38.121139 32426 solver.cpp:253]     Train net output #0: loss = 1.14918 (* 1 = 1.14918 loss)
+I0523 11:49:38.121155 32426 sgd_solver.cpp:106] Iteration 106800, lr = 0.005
+I0523 11:49:47.395207 32426 solver.cpp:237] Iteration 107100, loss = 1.02364
+I0523 11:49:47.395256 32426 solver.cpp:253]     Train net output #0: loss = 1.02364 (* 1 = 1.02364 loss)
+I0523 11:49:47.395272 32426 sgd_solver.cpp:106] Iteration 107100, lr = 0.005
+I0523 11:49:56.667088 32426 solver.cpp:237] Iteration 107400, loss = 1.34184
+I0523 11:49:56.667261 32426 solver.cpp:253]     Train net output #0: loss = 1.34184 (* 1 = 1.34184 loss)
+I0523 11:49:56.667274 32426 sgd_solver.cpp:106] Iteration 107400, lr = 0.005
+I0523 11:50:05.942934 32426 solver.cpp:237] Iteration 107700, loss = 1.04791
+I0523 11:50:05.942968 32426 solver.cpp:253]     Train net output #0: loss = 1.04791 (* 1 = 1.04791 loss)
+I0523 11:50:05.942986 32426 sgd_solver.cpp:106] Iteration 107700, lr = 0.005
+I0523 11:50:15.184552 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_108000.caffemodel
+I0523 11:50:15.249531 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_108000.solverstate
+I0523 11:50:15.276734 32426 solver.cpp:341] Iteration 108000, Testing net (#0)
+I0523 11:51:23.878332 32426 solver.cpp:409]     Test net output #0: accuracy = 0.898983
+I0523 11:51:23.878530 32426 solver.cpp:409]     Test net output #1: loss = 0.312431 (* 1 = 0.312431 loss)
+I0523 11:51:44.734190 32426 solver.cpp:237] Iteration 108000, loss = 0.991963
+I0523 11:51:44.734244 32426 solver.cpp:253]     Train net output #0: loss = 0.991963 (* 1 = 0.991963 loss)
+I0523 11:51:44.734259 32426 sgd_solver.cpp:106] Iteration 108000, lr = 0.005
+I0523 11:51:54.021643 32426 solver.cpp:237] Iteration 108300, loss = 0.982324
+I0523 11:51:54.021828 32426 solver.cpp:253]     Train net output #0: loss = 0.982324 (* 1 = 0.982324 loss)
+I0523 11:51:54.021842 32426 sgd_solver.cpp:106] Iteration 108300, lr = 0.005
+I0523 11:52:03.310334 32426 solver.cpp:237] Iteration 108600, loss = 1.17807
+I0523 11:52:03.310369 32426 solver.cpp:253]     Train net output #0: loss = 1.17807 (* 1 = 1.17807 loss)
+I0523 11:52:03.310386 32426 sgd_solver.cpp:106] Iteration 108600, lr = 0.005
+I0523 11:52:12.597394 32426 solver.cpp:237] Iteration 108900, loss = 1.19586
+I0523 11:52:12.597439 32426 solver.cpp:253]     Train net output #0: loss = 1.19586 (* 1 = 1.19586 loss)
+I0523 11:52:12.597456 32426 sgd_solver.cpp:106] Iteration 108900, lr = 0.005
+I0523 11:52:21.885995 32426 solver.cpp:237] Iteration 109200, loss = 1.34038
+I0523 11:52:21.886029 32426 solver.cpp:253]     Train net output #0: loss = 1.34038 (* 1 = 1.34038 loss)
+I0523 11:52:21.886047 32426 sgd_solver.cpp:106] Iteration 109200, lr = 0.005
+I0523 11:52:31.174844 32426 solver.cpp:237] Iteration 109500, loss = 1.13668
+I0523 11:52:31.175026 32426 solver.cpp:253]     Train net output #0: loss = 1.13668 (* 1 = 1.13668 loss)
+I0523 11:52:31.175040 32426 sgd_solver.cpp:106] Iteration 109500, lr = 0.005
+I0523 11:52:40.463066 32426 solver.cpp:237] Iteration 109800, loss = 0.894438
+I0523 11:52:40.463109 32426 solver.cpp:253]     Train net output #0: loss = 0.894438 (* 1 = 0.894438 loss)
+I0523 11:52:40.463129 32426 sgd_solver.cpp:106] Iteration 109800, lr = 0.005
+I0523 11:53:10.616452 32426 solver.cpp:237] Iteration 110100, loss = 1.14666
+I0523 11:53:10.616649 32426 solver.cpp:253]     Train net output #0: loss = 1.14666 (* 1 = 1.14666 loss)
+I0523 11:53:10.616664 32426 sgd_solver.cpp:106] Iteration 110100, lr = 0.005
+I0523 11:53:19.909720 32426 solver.cpp:237] Iteration 110400, loss = 0.89764
+I0523 11:53:19.909755 32426 solver.cpp:253]     Train net output #0: loss = 0.89764 (* 1 = 0.89764 loss)
+I0523 11:53:19.909773 32426 sgd_solver.cpp:106] Iteration 110400, lr = 0.005
+I0523 11:53:29.199215 32426 solver.cpp:237] Iteration 110700, loss = 1.01842
+I0523 11:53:29.199261 32426 solver.cpp:253]     Train net output #0: loss = 1.01842 (* 1 = 1.01842 loss)
+I0523 11:53:29.199280 32426 sgd_solver.cpp:106] Iteration 110700, lr = 0.005
+I0523 11:53:38.459142 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_111000.caffemodel
+I0523 11:53:38.519201 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_111000.solverstate
+I0523 11:53:38.554656 32426 solver.cpp:237] Iteration 111000, loss = 0.684293
+I0523 11:53:38.554703 32426 solver.cpp:253]     Train net output #0: loss = 0.684293 (* 1 = 0.684293 loss)
+I0523 11:53:38.554718 32426 sgd_solver.cpp:106] Iteration 111000, lr = 0.005
+I0523 11:53:47.844019 32426 solver.cpp:237] Iteration 111300, loss = 1.06611
+I0523 11:53:47.844197 32426 solver.cpp:253]     Train net output #0: loss = 1.06611 (* 1 = 1.06611 loss)
+I0523 11:53:47.844210 32426 sgd_solver.cpp:106] Iteration 111300, lr = 0.005
+I0523 11:53:57.133720 32426 solver.cpp:237] Iteration 111600, loss = 1.30671
+I0523 11:53:57.133762 32426 solver.cpp:253]     Train net output #0: loss = 1.30671 (* 1 = 1.30671 loss)
+I0523 11:53:57.133780 32426 sgd_solver.cpp:106] Iteration 111600, lr = 0.005
+I0523 11:54:06.419234 32426 solver.cpp:237] Iteration 111900, loss = 1.04712
+I0523 11:54:06.419270 32426 solver.cpp:253]     Train net output #0: loss = 1.04712 (* 1 = 1.04712 loss)
+I0523 11:54:06.419286 32426 sgd_solver.cpp:106] Iteration 111900, lr = 0.005
+I0523 11:54:36.571292 32426 solver.cpp:237] Iteration 112200, loss = 0.76827
+I0523 11:54:36.571496 32426 solver.cpp:253]     Train net output #0: loss = 0.76827 (* 1 = 0.76827 loss)
+I0523 11:54:36.571512 32426 sgd_solver.cpp:106] Iteration 112200, lr = 0.005
+I0523 11:54:45.858675 32426 solver.cpp:237] Iteration 112500, loss = 1.24838
+I0523 11:54:45.858716 32426 solver.cpp:253]     Train net output #0: loss = 1.24838 (* 1 = 1.24838 loss)
+I0523 11:54:45.858734 32426 sgd_solver.cpp:106] Iteration 112500, lr = 0.005
+I0523 11:54:55.147070 32426 solver.cpp:237] Iteration 112800, loss = 1.22906
+I0523 11:54:55.147106 32426 solver.cpp:253]     Train net output #0: loss = 1.22906 (* 1 = 1.22906 loss)
+I0523 11:54:55.147122 32426 sgd_solver.cpp:106] Iteration 112800, lr = 0.005
+I0523 11:55:04.435607 32426 solver.cpp:237] Iteration 113100, loss = 1.23623
+I0523 11:55:04.435643 32426 solver.cpp:253]     Train net output #0: loss = 1.23623 (* 1 = 1.23623 loss)
+I0523 11:55:04.435659 32426 sgd_solver.cpp:106] Iteration 113100, lr = 0.005
+I0523 11:55:13.721323 32426 solver.cpp:237] Iteration 113400, loss = 1.08064
+I0523 11:55:13.721501 32426 solver.cpp:253]     Train net output #0: loss = 1.08064 (* 1 = 1.08064 loss)
+I0523 11:55:13.721515 32426 sgd_solver.cpp:106] Iteration 113400, lr = 0.005
+I0523 11:55:23.005625 32426 solver.cpp:237] Iteration 113700, loss = 1.18382
+I0523 11:55:23.005659 32426 solver.cpp:253]     Train net output #0: loss = 1.18382 (* 1 = 1.18382 loss)
+I0523 11:55:23.005676 32426 sgd_solver.cpp:106] Iteration 113700, lr = 0.005
+I0523 11:55:32.264686 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_114000.caffemodel
+I0523 11:55:32.324137 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_114000.solverstate
+I0523 11:55:32.349239 32426 solver.cpp:341] Iteration 114000, Testing net (#0)
+I0523 11:56:19.828493 32426 solver.cpp:409]     Test net output #0: accuracy = 0.900662
+I0523 11:56:19.828702 32426 solver.cpp:409]     Test net output #1: loss = 0.317568 (* 1 = 0.317568 loss)
+I0523 11:56:40.690089 32426 solver.cpp:237] Iteration 114000, loss = 1.21883
+I0523 11:56:40.690142 32426 solver.cpp:253]     Train net output #0: loss = 1.21883 (* 1 = 1.21883 loss)
+I0523 11:56:40.690156 32426 sgd_solver.cpp:106] Iteration 114000, lr = 0.005
+I0523 11:56:49.981142 32426 solver.cpp:237] Iteration 114300, loss = 1.18214
+I0523 11:56:49.981329 32426 solver.cpp:253]     Train net output #0: loss = 1.18214 (* 1 = 1.18214 loss)
+I0523 11:56:49.981343 32426 sgd_solver.cpp:106] Iteration 114300, lr = 0.005
+I0523 11:56:59.272383 32426 solver.cpp:237] Iteration 114600, loss = 0.98827
+I0523 11:56:59.272418 32426 solver.cpp:253]     Train net output #0: loss = 0.988269 (* 1 = 0.988269 loss)
+I0523 11:56:59.272433 32426 sgd_solver.cpp:106] Iteration 114600, lr = 0.005
+I0523 11:57:08.565984 32426 solver.cpp:237] Iteration 114900, loss = 1.04697
+I0523 11:57:08.566020 32426 solver.cpp:253]     Train net output #0: loss = 1.04697 (* 1 = 1.04697 loss)
+I0523 11:57:08.566035 32426 sgd_solver.cpp:106] Iteration 114900, lr = 0.005
+I0523 11:57:17.863662 32426 solver.cpp:237] Iteration 115200, loss = 1.35198
+I0523 11:57:17.863706 32426 solver.cpp:253]     Train net output #0: loss = 1.35198 (* 1 = 1.35198 loss)
+I0523 11:57:17.863723 32426 sgd_solver.cpp:106] Iteration 115200, lr = 0.005
+I0523 11:57:27.161487 32426 solver.cpp:237] Iteration 115500, loss = 1.22066
+I0523 11:57:27.161672 32426 solver.cpp:253]     Train net output #0: loss = 1.22066 (* 1 = 1.22066 loss)
+I0523 11:57:27.161686 32426 sgd_solver.cpp:106] Iteration 115500, lr = 0.005
+I0523 11:57:36.455395 32426 solver.cpp:237] Iteration 115800, loss = 1.32507
+I0523 11:57:36.455430 32426 solver.cpp:253]     Train net output #0: loss = 1.32507 (* 1 = 1.32507 loss)
+I0523 11:57:36.455446 32426 sgd_solver.cpp:106] Iteration 115800, lr = 0.005
+I0523 11:58:06.634073 32426 solver.cpp:237] Iteration 116100, loss = 1.27493
+I0523 11:58:06.634269 32426 solver.cpp:253]     Train net output #0: loss = 1.27493 (* 1 = 1.27493 loss)
+I0523 11:58:06.634284 32426 sgd_solver.cpp:106] Iteration 116100, lr = 0.005
+I0523 11:58:15.924183 32426 solver.cpp:237] Iteration 116400, loss = 1.18802
+I0523 11:58:15.924217 32426 solver.cpp:253]     Train net output #0: loss = 1.18802 (* 1 = 1.18802 loss)
+I0523 11:58:15.924235 32426 sgd_solver.cpp:106] Iteration 116400, lr = 0.005
+I0523 11:58:25.218231 32426 solver.cpp:237] Iteration 116700, loss = 1.18652
+I0523 11:58:25.218267 32426 solver.cpp:253]     Train net output #0: loss = 1.18652 (* 1 = 1.18652 loss)
+I0523 11:58:25.218283 32426 sgd_solver.cpp:106] Iteration 116700, lr = 0.005
+I0523 11:58:34.483814 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_117000.caffemodel
+I0523 11:58:34.543810 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_117000.solverstate
+I0523 11:58:34.578708 32426 solver.cpp:237] Iteration 117000, loss = 1.04711
+I0523 11:58:34.578748 32426 solver.cpp:253]     Train net output #0: loss = 1.04711 (* 1 = 1.04711 loss)
+I0523 11:58:34.578766 32426 sgd_solver.cpp:106] Iteration 117000, lr = 0.005
+I0523 11:58:43.872524 32426 solver.cpp:237] Iteration 117300, loss = 1.33552
+I0523 11:58:43.872722 32426 solver.cpp:253]     Train net output #0: loss = 1.33552 (* 1 = 1.33552 loss)
+I0523 11:58:43.872736 32426 sgd_solver.cpp:106] Iteration 117300, lr = 0.005
+I0523 11:58:53.166672 32426 solver.cpp:237] Iteration 117600, loss = 1.53124
+I0523 11:58:53.166712 32426 solver.cpp:253]     Train net output #0: loss = 1.53124 (* 1 = 1.53124 loss)
+I0523 11:58:53.166733 32426 sgd_solver.cpp:106] Iteration 117600, lr = 0.005
+I0523 11:59:02.461627 32426 solver.cpp:237] Iteration 117900, loss = 1.20042
+I0523 11:59:02.461663 32426 solver.cpp:253]     Train net output #0: loss = 1.20042 (* 1 = 1.20042 loss)
+I0523 11:59:02.461679 32426 sgd_solver.cpp:106] Iteration 117900, lr = 0.005
+I0523 11:59:32.636032 32426 solver.cpp:237] Iteration 118200, loss = 1.04511
+I0523 11:59:32.636229 32426 solver.cpp:253]     Train net output #0: loss = 1.04511 (* 1 = 1.04511 loss)
+I0523 11:59:32.636245 32426 sgd_solver.cpp:106] Iteration 118200, lr = 0.005
+I0523 11:59:41.932297 32426 solver.cpp:237] Iteration 118500, loss = 1.11468
+I0523 11:59:41.932346 32426 solver.cpp:253]     Train net output #0: loss = 1.11468 (* 1 = 1.11468 loss)
+I0523 11:59:41.932368 32426 sgd_solver.cpp:106] Iteration 118500, lr = 0.005
+I0523 11:59:51.225989 32426 solver.cpp:237] Iteration 118800, loss = 0.829184
+I0523 11:59:51.226025 32426 solver.cpp:253]     Train net output #0: loss = 0.829184 (* 1 = 0.829184 loss)
+I0523 11:59:51.226042 32426 sgd_solver.cpp:106] Iteration 118800, lr = 0.005
+I0523 12:00:00.523167 32426 solver.cpp:237] Iteration 119100, loss = 1.2564
+I0523 12:00:00.523203 32426 solver.cpp:253]     Train net output #0: loss = 1.2564 (* 1 = 1.2564 loss)
+I0523 12:00:00.523221 32426 sgd_solver.cpp:106] Iteration 119100, lr = 0.005
+I0523 12:00:09.822324 32426 solver.cpp:237] Iteration 119400, loss = 1.23292
+I0523 12:00:09.822509 32426 solver.cpp:253]     Train net output #0: loss = 1.23292 (* 1 = 1.23292 loss)
+I0523 12:00:09.822522 32426 sgd_solver.cpp:106] Iteration 119400, lr = 0.005
+I0523 12:00:19.113085 32426 solver.cpp:237] Iteration 119700, loss = 1.1843
+I0523 12:00:19.113119 32426 solver.cpp:253]     Train net output #0: loss = 1.1843 (* 1 = 1.1843 loss)
+I0523 12:00:19.113137 32426 sgd_solver.cpp:106] Iteration 119700, lr = 0.005
+I0523 12:00:28.374508 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_120000.caffemodel
+I0523 12:00:28.435382 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_120000.solverstate
+I0523 12:00:28.462960 32426 solver.cpp:341] Iteration 120000, Testing net (#0)
+I0523 12:01:37.092849 32426 solver.cpp:409]     Test net output #0: accuracy = 0.900949
+I0523 12:01:37.093044 32426 solver.cpp:409]     Test net output #1: loss = 0.317085 (* 1 = 0.317085 loss)
+I0523 12:01:57.939997 32426 solver.cpp:237] Iteration 120000, loss = 0.973351
+I0523 12:01:57.940050 32426 solver.cpp:253]     Train net output #0: loss = 0.973351 (* 1 = 0.973351 loss)
+I0523 12:01:57.940065 32426 sgd_solver.cpp:106] Iteration 120000, lr = 0.005
+I0523 12:02:07.229164 32426 solver.cpp:237] Iteration 120300, loss = 0.88169
+I0523 12:02:07.229346 32426 solver.cpp:253]     Train net output #0: loss = 0.88169 (* 1 = 0.88169 loss)
+I0523 12:02:07.229359 32426 sgd_solver.cpp:106] Iteration 120300, lr = 0.005
+I0523 12:02:16.521085 32426 solver.cpp:237] Iteration 120600, loss = 1.19938
+I0523 12:02:16.521126 32426 solver.cpp:253]     Train net output #0: loss = 1.19938 (* 1 = 1.19938 loss)
+I0523 12:02:16.521142 32426 sgd_solver.cpp:106] Iteration 120600, lr = 0.005
+I0523 12:02:25.812088 32426 solver.cpp:237] Iteration 120900, loss = 1.15978
+I0523 12:02:25.812124 32426 solver.cpp:253]     Train net output #0: loss = 1.15978 (* 1 = 1.15978 loss)
+I0523 12:02:25.812140 32426 sgd_solver.cpp:106] Iteration 120900, lr = 0.005
+I0523 12:02:35.101174 32426 solver.cpp:237] Iteration 121200, loss = 1.20358
+I0523 12:02:35.101210 32426 solver.cpp:253]     Train net output #0: loss = 1.20358 (* 1 = 1.20358 loss)
+I0523 12:02:35.101224 32426 sgd_solver.cpp:106] Iteration 121200, lr = 0.005
+I0523 12:02:44.389053 32426 solver.cpp:237] Iteration 121500, loss = 1.08848
+I0523 12:02:44.389248 32426 solver.cpp:253]     Train net output #0: loss = 1.08848 (* 1 = 1.08848 loss)
+I0523 12:02:44.389262 32426 sgd_solver.cpp:106] Iteration 121500, lr = 0.005
+I0523 12:02:53.680323 32426 solver.cpp:237] Iteration 121800, loss = 1.1262
+I0523 12:02:53.680357 32426 solver.cpp:253]     Train net output #0: loss = 1.1262 (* 1 = 1.1262 loss)
+I0523 12:02:53.680372 32426 sgd_solver.cpp:106] Iteration 121800, lr = 0.005
+I0523 12:03:23.819386 32426 solver.cpp:237] Iteration 122100, loss = 1.12093
+I0523 12:03:23.819586 32426 solver.cpp:253]     Train net output #0: loss = 1.12093 (* 1 = 1.12093 loss)
+I0523 12:03:23.819600 32426 sgd_solver.cpp:106] Iteration 122100, lr = 0.005
+I0523 12:03:33.108131 32426 solver.cpp:237] Iteration 122400, loss = 0.990615
+I0523 12:03:33.108173 32426 solver.cpp:253]     Train net output #0: loss = 0.990615 (* 1 = 0.990615 loss)
+I0523 12:03:33.108194 32426 sgd_solver.cpp:106] Iteration 122400, lr = 0.005
+I0523 12:03:42.394843 32426 solver.cpp:237] Iteration 122700, loss = 1.55177
+I0523 12:03:42.394879 32426 solver.cpp:253]     Train net output #0: loss = 1.55177 (* 1 = 1.55177 loss)
+I0523 12:03:42.394896 32426 sgd_solver.cpp:106] Iteration 122700, lr = 0.005
+I0523 12:03:51.658615 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_123000.caffemodel
+I0523 12:03:51.717644 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_123000.solverstate
+I0523 12:03:51.752396 32426 solver.cpp:237] Iteration 123000, loss = 1.07287
+I0523 12:03:51.752441 32426 solver.cpp:253]     Train net output #0: loss = 1.07287 (* 1 = 1.07287 loss)
+I0523 12:03:51.752457 32426 sgd_solver.cpp:106] Iteration 123000, lr = 0.005
+I0523 12:04:01.043094 32426 solver.cpp:237] Iteration 123300, loss = 0.936901
+I0523 12:04:01.043287 32426 solver.cpp:253]     Train net output #0: loss = 0.936901 (* 1 = 0.936901 loss)
+I0523 12:04:01.043300 32426 sgd_solver.cpp:106] Iteration 123300, lr = 0.005
+I0523 12:04:10.333271 32426 solver.cpp:237] Iteration 123600, loss = 1.11775
+I0523 12:04:10.333307 32426 solver.cpp:253]     Train net output #0: loss = 1.11775 (* 1 = 1.11775 loss)
+I0523 12:04:10.333324 32426 sgd_solver.cpp:106] Iteration 123600, lr = 0.005
+I0523 12:04:19.624991 32426 solver.cpp:237] Iteration 123900, loss = 1.06991
+I0523 12:04:19.625033 32426 solver.cpp:253]     Train net output #0: loss = 1.06991 (* 1 = 1.06991 loss)
+I0523 12:04:19.625052 32426 sgd_solver.cpp:106] Iteration 123900, lr = 0.005
+I0523 12:04:49.746376 32426 solver.cpp:237] Iteration 124200, loss = 0.921153
+I0523 12:04:49.746573 32426 solver.cpp:253]     Train net output #0: loss = 0.921153 (* 1 = 0.921153 loss)
+I0523 12:04:49.746589 32426 sgd_solver.cpp:106] Iteration 124200, lr = 0.005
+I0523 12:04:59.034380 32426 solver.cpp:237] Iteration 124500, loss = 1.01115
+I0523 12:04:59.034415 32426 solver.cpp:253]     Train net output #0: loss = 1.01115 (* 1 = 1.01115 loss)
+I0523 12:04:59.034432 32426 sgd_solver.cpp:106] Iteration 124500, lr = 0.005
+I0523 12:05:08.327960 32426 solver.cpp:237] Iteration 124800, loss = 1.24342
+I0523 12:05:08.328004 32426 solver.cpp:253]     Train net output #0: loss = 1.24342 (* 1 = 1.24342 loss)
+I0523 12:05:08.328022 32426 sgd_solver.cpp:106] Iteration 124800, lr = 0.005
+I0523 12:05:17.621503 32426 solver.cpp:237] Iteration 125100, loss = 1.04665
+I0523 12:05:17.621538 32426 solver.cpp:253]     Train net output #0: loss = 1.04665 (* 1 = 1.04665 loss)
+I0523 12:05:17.621556 32426 sgd_solver.cpp:106] Iteration 125100, lr = 0.005
+I0523 12:05:26.910854 32426 solver.cpp:237] Iteration 125400, loss = 0.978423
+I0523 12:05:26.911041 32426 solver.cpp:253]     Train net output #0: loss = 0.978422 (* 1 = 0.978422 loss)
+I0523 12:05:26.911056 32426 sgd_solver.cpp:106] Iteration 125400, lr = 0.005
+I0523 12:05:36.203672 32426 solver.cpp:237] Iteration 125700, loss = 1.02506
+I0523 12:05:36.203721 32426 solver.cpp:253]     Train net output #0: loss = 1.02506 (* 1 = 1.02506 loss)
+I0523 12:05:36.203742 32426 sgd_solver.cpp:106] Iteration 125700, lr = 0.005
+I0523 12:05:45.459122 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_126000.caffemodel
+I0523 12:05:45.518745 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_126000.solverstate
+I0523 12:05:45.543974 32426 solver.cpp:341] Iteration 126000, Testing net (#0)
+I0523 12:06:33.315968 32426 solver.cpp:409]     Test net output #0: accuracy = 0.902916
+I0523 12:06:33.316164 32426 solver.cpp:409]     Test net output #1: loss = 0.314253 (* 1 = 0.314253 loss)
+I0523 12:06:54.140625 32426 solver.cpp:237] Iteration 126000, loss = 0.908579
+I0523 12:06:54.140677 32426 solver.cpp:253]     Train net output #0: loss = 0.908579 (* 1 = 0.908579 loss)
+I0523 12:06:54.140693 32426 sgd_solver.cpp:106] Iteration 126000, lr = 0.005
+I0523 12:07:03.409075 32426 solver.cpp:237] Iteration 126300, loss = 1.19845
+I0523 12:07:03.409258 32426 solver.cpp:253]     Train net output #0: loss = 1.19845 (* 1 = 1.19845 loss)
+I0523 12:07:03.409273 32426 sgd_solver.cpp:106] Iteration 126300, lr = 0.005
+I0523 12:07:12.682728 32426 solver.cpp:237] Iteration 126600, loss = 0.876168
+I0523 12:07:12.682775 32426 solver.cpp:253]     Train net output #0: loss = 0.876168 (* 1 = 0.876168 loss)
+I0523 12:07:12.682791 32426 sgd_solver.cpp:106] Iteration 126600, lr = 0.005
+I0523 12:07:21.954260 32426 solver.cpp:237] Iteration 126900, loss = 1.10702
+I0523 12:07:21.954294 32426 solver.cpp:253]     Train net output #0: loss = 1.10702 (* 1 = 1.10702 loss)
+I0523 12:07:21.954313 32426 sgd_solver.cpp:106] Iteration 126900, lr = 0.005
+I0523 12:07:31.224565 32426 solver.cpp:237] Iteration 127200, loss = 1.00463
+I0523 12:07:31.224599 32426 solver.cpp:253]     Train net output #0: loss = 1.00463 (* 1 = 1.00463 loss)
+I0523 12:07:31.224616 32426 sgd_solver.cpp:106] Iteration 127200, lr = 0.005
+I0523 12:07:40.498811 32426 solver.cpp:237] Iteration 127500, loss = 1.02497
+I0523 12:07:40.499003 32426 solver.cpp:253]     Train net output #0: loss = 1.02497 (* 1 = 1.02497 loss)
+I0523 12:07:40.499017 32426 sgd_solver.cpp:106] Iteration 127500, lr = 0.005
+I0523 12:07:49.768769 32426 solver.cpp:237] Iteration 127800, loss = 0.930358
+I0523 12:07:49.768803 32426 solver.cpp:253]     Train net output #0: loss = 0.930358 (* 1 = 0.930358 loss)
+I0523 12:07:49.768821 32426 sgd_solver.cpp:106] Iteration 127800, lr = 0.005
+I0523 12:08:19.895375 32426 solver.cpp:237] Iteration 128100, loss = 0.991871
+I0523 12:08:19.895573 32426 solver.cpp:253]     Train net output #0: loss = 0.99187 (* 1 = 0.99187 loss)
+I0523 12:08:19.895588 32426 sgd_solver.cpp:106] Iteration 128100, lr = 0.005
+I0523 12:08:29.169430 32426 solver.cpp:237] Iteration 128400, loss = 1.10458
+I0523 12:08:29.169476 32426 solver.cpp:253]     Train net output #0: loss = 1.10458 (* 1 = 1.10458 loss)
+I0523 12:08:29.169491 32426 sgd_solver.cpp:106] Iteration 128400, lr = 0.005
+I0523 12:08:38.446085 32426 solver.cpp:237] Iteration 128700, loss = 1.21359
+I0523 12:08:38.446121 32426 solver.cpp:253]     Train net output #0: loss = 1.21359 (* 1 = 1.21359 loss)
+I0523 12:08:38.446138 32426 sgd_solver.cpp:106] Iteration 128700, lr = 0.005
+I0523 12:08:47.691826 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_129000.caffemodel
+I0523 12:08:47.751598 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_129000.solverstate
+I0523 12:08:47.787061 32426 solver.cpp:237] Iteration 129000, loss = 1.21026
+I0523 12:08:47.787101 32426 solver.cpp:253]     Train net output #0: loss = 1.21026 (* 1 = 1.21026 loss)
+I0523 12:08:47.787119 32426 sgd_solver.cpp:106] Iteration 129000, lr = 0.005
+I0523 12:08:57.063282 32426 solver.cpp:237] Iteration 129300, loss = 1.25337
+I0523 12:08:57.063484 32426 solver.cpp:253]     Train net output #0: loss = 1.25337 (* 1 = 1.25337 loss)
+I0523 12:08:57.063499 32426 sgd_solver.cpp:106] Iteration 129300, lr = 0.005
+I0523 12:09:06.337916 32426 solver.cpp:237] Iteration 129600, loss = 0.938176
+I0523 12:09:06.337949 32426 solver.cpp:253]     Train net output #0: loss = 0.938176 (* 1 = 0.938176 loss)
+I0523 12:09:06.337961 32426 sgd_solver.cpp:106] Iteration 129600, lr = 0.005
+I0523 12:09:15.609608 32426 solver.cpp:237] Iteration 129900, loss = 1.51243
+I0523 12:09:15.609644 32426 solver.cpp:253]     Train net output #0: loss = 1.51243 (* 1 = 1.51243 loss)
+I0523 12:09:15.609661 32426 sgd_solver.cpp:106] Iteration 129900, lr = 0.005
+I0523 12:09:45.760596 32426 solver.cpp:237] Iteration 130200, loss = 1.15422
+I0523 12:09:45.760794 32426 solver.cpp:253]     Train net output #0: loss = 1.15422 (* 1 = 1.15422 loss)
+I0523 12:09:45.760809 32426 sgd_solver.cpp:106] Iteration 130200, lr = 0.005
+I0523 12:09:55.032965 32426 solver.cpp:237] Iteration 130500, loss = 1.12216
+I0523 12:09:55.033001 32426 solver.cpp:253]     Train net output #0: loss = 1.12216 (* 1 = 1.12216 loss)
+I0523 12:09:55.033017 32426 sgd_solver.cpp:106] Iteration 130500, lr = 0.005
+I0523 12:10:04.309967 32426 solver.cpp:237] Iteration 130800, loss = 1.15181
+I0523 12:10:04.310003 32426 solver.cpp:253]     Train net output #0: loss = 1.15181 (* 1 = 1.15181 loss)
+I0523 12:10:04.310019 32426 sgd_solver.cpp:106] Iteration 130800, lr = 0.005
+I0523 12:10:13.584959 32426 solver.cpp:237] Iteration 131100, loss = 0.967562
+I0523 12:10:13.585002 32426 solver.cpp:253]     Train net output #0: loss = 0.967562 (* 1 = 0.967562 loss)
+I0523 12:10:13.585019 32426 sgd_solver.cpp:106] Iteration 131100, lr = 0.005
+I0523 12:10:22.858475 32426 solver.cpp:237] Iteration 131400, loss = 1.35035
+I0523 12:10:22.858655 32426 solver.cpp:253]     Train net output #0: loss = 1.35035 (* 1 = 1.35035 loss)
+I0523 12:10:22.858669 32426 sgd_solver.cpp:106] Iteration 131400, lr = 0.005
+I0523 12:10:32.131163 32426 solver.cpp:237] Iteration 131700, loss = 1.20956
+I0523 12:10:32.131212 32426 solver.cpp:253]     Train net output #0: loss = 1.20956 (* 1 = 1.20956 loss)
+I0523 12:10:32.131227 32426 sgd_solver.cpp:106] Iteration 131700, lr = 0.005
+I0523 12:10:41.375885 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_132000.caffemodel
+I0523 12:10:41.435730 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_132000.solverstate
+I0523 12:10:41.460887 32426 solver.cpp:341] Iteration 132000, Testing net (#0)
+I0523 12:11:50.105394 32426 solver.cpp:409]     Test net output #0: accuracy = 0.901595
+I0523 12:11:50.105588 32426 solver.cpp:409]     Test net output #1: loss = 0.329841 (* 1 = 0.329841 loss)
+I0523 12:12:10.991061 32426 solver.cpp:237] Iteration 132000, loss = 1.00192
+I0523 12:12:10.991114 32426 solver.cpp:253]     Train net output #0: loss = 1.00192 (* 1 = 1.00192 loss)
+I0523 12:12:10.991130 32426 sgd_solver.cpp:106] Iteration 132000, lr = 0.005
+I0523 12:12:20.280241 32426 solver.cpp:237] Iteration 132300, loss = 1.24862
+I0523 12:12:20.280448 32426 solver.cpp:253]     Train net output #0: loss = 1.24862 (* 1 = 1.24862 loss)
+I0523 12:12:20.280462 32426 sgd_solver.cpp:106] Iteration 132300, lr = 0.005
+I0523 12:12:29.567615 32426 solver.cpp:237] Iteration 132600, loss = 1.34312
+I0523 12:12:29.567649 32426 solver.cpp:253]     Train net output #0: loss = 1.34311 (* 1 = 1.34311 loss)
+I0523 12:12:29.567667 32426 sgd_solver.cpp:106] Iteration 132600, lr = 0.005
+I0523 12:12:38.862181 32426 solver.cpp:237] Iteration 132900, loss = 1.23247
+I0523 12:12:38.862221 32426 solver.cpp:253]     Train net output #0: loss = 1.23247 (* 1 = 1.23247 loss)
+I0523 12:12:38.862244 32426 sgd_solver.cpp:106] Iteration 132900, lr = 0.005
+I0523 12:12:48.152032 32426 solver.cpp:237] Iteration 133200, loss = 0.975034
+I0523 12:12:48.152062 32426 solver.cpp:253]     Train net output #0: loss = 0.975033 (* 1 = 0.975033 loss)
+I0523 12:12:48.152076 32426 sgd_solver.cpp:106] Iteration 133200, lr = 0.005
+I0523 12:12:57.439872 32426 solver.cpp:237] Iteration 133500, loss = 1.19959
+I0523 12:12:57.440052 32426 solver.cpp:253]     Train net output #0: loss = 1.19959 (* 1 = 1.19959 loss)
+I0523 12:12:57.440065 32426 sgd_solver.cpp:106] Iteration 133500, lr = 0.005
+I0523 12:13:06.729032 32426 solver.cpp:237] Iteration 133800, loss = 1.18895
+I0523 12:13:06.729074 32426 solver.cpp:253]     Train net output #0: loss = 1.18895 (* 1 = 1.18895 loss)
+I0523 12:13:06.729091 32426 sgd_solver.cpp:106] Iteration 133800, lr = 0.005
+I0523 12:13:36.926707 32426 solver.cpp:237] Iteration 134100, loss = 1.27403
+I0523 12:13:36.926908 32426 solver.cpp:253]     Train net output #0: loss = 1.27403 (* 1 = 1.27403 loss)
+I0523 12:13:36.926923 32426 sgd_solver.cpp:106] Iteration 134100, lr = 0.005
+I0523 12:13:46.215737 32426 solver.cpp:237] Iteration 134400, loss = 1.01113
+I0523 12:13:46.215771 32426 solver.cpp:253]     Train net output #0: loss = 1.01113 (* 1 = 1.01113 loss)
+I0523 12:13:46.215790 32426 sgd_solver.cpp:106] Iteration 134400, lr = 0.005
+I0523 12:13:55.502321 32426 solver.cpp:237] Iteration 134700, loss = 0.875111
+I0523 12:13:55.502360 32426 solver.cpp:253]     Train net output #0: loss = 0.875111 (* 1 = 0.875111 loss)
+I0523 12:13:55.502382 32426 sgd_solver.cpp:106] Iteration 134700, lr = 0.005
+I0523 12:14:04.762909 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_135000.caffemodel
+I0523 12:14:04.824475 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_135000.solverstate
+I0523 12:14:04.861780 32426 solver.cpp:237] Iteration 135000, loss = 1.19628
+I0523 12:14:04.861830 32426 solver.cpp:253]     Train net output #0: loss = 1.19628 (* 1 = 1.19628 loss)
+I0523 12:14:04.861845 32426 sgd_solver.cpp:106] Iteration 135000, lr = 0.005
+I0523 12:14:14.152750 32426 solver.cpp:237] Iteration 135300, loss = 1.05197
+I0523 12:14:14.152937 32426 solver.cpp:253]     Train net output #0: loss = 1.05197 (* 1 = 1.05197 loss)
+I0523 12:14:14.152951 32426 sgd_solver.cpp:106] Iteration 135300, lr = 0.005
+I0523 12:14:23.440636 32426 solver.cpp:237] Iteration 135600, loss = 1.21988
+I0523 12:14:23.440685 32426 solver.cpp:253]     Train net output #0: loss = 1.21988 (* 1 = 1.21988 loss)
+I0523 12:14:23.440698 32426 sgd_solver.cpp:106] Iteration 135600, lr = 0.005
+I0523 12:14:32.733582 32426 solver.cpp:237] Iteration 135900, loss = 0.872147
+I0523 12:14:32.733618 32426 solver.cpp:253]     Train net output #0: loss = 0.872147 (* 1 = 0.872147 loss)
+I0523 12:14:32.733635 32426 sgd_solver.cpp:106] Iteration 135900, lr = 0.005
+I0523 12:15:02.899608 32426 solver.cpp:237] Iteration 136200, loss = 1.24231
+I0523 12:15:02.899818 32426 solver.cpp:253]     Train net output #0: loss = 1.24231 (* 1 = 1.24231 loss)
+I0523 12:15:02.899833 32426 sgd_solver.cpp:106] Iteration 136200, lr = 0.005
+I0523 12:15:12.188321 32426 solver.cpp:237] Iteration 136500, loss = 0.859295
+I0523 12:15:12.188366 32426 solver.cpp:253]     Train net output #0: loss = 0.859295 (* 1 = 0.859295 loss)
+I0523 12:15:12.188385 32426 sgd_solver.cpp:106] Iteration 136500, lr = 0.005
+I0523 12:15:21.480185 32426 solver.cpp:237] Iteration 136800, loss = 0.954657
+I0523 12:15:21.480221 32426 solver.cpp:253]     Train net output #0: loss = 0.954657 (* 1 = 0.954657 loss)
+I0523 12:15:21.480237 32426 sgd_solver.cpp:106] Iteration 136800, lr = 0.005
+I0523 12:15:30.769659 32426 solver.cpp:237] Iteration 137100, loss = 1.03273
+I0523 12:15:30.769695 32426 solver.cpp:253]     Train net output #0: loss = 1.03273 (* 1 = 1.03273 loss)
+I0523 12:15:30.769711 32426 sgd_solver.cpp:106] Iteration 137100, lr = 0.005
+I0523 12:15:40.058753 32426 solver.cpp:237] Iteration 137400, loss = 1.19489
+I0523 12:15:40.058957 32426 solver.cpp:253]     Train net output #0: loss = 1.19489 (* 1 = 1.19489 loss)
+I0523 12:15:40.058970 32426 sgd_solver.cpp:106] Iteration 137400, lr = 0.005
+I0523 12:15:49.349287 32426 solver.cpp:237] Iteration 137700, loss = 0.941238
+I0523 12:15:49.349324 32426 solver.cpp:253]     Train net output #0: loss = 0.941238 (* 1 = 0.941238 loss)
+I0523 12:15:49.349341 32426 sgd_solver.cpp:106] Iteration 137700, lr = 0.005
+I0523 12:15:58.608598 32426 solver.cpp:459] Snapshotting to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_138000.caffemodel
+I0523 12:15:58.667649 32426 sgd_solver.cpp:273] Snapshotting solver state to binary proto file /lustre/atlas/proj-shared/hep105/caffe_titan/caffe_workflow/snapshots_bslr/bs_50_lr_0.0050_2016-05-20T15.49.08.453964_iter_138000.solverstate
+I0523 12:15:58.692890 32426 solver.cpp:341] Iteration 138000, Testing net (#0)
+I0523 12:16:46.212857 32426 solver.cpp:409]     Test net output #0: accuracy = 0.900976
+I0523 12:16:46.213059 32426 solver.cpp:409]     Test net output #1: loss = 0.317012 (* 1 = 0.317012 loss)
+I0523 12:17:07.089511 32426 solver.cpp:237] Iteration 138000, loss = 0.99214
+I0523 12:17:07.089565 32426 solver.cpp:253]     Train net output #0: loss = 0.992139 (* 1 = 0.992139 loss)
+I0523 12:17:07.089581 32426 sgd_solver.cpp:106] Iteration 138000, lr = 0.005
+I0523 12:17:16.381567 32426 solver.cpp:237] Iteration 138300, loss = 1.16357
+I0523 12:17:16.381765 32426 solver.cpp:253]     Train net output #0: loss = 1.16357 (* 1 = 1.16357 loss)
+I0523 12:17:16.381779 32426 sgd_solver.cpp:106] Iteration 138300, lr = 0.005
+I0523 12:17:25.676000 32426 solver.cpp:237] Iteration 138600, loss = 1.02721
+I0523 12:17:25.676034 32426 solver.cpp:253]     Train net output #0: loss = 1.02721 (* 1 = 1.02721 loss)
+I0523 12:17:25.676051 32426 sgd_solver.cpp:106] Iteration 138600, lr = 0.005
+I0523 12:17:34.967655 32426 solver.cpp:237] Iteration 138900, loss = 1.36499
+I0523 12:17:34.967691 32426 solver.cpp:253]     Train net output #0: loss = 1.36499 (* 1 = 1.36499 loss)
+I0523 12:17:34.967707 32426 sgd_solver.cpp:106] Iteration 138900, lr = 0.005
+I0523 12:17:44.263525 32426 solver.cpp:237] Iteration 139200, loss = 1.48869
+I0523 12:17:44.263566 32426 solver.cpp:253]     Train net output #0: loss = 1.48869 (* 1 = 1.48869 loss)
+I0523 12:17:44.263583 32426 sgd_solver.cpp:106] Iteration 139200, lr = 0.005
+I0523 12:17:53.558480 32426 solver.cpp:237] Iteration 139500, loss = 1.03834
+I0523 12:17:53.558652 32426 solver.cpp:253]     Train net output #0: loss = 1.03834 (* 1 = 1.03834 loss)
+I0523 12:17:53.558666 32426 sgd_solver.cpp:106] Iteration 139500, lr = 0.005
+I0523 12:18:02.854868 32426 solver.cpp:237] Iteration 139800, loss = 0.813026
+I0523 12:18:02.854908 32426 solver.cpp:253]     Train net output #0: loss = 0.813026 (* 1 = 0.813026 loss)
+I0523 12:18:02.854929 32426 sgd_solver.cpp:106] Iteration 139800, lr = 0.005
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+*** Aborted at 1464020285 (unix time) try "date -d @1464020285" if you are using GNU date ***
+PC: @     0x2aaaaaaca834 ([vdso]+0x833)
+*** SIGTERM (@0x7ea7) received by PID 32426 (TID 0x2aaac746f900) from PID 32423; stack trace: ***
+    @     0x2aaab7c78850 (unknown)
+    @     0x2aaaaaaca834 ([vdso]+0x833)
+=>> PBS: job killed: walltime 7220 exceeded limit 7200
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+    @     0x2aaab82072d0 maybe_syscall_gettime_cpu
+    @     0x2aaab82074b0 __GI_clock_gettime
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+    @     0x2aaab9898f3e (unknown)
+    @     0x2aaab928ec5b (unknown)
+    @     0x2aaab926d723 (unknown)
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+    @     0x2aaab92655e1 (unknown)
+    @     0x2aaab9266356 (unknown)
+    @     0x2aaab91d5562 (unknown)
+    @     0x2aaab91d56ba (unknown)
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+    @     0x2aaab91b8715 cuMemcpy
+    @     0x2aaaaacf9e92 (unknown)
+    @     0x2aaaaacde306 (unknown)
+    @     0x2aaaaad00328 cudaMemcpy
+    @           0x4d6a10 caffe::caffe_copy<>()
+    @           0x626ea9 caffe::HDF5DataLayer<>::Forward_gpu()
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+    @           0x5efe82 caffe::Net<>::ForwardFromTo()
+    @           0x5eff97 caffe::Net<>::ForwardPrefilled()
+    @           0x5ca109 caffe::Solver<>::Step()
+    @           0x5caba5 caffe::Solver<>::Solve()
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+    @           0x43b3b8 train()
+    @           0x43020c main
+    @     0x2aaab7ea4c36 __libc_start_main
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+    @           0x438669 (unknown)
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
+aprun: Apid 11254363: Caught signal Terminated, sending to application
