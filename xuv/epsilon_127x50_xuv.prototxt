@@ -1,121 +1,69 @@
 name: "epsilon_127x50_xuv"
 
 layer {
-  name: "data_x"
+  name: "data"
   type: "HDF5Data"
   include {
     phase: TRAIN
   }
   hdf5_data_param {
-    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/xuv/epsilon_127x50_x.trainlist"
+    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/xuv/epsilon_127x50_xuv.trainlist"
     batch_size: 100
   }
-  top: "data"
-  top: "label"
+  top: "hits-x"
+  top: "hits-u"
+  top: "hits-v"
+  top: "segments"
 }
 
 layer {
-  name: "data_u"
-  type: "HDF5Data"
-  include {
-    phase: TRAIN
-  }
-  hdf5_data_param {
-    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/xuv/epsilon_127x50_u.trainlist"
-    batch_size: 100
-  }
-  top: "data"
-  top: "label"
-}
-
-layer {
-  name: "data_v"
-  type: "HDF5Data"
-  include {
-    phase: TRAIN
-  }
-  hdf5_data_param {
-    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/xuv/epsilon_127x50_v.trainlist"
-    batch_size: 100
-  }
-  top: "data"
-  top: "label"
-}
-
-layer {
-  name: "data_x"
+  name: "data"
   type: "HDF5Data"
   include {
     phase: TEST
   }
   hdf5_data_param {
-    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/xuv/epsilon_127x50_x.testlist"
+    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/xuv/epsilon_127x50_xuv.testlist"
     batch_size: 100
   }
-  top: "data"
-  top: "label"
+  top: "hits-x"
+  top: "hits-u"
+  top: "hits-v"
+  top: "segments"
 }
 
 layer {
-  name: "data_u"
-  type: "HDF5Data"
-  include {
-    phase: TEST
-  }
-  hdf5_data_param {
-    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/xuv/epsilon_127x50_u.testlist"
-    batch_size: 100
-  }
-  top: "data"
-  top: "label"
-}
-
-layer {
-  name: "data_v"
-  type: "HDF5Data"
-  include {
-    phase: TEST
-  }
-  hdf5_data_param {
-    source: "/lustre/atlas/proj-shared/hep105/caffe_titan/xuv/epsilon_127x50_v.testlist"
-    batch_size: 100
-  }
-  top: "data"
-  top: "label"
-}
-
-layer {
-  name: "conv1"
+  name: "conv_x1"
   type: "Convolution"
-  bottom: "data"
-  top: "conv1"
+  bottom: "hits-x"
+  top: "conv_x1"
   convolution_param {
-    num_output: 12     # learn 96 filters
+    num_output: 12
     pad: 0
     kernel_h: 8
     kernel_w: 3
     stride: 1
     weight_filler {
-      type: "xavier" # initialize the filters from a Gaussian
+      type: "xavier"
     }
     bias_filler {
-      type: "constant" # initialize the biases to zero (0)
+      type: "constant"
     }
   }
 }
 
 layer {
-  name: "relu1"
+  name: "relu_x1"
   type: "ReLU"
-  bottom: "conv1"
-  top: "conv1"
+  bottom: "conv_x1"
+  top: "conv_x1"
 }
 
 layer {
-  name: "pool1"
+  name: "pool_x1"
   type: "Pooling"
-  bottom: "conv1"
-  top: "pool1"
+  bottom: "conv_x1"
+  top: "pool_x1"
   pooling_param {
     pool: MAX
     kernel_h: 2
@@ -126,38 +74,37 @@ layer {
 }
 
 layer {
-  name: "conv2"
+  name: "conv_x2"
   type: "Convolution"
-  bottom: "pool1"
-  top: "conv2"
+  bottom: "pool_x1"
+  top: "conv_x2"
   convolution_param {
-    num_output: 20     # learn 96 filters
+    num_output: 20
     pad: 0
     kernel_h: 7
     kernel_w: 3
     stride: 1
     weight_filler {
-      type: "xavier" # initialize the filters from a Gaussian
+      type: "xavier"
     }
-
     bias_filler {
-      type: "constant" # initialize the biases to zero (0)
+      type: "constant"
     }
   }
 }
 
 layer {
-  name: "relu2"
+  name: "relu_x2"
   type: "ReLU"
-  bottom: "conv2"
-  top: "conv2"
+  bottom: "conv_x2"
+  top: "conv_x2"
 }
 
 layer {
-  name: "pool2"
+  name: "pool_x2"
   type: "Pooling"
-  bottom: "conv2"
-  top: "pool2"
+  bottom: "conv_x2"
+  top: "pool_x2"
   pooling_param {
     pool: MAX
     kernel_h: 2
@@ -168,38 +115,37 @@ layer {
 }
 
 layer {
-  name: "conv3"
+  name: "conv_x3"
   type: "Convolution"
-  bottom: "pool2"
-  top: "conv3"
+  bottom: "pool_x2"
+  top: "conv_x3"
   convolution_param {
-    num_output: 28     # learn 96 filters
+    num_output: 28
     pad: 0
     kernel_h: 6
     kernel_w: 3
     stride: 1
     weight_filler {
-      type: "xavier" # initialize the filters from a Gaussian
+      type: "xavier"
     }
-
     bias_filler {
-      type: "constant" # initialize the biases to zero (0)
+      type: "constant"
     }
   }
 }
 
 layer {
-  name: "relu3"
+  name: "relu_x3"
   type: "ReLU"
-  bottom: "conv3"
-  top: "conv3"
+  bottom: "conv_x3"
+  top: "conv_x3"
 }
 
 layer {
-  name: "pool3"
+  name: "pool_x3"
   type: "Pooling"
-  bottom: "conv3"
-  top: "pool3"
+  bottom: "conv_x3"
+  top: "pool_x3"
   pooling_param {
     pool: MAX
     kernel_h: 2
@@ -210,38 +156,37 @@ layer {
 }
 
 layer {
-  name: "conv4"
+  name: "conv_x4"
   type: "Convolution"
-  bottom: "pool3"
-  top: "conv4"
+  bottom: "pool_x3"
+  top: "conv_x4"
   convolution_param {
-    num_output: 36     # learn 96 filters
+    num_output: 36
     pad: 0
     kernel_h: 6
     kernel_w: 3
     stride: 1
     weight_filler {
-      type: "xavier" # initialize the filters from a Gaussian
+      type: "xavier"
     }
-
     bias_filler {
-      type: "constant" # initialize the biases to zero (0)
+      type: "constant"
     }
   }
 }
 
 layer {
-  name: "relu4"
+  name: "relu_x4"
   type: "ReLU"
-  bottom: "conv4"
-  top: "conv4"
+  bottom: "conv_x4"
+  top: "conv_x4"
 }
 
 layer {
-  name: "pool4"
+  name: "pool_x4"
   type: "Pooling"
-  bottom: "conv4"
-  top: "pool4"
+  bottom: "conv_x4"
+  top: "pool_x4"
   pooling_param {
     pool: MAX
     kernel_h: 2
@@ -252,10 +197,10 @@ layer {
 }
 
 layer {
-  name: "ip1"
+  name: "dl_x1"
   type: "InnerProduct"
-  bottom: "pool4"
-  top: "ip1"
+  bottom: "pool_x4"
+  top: "dl_x1"
   inner_product_param {
     num_output: 196
     weight_filler {
@@ -268,27 +213,433 @@ layer {
 }
 
 layer {
-  name: "relu5"
+  name: "relu_x5"
   type: "ReLU"
-  bottom: "ip1"
-  top: "ip1"
+  bottom: "dl_x1"
+  top: "dl_x1"
 }
 
 layer {
-  name: "drop1"
+  name: "drop_x1"
   type: "Dropout"
-  bottom: "ip1"
-  top: "ip1"
+  bottom: "dl_x1"
+  top: "dl_x1"
   dropout_param {
     dropout_ratio: 0.5
   }
 }
 
 layer {
-  name: "ip2"
+  name: "conv_u1"
+  type: "Convolution"
+  bottom: "hits-u"
+  top: "conv_u1"
+  convolution_param {
+    num_output: 12
+    pad: 0
+    kernel_h: 8
+    kernel_w: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_u1"
+  type: "ReLU"
+  bottom: "conv_u1"
+  top: "conv_u1"
+}
+
+layer {
+  name: "pool_u1"
+  type: "Pooling"
+  bottom: "conv_u1"
+  top: "pool_u1"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+
+layer {
+  name: "conv_u2"
+  type: "Convolution"
+  bottom: "pool_u1"
+  top: "conv_u2"
+  convolution_param {
+    num_output: 20
+    pad: 0
+    kernel_h: 7
+    kernel_w: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_u2"
+  type: "ReLU"
+  bottom: "conv_u2"
+  top: "conv_u2"
+}
+
+layer {
+  name: "pool_u2"
+  type: "Pooling"
+  bottom: "conv_u2"
+  top: "pool_u2"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+
+layer {
+  name: "conv_u3"
+  type: "Convolution"
+  bottom: "pool_u2"
+  top: "conv_u3"
+  convolution_param {
+    num_output: 28
+    pad: 0
+    kernel_h: 6
+    kernel_w: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_u3"
+  type: "ReLU"
+  bottom: "conv_u3"
+  top: "conv_u3"
+}
+
+layer {
+  name: "pool_u3"
+  type: "Pooling"
+  bottom: "conv_u3"
+  top: "pool_u3"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+
+layer {
+  name: "conv_u4"
+  type: "Convolution"
+  bottom: "pool_u3"
+  top: "conv_u4"
+  convolution_param {
+    num_output: 36
+    pad: 0
+    kernel_h: 6
+    kernel_w: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_u4"
+  type: "ReLU"
+  bottom: "conv_u4"
+  top: "conv_u4"
+}
+
+layer {
+  name: "pool_u4"
+  type: "Pooling"
+  bottom: "conv_u4"
+  top: "pool_u4"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+
+layer {
+  name: "dl_u1"
   type: "InnerProduct"
-  bottom: "ip1"
-  top: "ip2"
+  bottom: "pool_u4"
+  top: "dl_u1"
+  inner_product_param {
+    num_output: 196
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_u5"
+  type: "ReLU"
+  bottom: "dl_u1"
+  top: "dl_u1"
+}
+
+layer {
+  name: "drop_u1"
+  type: "Dropout"
+  bottom: "dl_u1"
+  top: "dl_u1"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+layer {
+  name: "conv_v1"
+  type: "Convolution"
+  bottom: "hits-v"
+  top: "conv_v1"
+  convolution_param {
+    num_output: 12
+    pad: 0
+    kernel_h: 8
+    kernel_w: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_v1"
+  type: "ReLU"
+  bottom: "conv_v1"
+  top: "conv_v1"
+}
+
+layer {
+  name: "pool_v1"
+  type: "Pooling"
+  bottom: "conv_v1"
+  top: "pool_v1"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+
+layer {
+  name: "conv_v2"
+  type: "Convolution"
+  bottom: "pool_v1"
+  top: "conv_v2"
+  convolution_param {
+    num_output: 20
+    pad: 0
+    kernel_h: 7
+    kernel_w: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_v2"
+  type: "ReLU"
+  bottom: "conv_v2"
+  top: "conv_v2"
+}
+
+layer {
+  name: "pool_v2"
+  type: "Pooling"
+  bottom: "conv_v2"
+  top: "pool_v2"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+
+layer {
+  name: "conv_v3"
+  type: "Convolution"
+  bottom: "pool_v2"
+  top: "conv_v3"
+  convolution_param {
+    num_output: 28
+    pad: 0
+    kernel_h: 6
+    kernel_w: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_v3"
+  type: "ReLU"
+  bottom: "conv_v3"
+  top: "conv_v3"
+}
+
+layer {
+  name: "pool_v3"
+  type: "Pooling"
+  bottom: "conv_v3"
+  top: "pool_v3"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+
+layer {
+  name: "conv_v4"
+  type: "Convolution"
+  bottom: "pool_v3"
+  top: "conv_v4"
+  convolution_param {
+    num_output: 36
+    pad: 0
+    kernel_h: 6
+    kernel_w: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_v4"
+  type: "ReLU"
+  bottom: "conv_v4"
+  top: "conv_v4"
+}
+
+layer {
+  name: "pool_v4"
+  type: "Pooling"
+  bottom: "conv_v4"
+  top: "pool_v4"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 1
+    stride_h: 2
+    stride_w: 1
+  }
+}
+
+layer {
+  name: "dl_v1"
+  type: "InnerProduct"
+  bottom: "pool_v4"
+  top: "dl_v1"
+  inner_product_param {
+    num_output: 196
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+layer {
+  name: "relu_v5"
+  type: "ReLU"
+  bottom: "dl_v1"
+  top: "dl_v1"
+}
+
+layer {
+  name: "drop_v1"
+  type: "Dropout"
+  bottom: "dl_v1"
+  top: "dl_v1"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+layer {
+    name: "concat_xuv"
+    type: "Concat"
+    top: "concat_xuv"
+    bottom: "dl_x1"
+    bottom: "dl_u1"
+    bottom: "dl_v1"
+    concat_param {
+        axis: 1
+    }
+}
+
+layer {
+  name: "dl_xuv"
+  type: "InnerProduct"
+  bottom: "concat_xuv"
+  top: "dl_xuv"
   inner_product_param {
     num_output: 98
     weight_filler {
@@ -301,27 +652,27 @@ layer {
 }
 
 layer {
-  name: "relu6"
+  name: "relu_xuv"
   type: "ReLU"
-  bottom: "ip2"
-  top: "ip2"
+  bottom: "dl_xuv"
+  top: "dl_xuv"
 }
 
 layer {
-  name: "drop2"
+  name: "drop_xuv"
   type: "Dropout"
-  bottom: "ip2"
-  top: "ip2"
+  bottom: "dl_xuv"
+  top: "dl_xuv"
   dropout_param {
     dropout_ratio: 0.5
   }
 }
 
 layer {
-  name: "ip3"
+  name: "output"
   type: "InnerProduct"
-  bottom: "ip2"
-  top: "ip3"
+  bottom: "dl_xuv"
+  top: "output"
   inner_product_param {
     num_output: 11
     weight_filler {
@@ -334,10 +685,10 @@ layer {
 }
 
 layer {
-  name: "drop3"
+  name: "drop_output"
   type: "Dropout"
-  bottom: "ip3"
-  top: "ip3"
+  bottom: "output"
+  top: "output"
   dropout_param {
     dropout_ratio: 0.5
   }
@@ -346,8 +697,8 @@ layer {
 layer {
   name: "accuracy"
   type: "Accuracy"
-  bottom: "ip3"
-  bottom: "label"
+  bottom: "output"
+  bottom: "segments"
   top: "accuracy"
   include {
     phase: TEST
@@ -357,7 +708,7 @@ layer {
 layer {
   name: "loss"
   type: "SoftmaxWithLoss"
-  bottom: "ip3"
-  bottom: "label"
+  bottom: "output"
+  bottom: "segments"
   top: "loss"
 }
